@@ -3,6 +3,8 @@ import {
   query,
   where,
   onSnapshot,
+  doc,
+  getDoc,
   orderBy,
 } from "firebase/firestore";
 import { db } from "../fireBaseConfig";
@@ -78,6 +80,72 @@ class EmpleadoControlador {
       console.error("Error al confirmar la eliminación:", error);
       mostrarAlerta("Error", "Ocurrió un problema.");
     }
+  }
+
+  static obtenerCurasPorEmpleadoYFecha(usuarioId, fechaSeleccionada, callback) {
+    const inicioDelDia = new Date(
+      fechaSeleccionada.getFullYear(),
+      fechaSeleccionada.getMonth(),
+      fechaSeleccionada.getDate(),
+      0,
+      0,
+      0,
+      0,
+    );
+
+    const finDelDia = new Date(
+      fechaSeleccionada.getFullYear(),
+      fechaSeleccionada.getMonth(),
+      fechaSeleccionada.getDate(),
+      23,
+      59,
+      59,
+      999,
+    );
+
+    const q = query(
+      collection(db, "curas"),
+      where("usuarioId", "==", usuarioId),
+      where("fecha", ">=", inicioDelDia),
+      where("fecha", "<=", finDelDia),
+      orderBy("fecha", "asc"),
+    );
+
+    return onSnapshot(q, async (querySnapshot) => {
+      const curasConResidente = await Promise.all(
+        querySnapshot.docs.map(async (docCura) => {
+          const data = docCura.data();
+          const cura = {
+            id: docCura.id,
+            fecha: data.fecha.toDate(),
+            observacion: data.observacion,
+            residenteId: data.residenteId,
+            usuarioId: data.usuarioId,
+            usuarioNombre: data.usuarioNombre,
+            zona: data.zona,
+          };
+
+          try {
+            const residenteDoc = await getDoc(
+              doc(db, "residentes", data.residenteId),
+            );
+            if (residenteDoc.exists()) {
+              const residenteData = residenteDoc.data();
+              cura.residenteNombreCompleto = `${residenteData.nombre?.trim() || ""} ${residenteData.apellido?.trim() || ""}`;
+            } else {
+              cura.residenteNombreCompleto = "Residente desconocido";
+            }
+          } catch (error) {
+            console.error("Error al obtener el residente:", error);
+            cura.residenteNombreCompleto = "Error al cargar nombre";
+          }
+
+          return cura;
+        }),
+      );
+
+      callback(curasConResidente);
+    });
   }
 }
 

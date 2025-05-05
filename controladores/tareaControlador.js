@@ -17,7 +17,7 @@ import Tarea from "../modelos/tarea";
 class TareaControlador {
   static obtenerTareasPorUsuarioYFecha(usuarioId, fechaSeleccionada, callback) {
     // Normalizamos el día con inicio y fin, es necasario para poder comparar fechas en firebase sin horas, minutos y segundos
-    const inicioDelDía = new Date(
+    const inicioDelDia = new Date(
       fechaSeleccionada.getFullYear(),
       fechaSeleccionada.getMonth(),
       fechaSeleccionada.getDate(),
@@ -27,7 +27,7 @@ class TareaControlador {
       0,
     );
 
-    const finDelDía = new Date(
+    const finDelDia = new Date(
       fechaSeleccionada.getFullYear(),
       fechaSeleccionada.getMonth(),
       fechaSeleccionada.getDate(),
@@ -40,8 +40,8 @@ class TareaControlador {
     const q = query(
       collection(db, "tareas"),
       where("usuarioId", "==", usuarioId),
-      where("fecha", ">=", inicioDelDía),
-      where("fecha", "<=", finDelDía),
+      where("fecha", ">=", inicioDelDia),
+      where("fecha", "<=", finDelDia),
       orderBy("fecha", "asc"),
     );
 
