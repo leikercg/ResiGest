@@ -20,7 +20,10 @@ https://react.dev/reference/react/useContext --> contexto para react native
 https://www.youtube.com/watch?v=K-r6s3wQgNs --> como crear y usar el contexto
 https://firebase.google.com/docs/firestore/manage-data/transactions?hl=es-419 --> como crear lotes y usarlos
 
-
+------------------------------ segundo sprint---------------
+https://stackoverflow.com/questions/79602687/react-native-expo-firebase-auth-component-auth-has-not-been-registered-yet/79603601#79603601 --> cambio de verison expo
+https://www.reddit.com/r/expo/comments/1kcdipj/expo_sdk_53_is_out_of_beta/?rdt=47668 --> reparar conflictos de version expo
+https://firebase.google.com/docs/auth/admin/errors?hl=es-419 --> codigos de error firebase
 
 
 

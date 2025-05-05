@@ -1,15 +1,19 @@
 import React, { useState } from "react";
 import { View, TextInput, Text, Pressable, StyleSheet } from "react-native";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+} from "firebase/auth";
 import { auth } from "../../fireBaseConfig";
 import { Ionicons } from "@expo/vector-icons";
 import estilos from "../../estilos/estilos";
 
 const LoginScreen = () => {
-  const [email, setEmail] = useState(""); // Email
-  const [password, setPassword] = useState(""); // Contraseña
-  const [mensaje, setMensaje] = useState(""); // Mensajes de error/éxito
-  const [mostrarContrasena, setVerContrasena] = useState(false); // Mostrar/ocultar contraseña
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [mensaje, setMensaje] = useState("");
+  const [mostrarContrasena, setVerContrasena] = useState(false);
+  const [olvidoContrasena, setOlvidoContrasena] = useState(false);
 
   // Iniciar sesión
   const iniciarSesion = async () => {
@@ -42,81 +46,152 @@ const LoginScreen = () => {
       setMensaje(mensajeError);
     }
   };
-  // Función para recuperar contraseña, TODOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-  const restaurarContrasena = () => {
-    console.log("Botón recuperar contraseña pulsado");
+
+  // Función para recuperar contraseña
+  const restaurarContrasena = async () => {
+    if (!email) {
+      return;
+    }
+
+    try {
+      await sendPasswordResetEmail(auth, email);
+      setMensaje("Se ha enviado un correo para restablecer contraseña.");
+      setOlvidoContrasena(false);
+    } catch (error) {
+      let mensajeError = "";
+
+      switch (error.code) {
+        case "auth/invalid-email":
+          mensajeError = "El formato del correo es inválido.";
+          break;
+        case "auth/user-not-found":
+          mensajeError = "No hay ningún usuario registrado con ese correo.";
+          break;
+        default:
+          mensajeError = "Ocurrió un error al intentar enviar el correo.";
+      }
+
+      setMensaje(mensajeError);
+    }
   };
 
   return (
     <View style={estilos.estilosLogin.contenedor}>
-      {/* Título */}
       <Text style={estilos.estilosLogin.title}>ResiGest</Text>
 
-      {/* Email */}
       <TextInput
         style={estilos.estilosLogin.input}
         placeholder="Correo electrónico"
         placeholderTextColor="#999"
         value={email}
         onChangeText={setEmail}
-        keyboardType="email-address" // Al cambiar el texto se setea el estado
+        keyboardType="email-address"
         autoCapitalize="none"
         autoComplete="email"
       />
 
-      {/* Ccontraseña */}
-      <View style={styles.contenedorContrsena}>
-        <TextInput
-          style={[estilos.estilosLogin.input, styles.inputContrasena]}
-          placeholder="Contraseña"
-          placeholderTextColor="#999"
-          value={password}
-          secureTextEntry={!mostrarContrasena} // Inicia como oculta, es decir, igual a false
-          onChangeText={setPassword}
-          autoComplete="password" // Permite auto completar la contraseña
-        />
-        {/* Botón para mostrar contraseña */}
-        <Pressable
-          style={styles.iconoOjo}
-          onPress={() => setVerContrasena(!mostrarContrasena)}
-        >
-          <Ionicons
-            name={mostrarContrasena ? "eye-off" : "eye"} // Si está en true muestra el ícono de ojo cerrado
-            size={20}
-            color="#999"
+      {/* Solo mostrar contraseña si no estamos en la vista de olvido contraseña */}
+      {!olvidoContrasena && (
+        <View style={styles.contenedorContrsena}>
+          <TextInput
+            style={[estilos.estilosLogin.input, styles.inputContrasena]}
+            placeholder="Contraseña"
+            placeholderTextColor="#999"
+            value={password}
+            secureTextEntry={!mostrarContrasena}
+            onChangeText={setPassword}
+            autoComplete="password"
           />
-        </Pressable>
-      </View>
+          {/* Botón para mostrar contraseña */}
+          <Pressable
+            style={styles.iconoOjo}
+            onPress={() => setVerContrasena(!mostrarContrasena)}
+          >
+            <Ionicons
+              name={mostrarContrasena ? "eye-off" : "eye"}
+              size={20}
+              color="#999"
+            />
+          </Pressable>
+        </View>
+      )}
 
       {/* Enlace para recuperar contraseña */}
-      <Pressable onPress={restaurarContrasena} style={styles.olvidarContrasena}>
+      <Pressable
+        onPress={() => setOlvidoContrasena(true)}
+        style={styles.olvidarContrasena}
+      >
         <Text style={styles.textoOlvidarContrasena}>
           ¿Olvidaste tu contraseña?
         </Text>
       </Pressable>
 
       {/* Mostrar mensajes de error/éxito */}
-      {mensaje ? ( // Si hay un mensaje, lo mostramos
+      {mensaje ? (
         <Text style={estilos.estilosLogin.error}>{mensaje}</Text>
       ) : null}
 
-      {/* Botón principal de inicio de sesión */}
-      <Pressable style={estilos.estilosLogin.button} onPress={iniciarSesion}>
-        <Text style={estilos.estilosLogin.buttonText}>Iniciar sesión</Text>
-      </Pressable>
+      {/* Mostrar botón de restaurar contraseña en vez de iniciar sesión si estamos en la vista de olvido de contraseña */}
+      {olvidoContrasena ? (
+  <View>
+    <Pressable
+      style={estilos.estilosLogin.button}
+      onPress={restaurarContrasena}
+    >
+      <Text style={estilos.estilosLogin.buttonText}>Restuarar</Text>
+    </Pressable>
+
+    {/* Botón para cancelar y volver al login */}
+    <Pressable
+      onPress={() => {
+        setOlvidoContrasena(false);
+        setMensaje("");
+      }}
+      style={styles.botonCancelar}
+    >
+      <Text style={styles.textoCancelar}>Cancelar</Text>
+    </Pressable>
+  </View>
+) : (
+  <Pressable style={estilos.estilosLogin.button} onPress={iniciarSesion}>
+    <Text style={estilos.estilosLogin.buttonText}>Iniciar sesión</Text>
+  </Pressable>
+)}
+
     </View>
   );
 };
 
-// Estilos específicos de este componente (complementan los estilos compartidos)
+
 const styles = StyleSheet.create({
   contenedorContrsena: {
     width: "100%",
     marginBottom: 20,
-    position: "relative", // Para posicionar el ícono absolutamente dentro
+    position: "relative",
   },
   inputContrasena: {
-    paddingRight: 40, // Espacio para el ícono del ojo
+    paddingRight: 40,
+  },
+  iconoOjo: {
+    position: "absolute",
+    right: 15,
+    top: 15,
+    zIndex: 1,
+  },
+  olvidarContrasena: {
+    alignSelf: "center",
+    marginBottom: 20,
+  },
+  textoOlvidarContrasena: {
+    color: "#2F80ED",
+    fontSize: 14,
+  },contenedorContrsena: {
+    width: "100%",
+    marginBottom: 20,
+    position: "relative",
+  },
+  inputContrasena: {
+    paddingRight: 40,
   },
   iconoOjo: {
     position: "absolute",
@@ -132,6 +207,17 @@ const styles = StyleSheet.create({
     color: "#2F80ED",
     fontSize: 14,
   },
+  botonCancelar: {
+    marginTop: 10,
+    alignSelf: "center",
+  },
+
+  textoCancelar: {
+    color: "#999",
+    fontSize: 14,
+    textDecorationLine: "underline",
+  },
+
 });
 
 export default LoginScreen;
