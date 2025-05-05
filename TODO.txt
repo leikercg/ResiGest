@@ -1,0 +1,32 @@
+Notas:
+Instalamos node y expo.
+Creamos la navegación.
+Usamos lazytab, para transiciones más rápidas.
+Creamos un fichero, para obtener el contexto de la autenticación y de la app.
+Creamos cloud function para poder modificar el comportamiento del backed---> buscar videos.
+La navegación se pasa a los componentes de manera implícita.
+Se pueden pasar parámetros por navegación (route).
+Hub que modificar en firebase los permisos de lectura y escritura.
+OnSnapShot para scuchar cambios en tiempo real en lugar de get.Docs que solo lee una vez.
+No funciona el datepicker en Android, revisar, o cambiar a piker por números. community-picker.
+Metodos staticos en controllers, para que sean de la clase, no de una instancia
+MVC, modelos, vistas/relaciones, controlador --> operaciones CRUD.
+Hablar de desuscripciones, ¿Qué son, que devuelven, ha hacen?
+Hablar de los callbacks,¿Que son y que hacen? Pasamos alertas.
+Hablar de componente en comportamiento por teclado.
+Hahblar por que es mejor manejar un modelo que datos crudos(Acceder a los métodos)
+Hablar de bacth, lotes, (revisar si se usan)
+
+
+
+
+
+
+
+TODO:
+Agregar dirección a empleados, para poder modificar algo, familiares igual.
+Refactorizar Residentes
+Al borrar los residentes que se borren también sus seguimientos.
+Al cargar los familiares, si no tienen ningún familiar ingresado relacionado, eliminar familiar. -->REV
+Mirar seguimiento controler , revisar y formatear.
+

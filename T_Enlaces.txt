@@ -1,0 +1,29 @@
+https://reactnative.dev/ --> documentacion react mative oficial
+https://www.youtube.com/watch?v=bElP3s1l2sw --> como crear cloud funtions (lado de servidor)
+https://www.youtube.com/watch?v=z-WsYu8n1vQ --> autenticacion con expo y firebase
+https://www.youtube.com/watch?v=ST89hMMse6A --> consultas sencillas en firebase
+https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Operators/Destructuring --> Desestruturación JS
+https://www.youtube.com/watch?v=dSY6HJc7CXE --> pickers en React Native
+https://www.npmjs.com/package/react-native-date-picker --> Date picker en React Native
+https://stackoverflow.com/questions/66140734/firebase-firestore-how-to-manually-create-indexes --> Aviso para crear indices
+https://firebase.google.com/docs/firestore/query-data/indexing?hl=es-419 --> manejar los indices
+https://www.youtube.com/watch?v=ig91zc-ERSE --> onsnapShot, para cargas en tiempo real
+https://www.youtube.com/watch?v=U23lNFm_J70&t=3650s --> react desde 0 miduDEv
+https://oblador.github.io/react-native-vector-icons/ --> iconos para react
+https://www.youtube.com/watch?v=ouXDEmQyqio --> crear ventanas modales
+https://www.youtube.com/watch?v=RFkI9-x6j6I --> rederizado condicional, en react, pero es usable en react native
+https://reactnative.dev/docs/flatlist --> como usar un item dentro de una flat list
+https://reactnavigation.org/docs/bottom-tab-navigator/ --> react navegation
+https://docs.expo.dev/ --> framework expo
+https://www.youtube.com/watch?app=desktop&v=kjCH7vvISsE --> como usar callbacks, parar funciones como parámetros
+https://react.dev/reference/react/useContext --> contexto para react native
+https://www.youtube.com/watch?v=K-r6s3wQgNs --> como crear y usar el contexto
+https://firebase.google.com/docs/firestore/manage-data/transactions?hl=es-419 --> como crear lotes y usarlos
+
+
+
+
+
+
+
+
