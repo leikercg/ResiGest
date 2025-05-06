@@ -7,6 +7,7 @@ class Cura {
     residenteId,
     usuarioId,
     usuarioNombre,
+    residenteNombre,
   ) {
     this.id = id;
     this.fecha = fecha;
@@ -15,6 +16,7 @@ class Cura {
     this.residenteId = residenteId;
     this.usuarioId = usuarioId;
     this.usuarioNombre = usuarioNombre;
+    this.residenteNombre = residenteNombre;
   }
 }
 

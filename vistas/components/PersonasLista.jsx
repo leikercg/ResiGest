@@ -215,6 +215,7 @@ const styles = StyleSheet.create({
   },
   flatListContenedor: {
     paddingBottom: 20,
+    minHeight: "100%",
   },
 
   textoVacio: {

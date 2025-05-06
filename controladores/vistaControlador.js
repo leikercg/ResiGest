@@ -46,15 +46,12 @@ class VisitasControlador {
     motivo,
     fecha,
     usuarioId,
-    usuarioNombre = null,
+    residenteNombre,
   ) {
     try {
-      if (!usuarioNombre) {
-        const usuarioDoc = await getDoc(doc(db, "usuarios", usuarioId));
-        const data = usuarioDoc.data();
-        usuarioNombre = `${data.nombre} ${data.apellido}`;
-        console.log("Nombre del usuario:", usuarioNombre);
-      }
+      const usuarioDoc = await getDoc(doc(db, "usuarios", usuarioId));
+      const data = usuarioDoc.data();
+      const usuarioNombre = `${data.nombre} ${data.apellido}`;
 
       await addDoc(collection(db, "visitas"), {
         residenteId,
@@ -62,6 +59,7 @@ class VisitasControlador {
         fecha,
         usuarioId,
         usuarioNombre,
+        residenteNombre,
       });
     } catch (error) {
       console.error("Error al crear visita:", error);

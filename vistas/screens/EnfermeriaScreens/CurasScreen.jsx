@@ -44,7 +44,6 @@ const CurasScreen = ({ route }) => {
     return () => desuscribirse();
   }, [residente.id]);
 
-  // Funciones auxiliares
   const formatearFechaHora = (fecha) => {
     const date = fecha.toDate ? fecha.toDate() : new Date(fecha);
     return (
@@ -117,6 +116,7 @@ const CurasScreen = ({ route }) => {
     }
 
     try {
+      const residenteNombre = `${residente.nombre} ${residente.apellido}`;
       if (editando) {
         await CurasControlador.actualizarCura(
           editando.id,
@@ -132,6 +132,8 @@ const CurasScreen = ({ route }) => {
           observacion,
           fechaCura,
           user.uid,
+          residenteNombre,
+          console.log(residenteNombre), // DEBUGGGGGGG
         );
         Alert.alert("Éxito", "Cura creada correctamente");
       }

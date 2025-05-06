@@ -108,6 +108,8 @@ const VisitasScreen = ({ route }) => {
     }
 
     try {
+      const residenteNombre = `${residente.nombre} ${residente.apellido}`;
+
       if (editando) {
         await VisitasControlador.actualizarVisita(
           editando.id,
@@ -121,6 +123,7 @@ const VisitasScreen = ({ route }) => {
           motivo,
           fechaVisita,
           user.uid,
+          residenteNombre,
         );
         Alert.alert("Éxito", "Visita creada correctamente");
       }

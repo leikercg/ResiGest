@@ -3,13 +3,13 @@ import {
   query,
   where,
   onSnapshot,
-  doc,
-  getDoc,
   orderBy,
 } from "firebase/firestore";
 import { db } from "../fireBaseConfig";
 import Empleado from "../modelos/empleado";
 import { eliminarUsuarioYCuenta } from "../services/authService";
+import Cura from "../modelos/cura";
+import Visita from "../modelos/visita";
 
 class EmpleadoControlador {
   // Método para listar empleados
@@ -83,6 +83,7 @@ class EmpleadoControlador {
   }
 
   static obtenerCurasPorEmpleadoYFecha(usuarioId, fechaSeleccionada, callback) {
+    // Preparamos el rango de fechas
     const inicioDelDia = new Date(
       fechaSeleccionada.getFullYear(),
       fechaSeleccionada.getMonth(),
@@ -103,6 +104,7 @@ class EmpleadoControlador {
       999,
     );
 
+    // Creamos la consulta
     const q = query(
       collection(db, "curas"),
       where("usuarioId", "==", usuarioId),
@@ -111,40 +113,73 @@ class EmpleadoControlador {
       orderBy("fecha", "asc"),
     );
 
-    return onSnapshot(q, async (querySnapshot) => {
-      const curasConResidente = await Promise.all(
-        querySnapshot.docs.map(async (docCura) => {
-          const data = docCura.data();
-          const cura = {
-            id: docCura.id,
-            fecha: data.fecha.toDate(),
-            observacion: data.observacion,
-            residenteId: data.residenteId,
-            usuarioId: data.usuarioId,
-            usuarioNombre: data.usuarioNombre,
-            zona: data.zona,
-          };
+    // Escuchamos cambios en tiempo real
+    return onSnapshot(q, (querySnapshot) => {
+      const curas = querySnapshot.docs.map((doc) => {
+        const data = doc.data();
+        return new Cura(
+          doc.id,
+          data.fecha.toDate(),
+          data.zona,
+          data.observacion,
+          data.residenteId,
+          data.usuarioId,
+          data.usuarioNombre,
+          data.residenteNombre,
+        );
+      });
 
-          try {
-            const residenteDoc = await getDoc(
-              doc(db, "residentes", data.residenteId),
-            );
-            if (residenteDoc.exists()) {
-              const residenteData = residenteDoc.data();
-              cura.residenteNombreCompleto = `${residenteData.nombre?.trim() || ""} ${residenteData.apellido?.trim() || ""}`;
-            } else {
-              cura.residenteNombreCompleto = "Residente desconocido";
-            }
-          } catch (error) {
-            console.error("Error al obtener el residente:", error);
-            cura.residenteNombreCompleto = "Error al cargar nombre";
-          }
+      callback(curas);
+    });
+  }
 
-          return cura;
-        }),
-      );
+  static obtenerVisitasPorEmpleadoYFecha(
+    usuarioId,
+    fechaSeleccionada,
+    callback,
+  ) {
+    // Definir el rango del día completo (00:00:00 a 23:59:59)
+    const inicioDelDia = new Date(
+      fechaSeleccionada.getFullYear(),
+      fechaSeleccionada.getMonth(),
+      fechaSeleccionada.getDate(),
+      0,
+      0,
+      0,
+      0,
+    );
 
-      callback(curasConResidente);
+    const finDelDia = new Date(
+      fechaSeleccionada.getFullYear(),
+      fechaSeleccionada.getMonth(),
+      fechaSeleccionada.getDate(),
+      23,
+      59,
+      59,
+      999,
+    );
+    const q = query(
+      collection(db, "visitas"),
+      where("usuarioId", "==", usuarioId),
+      where("fecha", ">=", inicioDelDia),
+      where("fecha", "<=", finDelDia),
+      orderBy("fecha", "asc"),
+    );
+
+    return onSnapshot(q, (querySnapshot) => {
+      const visitas = querySnapshot.docs.map((doc) => {
+        const data = doc.data();
+        return new Visita(
+          doc.id,
+          data.fecha.toDate(),
+          data.motivo,
+          data.residenteId,
+          data.usuarioId,
+          data.usuarioNombre,
+          data.residenteNombre,
+        );
+      });
+      callback(visitas);
     });
   }
 }

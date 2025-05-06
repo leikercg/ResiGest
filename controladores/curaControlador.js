@@ -49,14 +49,12 @@ class CurasControlador {
     observacion,
     fecha,
     usuarioId,
-    usuarioNombre = null,
+    residenteNombre,
   ) {
     try {
-      if (!usuarioNombre) {
-        const usuarioDoc = await getDoc(doc(db, "usuarios", usuarioId));
-        const data = usuarioDoc.data();
-        usuarioNombre = `${data.nombre} ${data.apellido}`;
-      }
+      const usuarioDoc = await getDoc(doc(db, "usuarios", usuarioId));
+      const data = usuarioDoc.data();
+      const usuarioNombre = `${data.nombre} ${data.apellido}`;
 
       await addDoc(collection(db, "curas"), {
         residenteId,
@@ -65,6 +63,7 @@ class CurasControlador {
         fecha,
         usuarioId,
         usuarioNombre,
+        residenteNombre,
       });
     } catch (error) {
       console.error("Error al crear cura:", error);

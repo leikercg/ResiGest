@@ -5,7 +5,6 @@ import {
   FlatList,
   StyleSheet,
   ActivityIndicator,
-  Pressable,
 } from "react-native";
 import { AuthContext } from "../../../contexto/AuthContext";
 import EmpladoControlador from "../../../controladores/empleadoControlador";
@@ -15,8 +14,8 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 
 const AgendaScreen = () => {
   const [fecha, setFecha] = useState(new Date());
-  const { user } = useContext(AuthContext);
-  const [curas, setCuras] = useState([]);
+  const { user, departamentoId } = useContext(AuthContext); // Obtenemos departamentoId
+  const [data, setData] = useState([]); // Puede ser curas o visitas
   const [cargando, setCargando] = useState(true);
 
   const cambioFecha = (event, fechaSeleccionada) => {
@@ -26,23 +25,40 @@ const AgendaScreen = () => {
   };
 
   useEffect(() => {
-    const desuscribirse = EmpladoControlador.obtenerCurasPorEmpleadoYFecha(
-      user.uid,
-      fecha,
-      (curasObtenidas) => {
-        setCuras(curasObtenidas);
-        setCargando(false);
-      },
-    );
+    if (departamentoId === 2) {
+      // Si el departamento es 2, buscamos las visitas
+      const desuscribirse = EmpladoControlador.obtenerVisitasPorEmpleadoYFecha(
+        user.uid,
+        fecha,
+        (visitasObtenidas) => {
+          setData(visitasObtenidas);
+          setCargando(false);
+        },
+      );
 
-    return () => desuscribirse();
-  }, [user, fecha]); // Dependencia añadida: fecha
+      return () => desuscribirse();
+    }
+
+    if (departamentoId === 3) {
+      // Si el departamento es 3, buscamos las curas
+      const desuscribirse = EmpladoControlador.obtenerCurasPorEmpleadoYFecha(
+        user.uid,
+        fecha,
+        (curasObtenidas) => {
+          setData(curasObtenidas);
+          setCargando(false);
+        },
+      );
+
+      return () => desuscribirse();
+    }
+  }, [user, fecha, departamentoId]);
 
   const renderItem = ({ item }) => (
-    <Pressable style={styles.curaItem}>
-      <View style={styles.curaContenido}>
-        <View style={styles.infoCura}>
-          <View style={styles.curaHeader}>
+    <View style={styles.estiloItem}>
+      <View style={styles.estiloContenedor}>
+        <View style={styles.estiloInfo}>
+          <View style={styles.estiloCabecera}>
             <Ionicons name="time" size={20} color="#0000FF" />
             <Text style={styles.curaFecha}>
               {item.fecha.toLocaleTimeString("es-ES", {
@@ -52,14 +68,23 @@ const AgendaScreen = () => {
               })}
             </Text>
           </View>
-          <Text style={styles.curaObservacion}>{item.observacion}</Text>
-          <Text style={styles.curaZona}>Zona: {item.zona}</Text>
-          <Text style={styles.curaResidente}>
-            Residente ID: {item.residenteNombreCompleto}
-          </Text>
+          <Text style={styles.estiloResidente}>{item.residenteNombre}</Text>
+
+          {departamentoId === 2 && (
+            <Text style={styles.curaObseervacion}>Motivo: {item.motivo}</Text>
+          )}
+
+          {departamentoId === 3 && (
+            <>
+              <Text style={styles.curaZona}>Zona: {item.zona}</Text>
+              <Text style={styles.curaObseervacion}>
+                Observación: {item.observacion}
+              </Text>
+            </>
+          )}
         </View>
       </View>
-    </Pressable>
+    </View>
   );
 
   if (cargando) {
@@ -72,22 +97,20 @@ const AgendaScreen = () => {
 
   return (
     <View style={estilos.estilosListaPersonasVentana.contenedor}>
-      {/* Cabecera */}
       <View style={estilos.estilosListaPersonasVentana.titulo}>
         <Text style={estilos.estilosListaPersonasVentana.tituloTexto}>
           Agenda
         </Text>
       </View>
 
-      {/* Lista principal */}
       <FlatList
-        data={curas}
+        data={data}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
         ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>
-              No tienes curas registradas para este día
+          <View style={styles.contenedorVacio}>
+            <Text style={styles.textoVacio}>
+              No hay registros para este día
             </Text>
           </View>
         }
@@ -95,7 +118,6 @@ const AgendaScreen = () => {
         showsVerticalScrollIndicator={false}
       />
 
-      {/* Picker flotante abajo a la derecha */}
       <View style={styles.pickerFlotante}>
         <DateTimePicker
           value={fecha}
@@ -119,8 +141,9 @@ const styles = StyleSheet.create({
   },
   listContent: {
     paddingBottom: 20,
+    minHeight: "100%",
   },
-  curaItem: {
+  estiloItem: {
     backgroundColor: "#F9F9F9",
     borderRadius: 10,
     padding: 20,
@@ -131,16 +154,16 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  curaContenido: {
+  estiloContenedor: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
   },
-  infoCura: {
+  estiloInfo: {
     flex: 1,
     paddingRight: 10,
   },
-  curaHeader: {
+  estiloCabecera: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 8,
@@ -150,7 +173,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#555",
   },
-  curaObservacion: {
+  estiloResidente: {
     fontSize: 16,
     fontWeight: "500",
     marginBottom: 5,
@@ -162,17 +185,17 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     marginBottom: 3,
   },
-  curaResidente: {
+  curaObseervacion: {
     fontSize: 12,
     color: "#777",
   },
-  emptyContainer: {
+  contenedorVacio: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     marginTop: 50,
   },
-  emptyText: {
+  textoVacio: {
     marginTop: 10,
     fontSize: 16,
     color: "#999",
@@ -181,10 +204,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 20,
     right: 20,
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    elevation: 4,
-    zIndex: 10,
   },
 });
 
