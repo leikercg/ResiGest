@@ -16,6 +16,8 @@ import Residente from "../modelos/residente";
 import SeguimientoControlador from "./seguimientoControlador";
 import VisitaControlador from "./vistaControlador";
 import TareaControlador from "./tareaControlador";
+import CurasControlador from "./curaControlador";
+import SesionControlador from "./sesionCotrolador";
 
 class ResidenteControlador {
   // Método para escuchar cambios en los familiares de un residente
@@ -130,10 +132,12 @@ class ResidenteControlador {
 
                 const familiaresIds = residenteDoc.data().familiares || [];
 
-                // 2. Eliminar elementos asociados (en orden seguro)
-                await VisitaControlador.eliminarVisitasResidente(id); // <-- Nuevo
+                // 2. Eliminar elementos asociados
+                await VisitaControlador.eliminarVisitasResidente(id);
                 await SeguimientoControlador.eliminarSeguimientosResidente(id);
                 await TareaControlador.eliminarTareasResidente(id);
+                await CurasControlador.eliminarCurasResidente(id);
+                await SesionControlador.eliminarSesionesResidente(id);
 
                 // 3. Eliminar residente
                 await deleteDoc(doc(db, "residentes", id));
