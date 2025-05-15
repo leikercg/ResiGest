@@ -141,7 +141,6 @@ const VisitasScreen = ({ route }) => {
     setFechaVisita(selectedTime || fechaVisita);
   };
 
-  // Renderizado condicional
   if (cargando) {
     return (
       <View style={styles.loadingContainer}>

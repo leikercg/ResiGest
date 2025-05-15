@@ -133,59 +133,36 @@ const LoginScreen = () => {
 
       {/* Mostrar botón de restaurar contraseña en vez de iniciar sesión si estamos en la vista de olvido de contraseña */}
       {olvidoContrasena ? (
-  <View>
-    <Pressable
-      style={estilos.estilosLogin.button}
-      onPress={restaurarContrasena}
-    >
-      <Text style={estilos.estilosLogin.buttonText}>Restuarar</Text>
-    </Pressable>
+        <View>
+          <Pressable
+            style={estilos.estilosLogin.button}
+            onPress={restaurarContrasena}
+          >
+            <Text style={estilos.estilosLogin.buttonText}>Restuarar</Text>
+          </Pressable>
 
-    {/* Botón para cancelar y volver al login */}
-    <Pressable
-      onPress={() => {
-        setOlvidoContrasena(false);
-        setMensaje("");
-      }}
-      style={styles.botonCancelar}
-    >
-      <Text style={styles.textoCancelar}>Cancelar</Text>
-    </Pressable>
-  </View>
-) : (
-  <Pressable style={estilos.estilosLogin.button} onPress={iniciarSesion}>
-    <Text style={estilos.estilosLogin.buttonText}>Iniciar sesión</Text>
-  </Pressable>
-)}
-
+          {/* Botón para cancelar y volver al login */}
+          <Pressable
+            onPress={() => {
+              setOlvidoContrasena(false);
+              setMensaje("");
+            }}
+            style={styles.botonCancelar}
+          >
+            <Text style={styles.textoCancelar}>Cancelar</Text>
+          </Pressable>
+        </View>
+      ) : (
+        <Pressable style={estilos.estilosLogin.button} onPress={iniciarSesion}>
+          <Text style={estilos.estilosLogin.buttonText}>Iniciar sesión</Text>
+        </Pressable>
+      )}
     </View>
   );
 };
 
-
 const styles = StyleSheet.create({
   contenedorContrsena: {
-    width: "100%",
-    marginBottom: 20,
-    position: "relative",
-  },
-  inputContrasena: {
-    paddingRight: 40,
-  },
-  iconoOjo: {
-    position: "absolute",
-    right: 15,
-    top: 15,
-    zIndex: 1,
-  },
-  olvidarContrasena: {
-    alignSelf: "center",
-    marginBottom: 20,
-  },
-  textoOlvidarContrasena: {
-    color: "#2F80ED",
-    fontSize: 14,
-  },contenedorContrsena: {
     width: "100%",
     marginBottom: 20,
     position: "relative",
@@ -217,7 +194,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textDecorationLine: "underline",
   },
-
 });
 
 export default LoginScreen;

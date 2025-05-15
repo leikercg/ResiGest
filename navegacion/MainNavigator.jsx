@@ -49,11 +49,11 @@ const MainNavigator = () => {
       ) : departamentoId === 4 ? ( // Si el departamento es 4 mostrar pantalla de familiar
         <Stack.Screen name="FamiliarNav" component={FamiliarNavigator} />
       ) : departamentoId === 5 ? ( // Si el departamento es 5 mostrar pantalla de fisioterapia
-        <Stack.Screen name="FarmaciaNav" component={FisioterapiaNavigator} />
+        <Stack.Screen name="FisioNab" component={FisioterapiaNavigator} />
       ) : departamentoId === 6 ? ( // Si el departamento es 6 mostrar pantalla de terapia
-        <Stack.Screen name="CocinaNav" component={TerapiaNavigator} />
+        <Stack.Screen name="TerapiaNav" component={TerapiaNavigator} />
       ) : departamentoId === 7 ? ( // Si el departamento es 7 mostrar pantalla de asistencia
-        <Stack.Screen name="LimpiezaNav" component={AsistencialNavigator} />
+        <Stack.Screen name="AsistenciaNav" component={AsistencialNavigator} />
       ) : null}
     </Stack.Navigator>
   );
