@@ -1,19 +1,90 @@
 import {
   collection,
   updateDoc,
-  getDoc,
   doc,
   query,
   where,
   deleteDoc,
   onSnapshot,
   orderBy,
-  arrayRemove,
+  addDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 import { db } from "../fireBaseConfig";
 import Grupo from "../modelos/grupo";
 
 class GrupoControlador {
+  // Método para crear un nuevo grupo
+  static async crearGrupo(
+    descripcion,
+    usuarioId,
+    nombreUsuario,
+    residentesIds,
+    fecha,
+  ) {
+    try {
+      // Crear el documento
+      const docRef = await addDoc(collection(db, "grupos"), {
+        descripcion: descripcion.trim(),
+        usuarioId,
+        nombreUsuario,
+        residentes: residentesIds,
+        fecha,
+        fechaCreacion: serverTimestamp(),
+      });
+    } catch (error) {
+      console.error("Error al crear grupo:", error);
+      throw error;
+    }
+  }
+
+  // Método para actualizar un grupo existente
+  static async actualizarGrupo(
+    grupoId,
+    { descripcion, fecha, residentesSeleccionados },
+  ) {
+    try {
+      await updateDoc(doc(db, "grupos", grupoId), {
+        descripcion: descripcion,
+        fecha: fecha,
+        residentes: residentesSeleccionados,
+      });
+    } catch (error) {
+      console.error("Error al actualizar grupo:", error);
+      throw error;
+    }
+  }
+  // Método para obtener todos los grupos por fecha
+  static obtenerTodosLosGrupos(fecha, callback) {
+    const inicioDia = new Date(fecha);
+    inicioDia.setHours(0, 0, 0, 0);
+
+    const finDia = new Date(fecha);
+    finDia.setHours(23, 59, 59, 999);
+
+    const q = query(
+      collection(db, "grupos"),
+      where("fecha", ">=", inicioDia),
+      where("fecha", "<=", finDia),
+      orderBy("fecha", "desc"),
+    );
+
+    return onSnapshot(q, (querySnapshot) => {
+      const grupos = querySnapshot.docs.map((doc) => {
+        const data = doc.data();
+        return new Grupo(
+          doc.id,
+          data.descripcion,
+          data.fecha.toDate(),
+          data.usuarioId,
+          data.nombreUsuario || "",
+          data.residentes || [],
+        );
+      });
+      callback(grupos);
+    });
+  }
+
   // Método para obtener grupos en tiempo real por residente
   static obtenerGruposPorResidente(residenteId, callback) {
     const q = query(
@@ -38,44 +109,13 @@ class GrupoControlador {
     });
   }
 
-  // Método para eliminar un residente de un grupo
-  static async removerResidenteDeGrupo(grupoId, residenteId) {
+  // Método para eliminar un grupo entero
+  static async eliminargrupo(grupoId) {
     try {
-      const grupoRef = doc(db, "grupos", grupoId);
-
-      // Primero verificamos que el grupo exista
-      const grupoSnap = await getDoc(grupoRef);
-      if (!grupoSnap.exists()) {
-        throw new Error("El grupo no existe");
-      }
-
-      // Obtenemos los residentes actuales
-      const grupoData = grupoSnap.data();
-      const residentesActuales = grupoData.residentes || [];
-
-      // Verificamos que el residente esté en el grupo
-      if (!residentesActuales.includes(residenteId)) {
-        throw new Error("El residente no pertenece a este grupo");
-      }
-
-      // Si es el último residente, eliminamos el grupo completo
-      if (residentesActuales.length === 1) {
-        await deleteDoc(grupoRef);
-        return {
-          eliminado: true,
-          mensaje: "Grupo eliminado al quedar sin residentes",
-        };
-      }
-
-      // Si hay más residentes, solo removemos este residente
-      await updateDoc(grupoRef, {
-        residentes: arrayRemove(residenteId),
-      });
-
-      return { eliminado: false, mensaje: "Residente removido del grupo" };
+      await deleteDoc(doc(db, "grupos", grupoId));
+      return { success: true, message: "Grupo eliminada correctamente" };
     } catch (error) {
-      console.error("Error al remover residente del grupo:", error);
-      throw error;
+      console.error("Error al eliminar grupo:", error);
     }
   }
 }

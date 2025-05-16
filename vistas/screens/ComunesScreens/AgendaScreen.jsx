@@ -52,6 +52,32 @@ const AgendaScreen = () => {
 
       return () => desuscribirse();
     }
+    if (departamentoId === 5) {
+      // Si el departamento es 5, buscamos las sesiones de fisioterapia
+      const desuscribirse = EmpladoControlador.obtenerSesionesPorEmpleadoYFecha(
+        user.uid,
+        fecha,
+        (sesionesObtenidas) => {
+          setData(sesionesObtenidas);
+          setCargando(false);
+        },
+      );
+
+      return () => desuscribirse();
+    }
+    if (departamentoId === 6) {
+      // Si el departamento es 6, buscamos las sesiones de terapia ocupacional
+      const desuscribirse = EmpladoControlador.obtenerGruposPorEmpleadoYFecha(
+        user.uid,
+        fecha,
+        (gruposObtenidos) => {
+          setData(gruposObtenidos);
+          setCargando(false);
+        },
+      );
+
+      return () => desuscribirse();
+    }
   }, [user, fecha, departamentoId]);
 
   const renderItem = ({ item }) => (

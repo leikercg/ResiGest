@@ -10,6 +10,8 @@ import Empleado from "../modelos/empleado";
 import { eliminarUsuarioYCuenta } from "../services/authService";
 import Cura from "../modelos/cura";
 import Visita from "../modelos/visita";
+import Sesion from "../modelos/sesion";
+import Grupo from "../modelos/grupo";
 
 class EmpleadoControlador {
   // Método para listar empleados
@@ -81,9 +83,8 @@ class EmpleadoControlador {
       mostrarAlerta("Error", "Ocurrió un problema.");
     }
   }
-
+  // Métodod que de las curas por empleado y fecha
   static obtenerCurasPorEmpleadoYFecha(usuarioId, fechaSeleccionada, callback) {
-    // Preparamos el rango de fechas
     const inicioDelDia = new Date(
       fechaSeleccionada.getFullYear(),
       fechaSeleccionada.getMonth(),
@@ -132,13 +133,12 @@ class EmpleadoControlador {
       callback(curas);
     });
   }
-
+  // Método para obtener visitas por empleado y fecha
   static obtenerVisitasPorEmpleadoYFecha(
     usuarioId,
     fechaSeleccionada,
     callback,
   ) {
-    // Definir el rango del día completo (00:00:00 a 23:59:59)
     const inicioDelDia = new Date(
       fechaSeleccionada.getFullYear(),
       fechaSeleccionada.getMonth(),
@@ -180,6 +180,106 @@ class EmpleadoControlador {
         );
       });
       callback(visitas);
+    });
+  }
+  // Método para obtener sesiones por empleado y fecha
+  static obtenerSesionesPorEmpleadoYFecha(
+    usuarioId,
+    fechaSeleccionada,
+    callback,
+  ) {
+    const inicioDelDia = new Date(
+      fechaSeleccionada.getFullYear(),
+      fechaSeleccionada.getMonth(),
+      fechaSeleccionada.getDate(),
+      0,
+      0,
+      0,
+      0,
+    );
+
+    const finDelDia = new Date(
+      fechaSeleccionada.getFullYear(),
+      fechaSeleccionada.getMonth(),
+      fechaSeleccionada.getDate(),
+      23,
+      59,
+      59,
+      999,
+    );
+    const q = query(
+      collection(db, "sesiones"),
+      where("usuarioId", "==", usuarioId),
+      where("fecha", ">=", inicioDelDia),
+      where("fecha", "<=", finDelDia),
+      orderBy("fecha", "asc"),
+    );
+
+    return onSnapshot(q, (querySnapshot) => {
+      const visitas = querySnapshot.docs.map((doc) => {
+        const data = doc.data();
+        return new Sesion(
+          doc.id,
+          data.fecha.toDate(),
+          data.descripcion,
+          data.residenteId,
+          data.usuarioId,
+          data.usuarioNombre,
+          data.residenteNombre,
+        );
+      });
+      callback(visitas);
+    });
+  }
+
+  // Método para obtener sesiones por empleado y fecha
+  static obtenerGruposPorEmpleadoYFecha(
+    usuarioId,
+    fechaSeleccionada,
+    callback,
+  ) {
+    const inicioDelDia = new Date(
+      fechaSeleccionada.getFullYear(),
+      fechaSeleccionada.getMonth(),
+      fechaSeleccionada.getDate(),
+      0,
+      0,
+      0,
+      0,
+    );
+
+    const finDelDia = new Date(
+      fechaSeleccionada.getFullYear(),
+      fechaSeleccionada.getMonth(),
+      fechaSeleccionada.getDate(),
+      23,
+      59,
+      59,
+      999,
+    );
+    const q = query(
+      collection(db, "grupos"),
+      where("usuarioId", "==", usuarioId),
+      where("fecha", ">=", inicioDelDia),
+      where("fecha", "<=", finDelDia),
+      orderBy("fecha", "asc"),
+    );
+
+    return onSnapshot(q, (querySnapshot) => {
+      const grupos = querySnapshot.docs.map((doc) => {
+        const data = doc.data();
+        return new Grupo(
+          doc.id,
+          data.descripcion,
+          data.fecha.toDate(),
+          data.residenteId,
+          data.usuarioId,
+          data.nombreUsuario,
+          data.residentes,
+        );
+      });
+      console.log("Grupos obtenidos:", grupos);
+      callback(grupos);
     });
   }
 }

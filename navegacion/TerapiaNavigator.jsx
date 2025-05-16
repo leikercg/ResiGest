@@ -87,6 +87,18 @@ const AgendaStack = () => {
   );
 };
 
+const TodosGruposStack = () => {
+  // Navegación para la pantalla de todos los grupos
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="TodosGruposScreen"
+        component={GruposScreen}
+        options={{ headerShown: false, headerStyle: styles.headerStyle }}
+      />
+    </Stack.Navigator>
+  );
+};
 const TerapiaNavigator = () => {
   return (
     <Tab.Navigator
@@ -110,6 +122,20 @@ const TerapiaNavigator = () => {
           ),
         }}
       />
+
+      <Tab.Screen
+        name="TodosGrupos"
+        component={TodosGruposStack}
+        options={{
+          title: null,
+          tabBarLabel: "Grupos",
+          headerStyle: styles.headerStyle,
+          tabBarIcon: ({ color, size }) => (
+            // Recibe el color y un tamaño por defecto
+            <Ionicons name="people" size={size} color={color} />
+          ),
+        }}
+      />
       <Tab.Screen
         name="Agenda"
         component={AgendaStack}
@@ -123,7 +149,6 @@ const TerapiaNavigator = () => {
           ),
         }}
       />
-
       <Tab.Screen
         name="Options"
         component={OpcionesStack}

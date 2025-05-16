@@ -9,10 +9,7 @@ import {
   Alert,
   Modal,
   TouchableWithoutFeedback,
-  KeyboardAvoidingView,
-  Platform,
   TextInput,
-  ScrollView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import estilos from "../../../estilos/estilos";
@@ -24,7 +21,7 @@ import ResidenteControlador from "../../../controladores/residenteControlador";
 const GruposScreen = ({ route }) => {
   // Estados (mantenemos los mismos)
   const { user } = useContext(AuthContext);
-  const { residente } = route.params;
+  const { residente } = route.params || {}; // Protección contra undefined
   const [editando, setEditando] = useState(null);
   const [grupos, setGrupos] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -33,21 +30,54 @@ const GruposScreen = ({ route }) => {
   const [fechaGrupo, setFechaGrupo] = useState(new Date());
   const [listaResidentes, setListaResidentes] = useState([]);
   const [residentesSeleccionados, setResidentesSeleccionados] = useState([]);
-
   const [mostrarSelectorResidente, setMostrarSelectorResidente] =
     useState(false);
+  const [fechaFiltro, setFechaFiltro] = useState(new Date());
 
-  // Efectos (sin cambios)
+  const cambioFecha = (event, fechaSeleccionada) => {
+    if (fechaSeleccionada) {
+      setFechaFiltro(fechaSeleccionada);
+    }
+  };
+  // Efectos
   useEffect(() => {
-    const desuscribirse = GrupoControlador.obtenerGruposPorResidente(
-      residente.id,
-      (grupos) => {
-        setGrupos(grupos);
+    let desuscribirse;
+
+    const cargarGrupos = async () => {
+      setCargando(true);
+
+      try {
+        if (residente?.id) {
+          // Caso con residente - buscar solo sus grupos
+          desuscribirse = GrupoControlador.obtenerGruposPorResidente(
+            residente.id,
+            (grupos) => {
+              setGrupos(grupos);
+              setCargando(false);
+            },
+          );
+        } else {
+          // Caso sin residente - buscar grupos por fecha seleccionada
+          desuscribirse = GrupoControlador.obtenerTodosLosGrupos(
+            fechaFiltro,
+            (grupos) => {
+              setGrupos(grupos);
+              setCargando(false);
+            },
+          );
+        }
+      } catch (error) {
+        console.error("Error cargando grupos:", error);
         setCargando(false);
-      },
-    );
-    return () => desuscribirse();
-  }, [residente.id]);
+      }
+    };
+
+    cargarGrupos();
+
+    return () => {
+      if (desuscribirse) desuscribirse();
+    };
+  }, [residente?.id, fechaFiltro]); // Añadir fechaFiltro como dependencia
 
   useEffect(() => {
     const desuscribirse =
@@ -67,18 +97,9 @@ const GruposScreen = ({ route }) => {
 
   // Manejador de edición con validación
   const manejarEditarGrupo = (grupo) => {
-    const ahora = new Date();
     const fechaGrupo = grupo.fecha.toDate
       ? grupo.fecha.toDate()
       : new Date(grupo.fecha);
-
-    if (fechaGrupo < ahora) {
-      Alert.alert(
-        "Edición no permitida",
-        "No puedes editar un grupo cuya fecha ya ha pasado",
-      );
-      return;
-    }
 
     setEditando(grupo);
     setDescripcion(grupo.descripcion);
@@ -106,19 +127,6 @@ const GruposScreen = ({ route }) => {
 
   // Manejador de eliminación con validación
   const manejarEliminarGrupo = (grupo) => {
-    const ahora = new Date();
-    const fechaGrupo = grupo.fecha.toDate
-      ? grupo.fecha.toDate()
-      : new Date(grupo.fecha);
-
-    if (fechaGrupo < ahora) {
-      Alert.alert(
-        "Eliminación no permitida",
-        "No puedes eliminar un grupo cuya fecha ya ha pasado",
-      );
-      return;
-    }
-
     Alert.alert(
       "Eliminar residente",
       "¿Estás seguro de remover a este residente del grupo?",
@@ -129,17 +137,9 @@ const GruposScreen = ({ route }) => {
           style: "destructive",
           onPress: async () => {
             try {
-              const resultado = await GrupoControlador.removerResidenteDeGrupo(
-                grupo.id,
-                residente.id,
-              );
+              const resultado = await GrupoControlador.eliminargrupo(grupo.id);
               if (resultado.eliminado) {
-                Alert.alert(
-                  "Éxito",
-                  "Grupo eliminado al quedar sin residentes",
-                );
-              } else {
-                Alert.alert("Éxito", "Residente eliminado del grupo");
+                Alert.alert("Éxito", "Grupo eliminado con éxito");
               }
             } catch (error) {
               Alert.alert("Error", error.message);
@@ -166,14 +166,24 @@ const GruposScreen = ({ route }) => {
       return;
     }
 
-    // Validación: Fecha pasada
-    const ahora = new Date();
-    if (fechaGrupo < ahora) {
+    // Validación: Al menos un residente (solo para creación)
+    if (!editando && residentesSeleccionados.length === 0) {
       Alert.alert(
-        "Fecha inválida",
-        "No puedes programar un grupo en una fecha pasada",
+        "Error",
+        "Debes seleccionar al menos un residente para el grupo",
       );
       return;
+    }
+
+    // Validación: Fecha/hora pasada
+    const ahora = new Date();
+    if (fechaGrupo < ahora) {
+      const esHoy = fechaGrupo.toDateString() === ahora.toDateString();
+
+      if (!esHoy || (esHoy && fechaGrupo <= ahora)) {
+        Alert.alert("Error", "Fecha y hora de grupo inválidas");
+        return;
+      }
     }
 
     try {
@@ -182,6 +192,7 @@ const GruposScreen = ({ route }) => {
         await GrupoControlador.actualizarGrupo(editando.id, {
           descripcion: descripcion.trim(),
           fecha: fechaGrupo,
+          residentesSeleccionados: residentesSeleccionados.map((r) => r.id), // Solo enviamos los IDs
         });
         Alert.alert("Éxito", "Grupo actualizado correctamente");
       } else {
@@ -216,7 +227,7 @@ const GruposScreen = ({ route }) => {
       </View>
     );
   }
-  // Renderizado de items con validaciones
+  // Renderizado de item
   const renderItem = ({ item }) => {
     const esMiGrupo = item.usuarioId === user?.uid;
     const ahora = new Date();
@@ -224,13 +235,17 @@ const GruposScreen = ({ route }) => {
       ? item.fecha.toDate()
       : new Date(item.fecha);
     const yaPasado = fechaItem < ahora;
-    const mostrarBotones = esMiGrupo && !yaPasado;
+    const esHoy = fechaItem.toDateString() === ahora.toDateString();
+    const mostrarEdicion = esMiGrupo && !yaPasado;
+    const mostrarEliminacion = esMiGrupo && !yaPasado && !residente;
 
     let colorFondo = styles.grupoItem;
-    if (fechaItem.toDateString() === ahora.toDateString()) {
-      colorFondo = [styles.grupoItem, { backgroundColor: "#D4EDDA" }]; // Hoy
-    } else if (yaPasado) {
-      colorFondo = [styles.grupoItem, { backgroundColor: "#F8D7DA" }]; // Pasado
+    const residenteValido = residente && residente.id; // Para no motar colores en la lista de todos los grupos
+
+    if (esHoy && residenteValido) {
+      colorFondo = [styles.grupoItem, { backgroundColor: "#D4EDDA" }]; // Hoy - verde
+    } else if (yaPasado && residenteValido) {
+      colorFondo = [styles.grupoItem, { backgroundColor: "#F8D7DA" }]; // Pasado - rojo
     }
 
     return (
@@ -252,21 +267,24 @@ const GruposScreen = ({ route }) => {
             </Text>
           </View>
 
-          {mostrarBotones && (
+          {(mostrarEdicion || mostrarEliminacion) && (
             <View style={styles.iconosAcciones}>
-              <Pressable
-                onPress={() => manejarEditarGrupo(item)}
-                style={styles.iconoBoton}
-                f
-              >
-                <Ionicons name="pencil" size={20} color="#2D9CDB" />
-              </Pressable>
-              <Pressable
-                onPress={() => manejarEliminarGrupo(item)}
-                style={styles.iconoBoton}
-              >
-                <Ionicons name="close" size={20} color="#EB5757" />
-              </Pressable>
+              {mostrarEdicion && (
+                <Pressable
+                  onPress={() => manejarEditarGrupo(item)}
+                  style={styles.iconoBoton}
+                >
+                  <Ionicons name="pencil" size={20} color="#2D9CDB" />
+                </Pressable>
+              )}
+              {mostrarEliminacion && (
+                <Pressable
+                  onPress={() => manejarEliminarGrupo(item)}
+                  style={styles.iconoBoton}
+                >
+                  <Ionicons name="close" size={20} color="#EB5757" />
+                </Pressable>
+              )}
             </View>
           )}
         </View>
@@ -282,9 +300,11 @@ const GruposScreen = ({ route }) => {
           Grupos de Terapia
         </Text>
       </View>
-      <Text style={styles.subtituloTexto}>
-        {residente.nombre} {residente.apellido}
-      </Text>
+      {residente?.nombre && residente?.apellido && (
+        <Text style={styles.subtituloTexto}>
+          {residente.nombre} {residente.apellido}
+        </Text>
+      )}
 
       {/* Lista principal */}
       <FlatList
@@ -300,7 +320,7 @@ const GruposScreen = ({ route }) => {
         showsVerticalScrollIndicator={false}
       />
 
-      {/* Modal de agregar/editar */}
+      {/* Modal */}
       <Modal
         visible={mostrarModal}
         animationType="slide"
@@ -310,10 +330,7 @@ const GruposScreen = ({ route }) => {
         <TouchableWithoutFeedback onPress={manejarCerrarModal}>
           <View style={styles.contenedorModal}>
             <TouchableWithoutFeedback onPress={() => {}}>
-              <KeyboardAvoidingView
-                behavior={Platform.OS === "ios" ? "padding" : "height"}
-                style={styles.contenidoModal}
-              >
+              <View style={styles.contenidoModal}>
                 <Text style={styles.modalTitulo}>
                   {editando ? "Editar Grupo" : "Nuevo Grupo"}
                 </Text>
@@ -363,7 +380,7 @@ const GruposScreen = ({ route }) => {
                             opacity: pressed ? 0.5 : 1,
                           })}
                         >
-                          <Ionicons name="add-circle" size={24} color="green" />
+                          <Ionicons name="add" size={24} color="green" />
                         </Pressable>
                       </Pressable>
                     )}
@@ -390,7 +407,7 @@ const GruposScreen = ({ route }) => {
                             opacity: pressed ? 0.5 : 1,
                           })}
                         >
-                          <Ionicons name="close-circle" size={20} color="red" />
+                          <Ionicons name="close" size={20} color="red" />
                         </Pressable>
                       </Pressable>
                     )}
@@ -449,7 +466,7 @@ const GruposScreen = ({ route }) => {
                     </Text>
                   </Pressable>
                 </View>
-              </KeyboardAvoidingView>
+              </View>
             </TouchableWithoutFeedback>
           </View>
         </TouchableWithoutFeedback>
@@ -465,6 +482,19 @@ const GruposScreen = ({ route }) => {
       >
         <Text style={estilos.botonFLotante.buttonText}>+</Text>
       </Pressable>
+
+      {/* Picker flotante abajo a la derecha */}
+      {!residente?.id && (
+        <View style={styles.pickerFlotante}>
+          <DateTimePicker
+            value={fechaFiltro}
+            mode="date"
+            onChange={cambioFecha}
+            locale="es-ES"
+            style={{ backgroundColor: "white", borderRadius: 10 }}
+          />
+        </View>
+      )}
     </View>
   );
 };
@@ -539,10 +569,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
-  },
-  iconoBoton: {
-    padding: 6,
-    borderRadius: 6,
   },
   contenedorModal: {
     flex: 1,
@@ -659,6 +685,14 @@ const styles = StyleSheet.create({
   chipText: {
     marginRight: 6,
     color: "#333",
+  },
+  pickerFlotante: {
+    position: "absolute",
+    bottom: 100,
+    right: 20,
+    borderRadius: 10,
+    elevation: 4,
+    zIndex: 10,
   },
 });
 
