@@ -12,6 +12,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   TextInput,
+  ScrollView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import estilos from "../../../estilos/estilos";
@@ -308,133 +309,148 @@ const GruposScreen = ({ route }) => {
       >
         <TouchableWithoutFeedback onPress={manejarCerrarModal}>
           <View style={styles.contenedorModal}>
-            <KeyboardAvoidingView
-              behavior={Platform.OS === "ios" ? "padding" : "height"}
-              style={styles.contenidoModal}
-            >
-              <Text style={styles.modalTitulo}>
-                {editando ? "Editar Grupo" : "Nuevo Grupo"}
-              </Text>
-
-              <Text style={styles.label}>Descripción:</Text>
-              <TextInput
-                style={styles.input}
-                value={descripcion}
-                onChangeText={setDescripcion}
-              />
-              <Text style={styles.label}>Agregar residente(s):</Text>
-              <Pressable
-                style={styles.selectorResidente}
-                onPress={() =>
-                  setMostrarSelectorResidente(!mostrarSelectorResidente)
-                }
+            <TouchableWithoutFeedback onPress={() => {}}>
+              <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                style={styles.contenidoModal}
               >
-                <Text style={styles.textoSelector}>Seleccionar residentes</Text>
-              </Pressable>
+                <Text style={styles.modalTitulo}>
+                  {editando ? "Editar Grupo" : "Nuevo Grupo"}
+                </Text>
 
-              {mostrarSelectorResidente && (
-                <FlatList
-                  data={listaResidentes.filter(
-                    (residenteLista) =>
-                      !residentesSeleccionados.some(
-                        (residenteSeleccionado) =>
-                          residenteSeleccionado.id === residenteLista.id,
-                      ),
-                  )}
-                  keyExtractor={(item) => item.id}
-                  style={styles.listaResidentes}
-                  renderItem={({ item }) => (
-                    <View style={styles.itemResidente}>
-                      <Text style={styles.textoItemResidente}>
-                        {item.apellido}, {item.nombre}
-                      </Text>
-                      <Pressable
-                        onPress={() => {
-                          setResidentesSeleccionados((prev) => [...prev, item]);
-                        }}
-                        style={styles.botonEliminarAgregar}
-                      >
-                        <Ionicons name="add-circle" size={24} color="green" />
-                      </Pressable>
-                    </View>
-                  )}
+                <Text style={styles.label}>Descripción:</Text>
+                <TextInput
+                  style={styles.input}
+                  value={descripcion}
+                  onChangeText={setDescripcion}
                 />
-              )}
-
-              {/* Residentes seleccionados */}
-              {residentesSeleccionados.length > 0 && (
-                <View style={styles.residentesSeleccionadosContainer}>
-                  {residentesSeleccionados.map((residente) => (
-                    <View key={residente.id} style={styles.residenteChip}>
-                      <Text style={styles.chipText}>
-                        {residente.apellido}, {residente.nombre}
-                      </Text>
-                      <Pressable
-                        onPress={() =>
-                          setResidentesSeleccionados((prev) =>
-                            prev.filter((r) => r.id !== residente.id),
-                          )
-                        }
-                      >
-                        <Ionicons name="close-circle" size={20} color="red" />
-                      </Pressable>
-                    </View>
-                  ))}
-                </View>
-              )}
-              {/* Selector de fecha y hora */}
-              <Text style={styles.label}>Fecha y hora:</Text>
-              <View style={styles.dateTimeContainer}>
-                <View style={styles.dateTimeButton}>
-                  <DateTimePicker
-                    value={fechaGrupo}
-                    mode="date"
-                    display="default"
-                    locale="es-ES"
-                    onChange={manejarCambioFecha}
-                  />
-                </View>
-                <View style={styles.dateTimeButton}>
-                  <DateTimePicker
-                    value={fechaGrupo}
-                    mode="time"
-                    display="default"
-                    onChange={manejarCambioHora}
-                  />
-                </View>
-              </View>
-
-              <View style={styles.contenedorBotones}>
+                <Text style={styles.label}>Agregar residente(s):</Text>
                 <Pressable
-                  style={[styles.botonModal, styles.botonCancelar]}
-                  onPress={manejarCerrarModal}
-                >
-                  <Text style={styles.textoBotonModal}>Cancelar</Text>
-                </Pressable>
-                <Pressable
-                  style={[styles.botonModal, styles.botonGuardar]}
+                  style={styles.selectorResidente}
                   onPress={() =>
-                    Alert.alert(
-                      "Confirmar",
-                      editando
-                        ? "¿Estás seguro de actualizar este grupo?"
-                        : "¿Estás seguro de crear este grupo?",
-                      [
-                        { text: "Cancelar", style: "cancel" },
-                        {
-                          text: editando ? "Actualizar" : "Crear",
-                          onPress: manejarGuardadoGrupo,
-                        },
-                      ],
-                    )
+                    setMostrarSelectorResidente(!mostrarSelectorResidente)
                   }
                 >
-                  <Text style={styles.textoBotonModal}>
-                    {editando ? "Actualizar" : "Crear"}
+                  <Text style={styles.textoSelector}>
+                    Seleccionar residentes
                   </Text>
                 </Pressable>
-              </View>
-            </KeyboardAvoidingView>
+
+                {mostrarSelectorResidente && (
+                  <FlatList
+                    data={listaResidentes.filter(
+                      (residenteLista) =>
+                        !residentesSeleccionados.some(
+                          (residenteSeleccionado) =>
+                            residenteSeleccionado.id === residenteLista.id,
+                        ),
+                    )}
+                    keyExtractor={(item) => item.id}
+                    style={styles.listaResidentes}
+                    renderItem={({ item }) => (
+                      <Pressable style={styles.itemResidente}>
+                        <Text style={styles.textoItemResidente}>
+                          {item.apellido}, {item.nombre}
+                        </Text>
+                        <Pressable
+                          onPress={() => {
+                            setResidentesSeleccionados((prev) => [
+                              ...prev,
+                              item,
+                            ]);
+                          }}
+                          style={({ pressed }) => ({
+                            opacity: pressed ? 0.5 : 1,
+                          })}
+                        >
+                          <Ionicons name="add-circle" size={24} color="green" />
+                        </Pressable>
+                      </Pressable>
+                    )}
+                  />
+                )}
+
+                {residentesSeleccionados.length > 0 && (
+                  <FlatList
+                    data={residentesSeleccionados}
+                    keyExtractor={(item) => item.id}
+                    style={styles.residentesSeleccionadosContainer}
+                    renderItem={({ item }) => (
+                      <Pressable style={styles.residenteChip}>
+                        <Text style={styles.chipText}>
+                          {item.apellido}, {item.nombre}
+                        </Text>
+                        <Pressable
+                          onPress={() =>
+                            setResidentesSeleccionados((prev) =>
+                              prev.filter((r) => r.id !== item.id),
+                            )
+                          }
+                          style={({ pressed }) => ({
+                            opacity: pressed ? 0.5 : 1,
+                          })}
+                        >
+                          <Ionicons name="close-circle" size={20} color="red" />
+                        </Pressable>
+                      </Pressable>
+                    )}
+                  />
+                )}
+
+                {/* Selector de fecha y hora */}
+                <Text style={styles.label}>Fecha y hora:</Text>
+                <View style={styles.dateTimeContainer}>
+                  <View style={styles.dateTimeButton}>
+                    <DateTimePicker
+                      value={fechaGrupo}
+                      mode="date"
+                      display="default"
+                      locale="es-ES"
+                      onChange={manejarCambioFecha}
+                    />
+                  </View>
+                  <View style={styles.dateTimeButton}>
+                    <DateTimePicker
+                      value={fechaGrupo}
+                      mode="time"
+                      display="default"
+                      onChange={manejarCambioHora}
+                    />
+                  </View>
+                </View>
+
+                <View style={styles.contenedorBotones}>
+                  <Pressable
+                    style={[styles.botonModal, styles.botonCancelar]}
+                    onPress={manejarCerrarModal}
+                  >
+                    <Text style={styles.textoBotonModal}>Cancelar</Text>
+                  </Pressable>
+                  <Pressable
+                    style={[styles.botonModal, styles.botonGuardar]}
+                    onPress={() =>
+                      Alert.alert(
+                        "Confirmar",
+                        editando
+                          ? "¿Estás seguro de actualizar este grupo?"
+                          : "¿Estás seguro de crear este grupo?",
+                        [
+                          { text: "Cancelar", style: "cancel" },
+                          {
+                            text: editando ? "Actualizar" : "Crear",
+                            onPress: manejarGuardadoGrupo,
+                          },
+                        ],
+                      )
+                    }
+                  >
+                    <Text style={styles.textoBotonModal}>
+                      {editando ? "Actualizar" : "Crear"}
+                    </Text>
+                  </Pressable>
+                </View>
+              </KeyboardAvoidingView>
+            </TouchableWithoutFeedback>
           </View>
         </TouchableWithoutFeedback>
       </Modal>
@@ -602,11 +618,12 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   selectorResidente: {
+    maxHeight: 100,
+    marginBottom: 15,
+    borderRadius: 8,
     borderWidth: 1,
     borderColor: "#ccc",
-    borderRadius: 8,
     padding: 12,
-    marginBottom: 15,
     backgroundColor: "#f0f0f0",
   },
   listaResidentes: {
@@ -623,9 +640,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: "#eaeaea",
   },
-
   residentesSeleccionadosContainer: {
     width: "100%",
+    maxHeight: 100,
     marginBottom: 10,
   },
   residenteChip: {
