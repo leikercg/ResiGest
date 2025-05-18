@@ -17,7 +17,7 @@ import { Ionicons } from "@expo/vector-icons";
 import estilos from "../../../estilos/estilos";
 import { AuthContext } from "../../../contexto/AuthContext";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import VisitasControlador from "../../../controladores/vistaControlador";
+import VisitasControlador from "../../../controladores/visitaControlador";
 
 const VisitasScreen = ({ route }) => {
   // Estados

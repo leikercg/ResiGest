@@ -14,7 +14,7 @@ import {
 import { db } from "../fireBaseConfig";
 import Residente from "../modelos/residente";
 import SeguimientoControlador from "./seguimientoControlador";
-import VisitaControlador from "./vistaControlador";
+import VisitaControlador from "./visitaControlador";
 import TareaControlador from "./tareaControlador";
 import CurasControlador from "./curaControlador";
 import SesionControlador from "./sesionCotrolador";
@@ -369,6 +369,7 @@ class ResidenteControlador {
       const tipo = ["cura", "visita", "sesion", "grupo", "tarea"][index];
       const unsuscribe = onSnapshot(q, (querySnapshot) => {
         querySnapshot.docChanges().forEach((change) => {
+          // Detectar cambios, para no recorrer toda la lista
           if (change.type === "added") {
             const data = change.doc.data();
             resultados.push({
@@ -378,7 +379,6 @@ class ResidenteControlador {
               ...data,
             });
           }
-          // También manejar removed y modified si es necesario
         });
 
         // Ordenar todos los resultados por fecha
