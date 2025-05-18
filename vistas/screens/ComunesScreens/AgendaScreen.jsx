@@ -22,7 +22,7 @@ const AgendaScreen = () => {
   const [cargando, setCargando] = useState(true);
   const [mostrarPicker, setMostrarPicker] = useState(false); // Control de visibilidad
 
-  const cambioFecha = (event, fechaSeleccionada) => {
+  const manejarCambioFecha = (event, fechaSeleccionada) => {
     // Para Android, necesitamos ocultar el picker después de seleccionar
     if (Platform.OS === "android") {
       setMostrarPicker(false);
@@ -142,7 +142,7 @@ const AgendaScreen = () => {
           <DateTimePicker
             value={fecha}
             mode="date"
-            onChange={cambioFecha}
+            onChange={manejarCambioFecha}
             locale="es-ES"
             style={{
               borderRadius: 10,
@@ -163,7 +163,7 @@ const AgendaScreen = () => {
             <DateTimePicker
               value={fecha}
               mode="date"
-              onChange={cambioFecha}
+              onChange={manejarCambioFecha}
               locale="es-ES"
             />
           )}

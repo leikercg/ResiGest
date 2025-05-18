@@ -61,7 +61,7 @@ const FormResidente = ({ navigation, route }) => {
   };
 
   // Función que actualiza el estado de la fecha cada vez que cambia
-  const onChangeFecha = (event, fechaSeleccionada) => {
+  const manejarCambioFecha = (event, fechaSeleccionada) => {
     // Para Android, necesitamos ocultar el picker después de seleccionar
     if (Platform.OS === "android") {
       setMostrarPicker(false);
@@ -171,7 +171,7 @@ const FormResidente = ({ navigation, route }) => {
             <DateTimePicker
               value={fechaNacimiento}
               mode="date"
-              onChange={onChangeFecha}
+              onChange={manejarCambioFecha}
               locale="es-ES"
               style={{
                 borderRadius: 10,
@@ -192,7 +192,7 @@ const FormResidente = ({ navigation, route }) => {
               <DateTimePicker
                 value={fechaNacimiento}
                 mode="date"
-                onChange={onChangeFecha}
+                onChange={manejarCambioFecha}
                 locale="es-ES"
               />
             )}
