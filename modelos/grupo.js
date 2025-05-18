@@ -4,14 +4,14 @@ class Grupo {
     descripcion,
     fecha,
     usuarioId,
-    nombreUsuario,
+    usuarioNombre,
     residentes = [],
   ) {
     this.id = id;
     this.descripcion = descripcion;
     this.fecha = fecha;
     this.usuarioId = usuarioId;
-    this.nombreUsuario = nombreUsuario;
+    this.usuarioNombre = usuarioNombre;
     this.residentes = residentes;
   }
 }

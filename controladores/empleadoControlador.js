@@ -272,9 +272,8 @@ class EmpleadoControlador {
           doc.id,
           data.descripcion,
           data.fecha.toDate(),
-          data.residenteId,
           data.usuarioId,
-          data.nombreUsuario,
+          data.usuarioNombre,
           data.residentes,
         );
       });

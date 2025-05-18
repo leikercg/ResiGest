@@ -1,16 +1,16 @@
 import React, { useContext, useState, useEffect } from "react";
 import {
   View,
-  Text,
   FlatList,
-  StyleSheet,
   ActivityIndicator,
+  StyleSheet,
+  Text,
 } from "react-native";
 import { AuthContext } from "../../../contexto/AuthContext";
 import EmpladoControlador from "../../../controladores/empleadoControlador";
 import estilos from "../../../estilos/estilos";
-import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import AgendaItem from "./../../components/AgendaItem"; // Importa el componente contenedor
 
 const AgendaScreen = () => {
   const [fecha, setFecha] = useState(new Date());
@@ -79,38 +79,23 @@ const AgendaScreen = () => {
       return () => desuscribirse();
     }
   }, [user, fecha, departamentoId]);
+  const getTipoPorDepartamento = (departamentoId) => {
+    switch (departamentoId) {
+      case 2:
+        return "visita";
+      case 3:
+        return "cura";
+      case 5:
+        return "sesion";
+      case 6:
+        return "grupo";
+      default:
+        return null;
+    }
+  };
 
   const renderItem = ({ item }) => (
-    <View style={styles.estiloItem}>
-      <View style={styles.estiloContenedor}>
-        <View style={styles.estiloInfo}>
-          <View style={styles.estiloCabecera}>
-            <Ionicons name="time" size={20} color="#0000FF" />
-            <Text style={styles.curaFecha}>
-              {item.fecha.toLocaleTimeString("es-ES", {
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: false,
-              })}
-            </Text>
-          </View>
-          <Text style={styles.estiloResidente}>{item.residenteNombre}</Text>
-
-          {departamentoId === 2 && (
-            <Text style={styles.curaObseervacion}>Motivo: {item.motivo}</Text>
-          )}
-
-          {departamentoId === 3 && (
-            <>
-              <Text style={styles.curaZona}>Zona: {item.zona}</Text>
-              <Text style={styles.curaObseervacion}>
-                Observación: {item.observacion}
-              </Text>
-            </>
-          )}
-        </View>
-      </View>
-    </View>
+    <AgendaItem item={item} tipo={getTipoPorDepartamento(departamentoId)} />
   );
 
   if (cargando) {

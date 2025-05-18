@@ -9,29 +9,25 @@ import {
   orderBy,
   addDoc,
   getDocs,
-  serverTimestamp,
+  getDoc,
 } from "firebase/firestore";
 import { db } from "../fireBaseConfig";
 import Grupo from "../modelos/grupo";
 
 class GrupoControlador {
   // Método para crear un nuevo grupo
-  static async crearGrupo(
-    descripcion,
-    usuarioId,
-    nombreUsuario,
-    residentesIds,
-    fecha,
-  ) {
+  static async crearGrupo(descripcion, usuarioId, residentesIds, fecha) {
     try {
-      // Crear el documento
-      const docRef = await addDoc(collection(db, "grupos"), {
+      const usuarioDoc = await getDoc(doc(db, "usuarios", usuarioId));
+      const data = usuarioDoc.data();
+      const usuarioNombre = `${data.nombre} ${data.apellido}`;
+
+      await addDoc(collection(db, "grupos"), {
         descripcion: descripcion.trim(),
         usuarioId,
-        nombreUsuario,
+        usuarioNombre,
         residentes: residentesIds,
         fecha,
-        fechaCreacion: serverTimestamp(),
       });
     } catch (error) {
       console.error("Error al crear grupo:", error);
@@ -78,7 +74,7 @@ class GrupoControlador {
           data.descripcion,
           data.fecha.toDate(),
           data.usuarioId,
-          data.nombreUsuario || "",
+          data.usuarioNombre,
           data.residentes || [],
         );
       });
@@ -102,7 +98,7 @@ class GrupoControlador {
           data.descripcion,
           data.fecha.toDate(),
           data.usuarioId,
-          data.nombreUsuario || data.usuarioNombre || "",
+          data.usuarioNombre,
           data.residentes || [],
         );
       });

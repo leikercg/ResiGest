@@ -203,7 +203,6 @@ const GruposScreen = ({ route }) => {
         await GrupoControlador.crearGrupo(
           descripcion.trim(),
           user.uid,
-          user.displayName || "Usuario",
           idsSeleccionados,
           fechaGrupo,
         );
@@ -256,14 +255,12 @@ const GruposScreen = ({ route }) => {
               <Ionicons name="calendar" size={20} color="#0000FF" />
               <Text style={styles.grupoFecha}>
                 {formatearFechaHora(item.fecha)}
-                {yaPasado && (
-                  <Text style={styles.textoRealizado}> (Realizado)</Text>
-                )}
+                {yaPasado && <Text style={styles.textoRealizado}></Text>}
               </Text>
             </View>
             <Text style={styles.grupoDescripcion}>{item.descripcion}</Text>
             <Text style={styles.grupoUsuario}>
-              Creado por: {item.nombreUsuario}
+              Creado por: {item.usuarioNombre}
             </Text>
           </View>
 
@@ -341,7 +338,7 @@ const GruposScreen = ({ route }) => {
                   value={descripcion}
                   onChangeText={setDescripcion}
                 />
-                <Text style={styles.label}>Agregar residente(s):</Text>
+                <Text style={styles.label}>Agregar residente:</Text>
                 <Pressable
                   style={styles.selectorResidente}
                   onPress={() =>
