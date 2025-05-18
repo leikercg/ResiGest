@@ -8,6 +8,7 @@ import {
   onSnapshot,
   orderBy,
   addDoc,
+  getDocs,
   serverTimestamp,
 } from "firebase/firestore";
 import { db } from "../fireBaseConfig";
@@ -116,6 +117,49 @@ class GrupoControlador {
       return { success: true, message: "Grupo eliminada correctamente" };
     } catch (error) {
       console.error("Error al eliminar grupo:", error);
+    }
+  }
+
+  static async eliminarReferenciasResidenteEnGrupos(residenteId) {
+    try {
+      // Referencia a la colección grupos
+      const gruposRef = collection(db, "grupos");
+
+      // Buscar todos los grupos que contengan al residente en su array residentes
+      const q = query(
+        gruposRef,
+        where("residentes", "array-contains", residenteId),
+      );
+      const querySnapshot = await getDocs(q);
+
+      // Cremos un array de promesas para eliminar al residente de cada grupo
+      const actualizaciones = querySnapshot.docs.map(async (doc) => {
+        const grupoData = doc.data();
+
+        // Deja fuera al residente pasado por parámetro
+        const nuevosResidentes = grupoData.residentes.filter(
+          (id) => id !== residenteId,
+        );
+
+        // Si el grupo queda vacío, lo eliminamos
+        if (nuevosResidentes.length === 0) {
+          await this.eliminarGrupo(doc.id);
+        }
+        // Si no, lo actualizamos
+        else {
+          await updateDoc(doc.ref, {
+            residentes: nuevosResidentes,
+          });
+        }
+      });
+
+      // Ejecutar todas las actualizaciones en paralelo y se espera a que todas se haya completado
+      await Promise.all(actualizaciones);
+    } catch (error) {
+      console.error(
+        "Error al eliminar referencias del residente en grupos:",
+        error,
+      );
     }
   }
 }

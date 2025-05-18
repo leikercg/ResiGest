@@ -18,6 +18,7 @@ import VisitaControlador from "./vistaControlador";
 import TareaControlador from "./tareaControlador";
 import CurasControlador from "./curaControlador";
 import SesionControlador from "./sesionCotrolador";
+import GrupoControlador from "./grupoControlador";
 
 class ResidenteControlador {
   // Método para escuchar cambios en los familiares de un residente
@@ -124,7 +125,7 @@ class ResidenteControlador {
             text: "Eliminar",
             onPress: async () => {
               try {
-                // 1. Obtener datos del residente
+                // Obtener datos del residente
                 const residenteDoc = await getDoc(doc(db, "residentes", id));
                 if (!residenteDoc.exists()) {
                   throw new Error("Residente no encontrado");
@@ -132,17 +133,18 @@ class ResidenteControlador {
 
                 const familiaresIds = residenteDoc.data().familiares || [];
 
-                // 2. Eliminar elementos asociados
+                // Eliminar elementos asociados
                 await VisitaControlador.eliminarVisitasResidente(id);
                 await SeguimientoControlador.eliminarSeguimientosResidente(id);
                 await TareaControlador.eliminarTareasResidente(id);
                 await CurasControlador.eliminarCurasResidente(id);
                 await SesionControlador.eliminarSesionesResidente(id);
+                await GrupoControlador.eliminarReferenciasResidenteEnGrupos(id);
 
-                // 3. Eliminar residente
+                // Eliminar residente
                 await deleteDoc(doc(db, "residentes", id));
 
-                // 4. Eliminar familiares no referenciados
+                // Eliminar familiares no referenciados
                 await this.eliminarFamiliaresSinReferencias(familiaresIds);
 
                 console.log("Eliminación completada exitosamente");
