@@ -301,6 +301,98 @@ class ResidenteControlador {
       mostrarAlerta("Error", "Ocurrió un problema.");
     }
   }
+  // Método para obtener el itinerario de un residente en una fecha específica
+  static obtenerItinerarioResidente(residenteId, fechaSeleccionada, callback) {
+    const inicioDelDia = new Date(
+      fechaSeleccionada.getFullYear(),
+      fechaSeleccionada.getMonth(),
+      fechaSeleccionada.getDate(),
+      0,
+      0,
+      0,
+      0,
+    );
+
+    const finDelDia = new Date(
+      fechaSeleccionada.getFullYear(),
+      fechaSeleccionada.getMonth(),
+      fechaSeleccionada.getDate(),
+      23,
+      59,
+      59,
+      999,
+    );
+
+    // Consultas para cada tipo
+    const queries = [
+      query(
+        collection(db, "curas"),
+        where("residenteId", "==", residenteId),
+        where("fecha", ">=", inicioDelDia),
+        where("fecha", "<=", finDelDia),
+        orderBy("fecha", "des"),
+      ),
+      query(
+        collection(db, "visitas"),
+        where("residenteId", "==", residenteId),
+        where("fecha", ">=", inicioDelDia),
+        where("fecha", "<=", finDelDia),
+        orderBy("fecha", "asc"),
+      ),
+      query(
+        collection(db, "sesiones"),
+        where("residenteId", "==", residenteId),
+        where("fecha", ">=", inicioDelDia),
+        where("fecha", "<=", finDelDia),
+        orderBy("fecha", "asc"),
+      ),
+      query(
+        collection(db, "grupos"),
+        where("residentes", "array-contains", residenteId),
+        where("fecha", ">=", inicioDelDia),
+        where("fecha", "<=", finDelDia),
+        orderBy("fecha", "asc"),
+      ),
+      query(
+        collection(db, "tareas"),
+        where("residenteId", "==", residenteId),
+        where("fecha", ">=", inicioDelDia),
+        where("fecha", "<=", finDelDia),
+        orderBy("fecha", "asc"),
+      ),
+    ];
+
+    const resultados = [];
+    const desuscripciones = [];
+
+    queries.forEach((q, index) => {
+      const tipo = ["cura", "visita", "sesion", "grupo", "tarea"][index];
+      const unsuscribe = onSnapshot(q, (querySnapshot) => {
+        querySnapshot.docChanges().forEach((change) => {
+          if (change.type === "added") {
+            const data = change.doc.data();
+            resultados.push({
+              id: change.doc.id,
+              tipo, // Tipo de actividad
+              fecha: data.fecha.toDate(),
+              ...data,
+            });
+          }
+          // También manejar removed y modified si es necesario
+        });
+
+        // Ordenar todos los resultados por fecha
+        const resultadosOrdenados = [...resultados].sort(
+          (a, b) => a.fecha - b.fecha,
+        );
+        callback(resultadosOrdenados);
+      });
+
+      desuscripciones.push(unsuscribe);
+    });
+
+    return () => desuscripciones.forEach((unsuscribe) => unsuscribe());
+  }
 }
 
 export default ResidenteControlador;

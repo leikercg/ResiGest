@@ -21,16 +21,19 @@ const GrupoItem = ({ item }) => {
                 hour12: false,
               })}
             </Text>
+            <Text style={styles.estiloTipoAccion}>
+              Sesión grupal de terapia ocupacional
+            </Text>
           </View>
-          <Text style={styles.estiloResidente}>
-            {item.residenteNombre || "Grupo de terapia"}
-          </Text>
-          <Text style={styles.textoInfo}>{item.descripcion}</Text>
+          <Text style={styles.textoInfo}>Descripción: {item.descripcion}</Text>
           {item.residentes && (
             <Text style={styles.textoInfo}>
               Participantes: {item.residentes.length}
             </Text>
           )}
+          <Text style={styles.estiloInfoUsuario}>
+            Realizado por: {item.usuarioNombre}
+          </Text>
         </View>
       </View>
     </View>

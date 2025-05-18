@@ -21,9 +21,14 @@ const VisitaItem = ({ item }) => {
                 hour12: false,
               })}
             </Text>
+            <Text style={styles.estiloTipoAccion}>Visita médica</Text>
           </View>
           <Text style={styles.estiloResidente}>{item.residenteNombre}</Text>
           <Text style={styles.textoInfo}>Motivo: {item.motivo}</Text>
+          <Text style={styles.textoInfo}>Observación: {item.observacion}</Text>
+          <Text style={styles.estiloInfoUsuario}>
+            Realizado por: {item.usuarioNombre}
+          </Text>
         </View>
       </View>
     </View>

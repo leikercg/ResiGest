@@ -20,11 +20,15 @@ const ItemCura = ({ item }) => {
                 hour12: false,
               })}
             </Text>
+            <Text style={styles.estiloTipoAccion}>Cura de enfermería</Text>
           </View>
           <Text style={styles.estiloResidente}>{item.residenteNombre}</Text>
           <Text style={styles.textoInfo}>Zona: {item.zona}</Text>
           <Text style={styles.textoInfo}>Observación: {item.observacion}</Text>
           <Text style={styles.textoInfo}>Creado por: {item.usuarioNombre}</Text>
+          <Text style={styles.estiloInfoUsuario}>
+            Realizado por: {item.usuarioNombre}
+          </Text>
         </View>
       </View>
     </View>

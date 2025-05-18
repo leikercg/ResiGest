@@ -193,7 +193,11 @@ const ResidenteScreen = ({ route, navigation }) => {
                 styles.BotonItinerario,
                 pressed && styles.BotonItinerarioPresionado,
               ]}
-              onPress={() => console.log("Itinerario pulsado")}
+              onPress={() =>
+                navigation.navigate("ItinerarioResidenteScreen", {
+                  residente: residente, // Enviamos el residente
+                })
+              }
             >
               <Text style={styles.textoBotonItinerario}>
                 Itinerario residente

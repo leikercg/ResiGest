@@ -2,8 +2,7 @@ import React from "react";
 import { View, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "./../../estilos/AgendaStyles";
-
-const SesionItem = ({ item }) => {
+const TareaItem = ({ item }) => {
   const fechaItem = item.fecha?.toDate
     ? item.fecha.toDate()
     : new Date(item.fecha);
@@ -21,7 +20,7 @@ const SesionItem = ({ item }) => {
                 hour12: false,
               })}
             </Text>
-            <Text style={styles.estiloTipoAccion}>Sesión de fisioterapia</Text>
+            <Text style={styles.estiloTipoAccion}>Tarea asistencial</Text>
           </View>
           <Text style={styles.estiloResidente}>{item.residenteNombre}</Text>
           <Text style={styles.textoInfo}>Descripción: {item.descripcion}</Text>
@@ -34,4 +33,4 @@ const SesionItem = ({ item }) => {
   );
 };
 
-export default SesionItem;
+export default TareaItem;

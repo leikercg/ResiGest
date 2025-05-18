@@ -29,6 +29,12 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingRight: 10,
   },
+  estiloInfoUsuario: {
+    flex: 1,
+    paddingRight: 10,
+    marginTop: 10,
+    color: "#555",
+  },
   estiloCabecera: {
     flexDirection: "row",
     alignItems: "center",
@@ -44,6 +50,12 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     marginBottom: 5,
     color: "#333",
+  },
+  estiloTipoAccion: {
+    marginLeft: 8,
+    fontSize: 14,
+    color: "#555",
+    fontWeight: "bold",
   },
   textoInfo: {
     fontSize: 13,
