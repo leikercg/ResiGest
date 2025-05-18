@@ -10,9 +10,11 @@ import {
   Modal,
   TouchableWithoutFeedback,
   TextInput,
+  Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import estilos from "../../../estilos/estilos";
+import pickerStyles from "../../../estilos/pickerStyles";
 import { AuthContext } from "../../../contexto/AuthContext";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import GrupoControlador from "../../../controladores/grupoControlador";
@@ -32,9 +34,15 @@ const GruposScreen = ({ route }) => {
   const [residentesSeleccionados, setResidentesSeleccionados] = useState([]);
   const [mostrarSelectorResidente, setMostrarSelectorResidente] =
     useState(false);
-  const [fechaFiltro, setFechaFiltro] = useState(new Date());
 
-  const cambioFecha = (event, fechaSeleccionada) => {
+  const [fechaFiltro, setFechaFiltro] = useState(new Date());
+  const [mostrarPicker, setMostrarPicker] = useState(false); // Control de visibilidad de fecha
+  const [mostrarTimePicker, setMostrarTimePicker] = useState(false); // Control de visibilidad de hora
+
+  const manejarCambioFechaFiltro = (event, fechaSeleccionada) => {
+    if (Platform.OS === "android") {
+      setMostrarPicker(false);
+    }
     if (fechaSeleccionada) {
       setFechaFiltro(fechaSeleccionada);
     }
@@ -151,10 +159,16 @@ const GruposScreen = ({ route }) => {
   };
 
   const manejarCambioFecha = (event, selectedDate) => {
+    if (Platform.OS === "android") {
+      setMostrarPicker(false);
+    }
     const fechaActual = selectedDate || fechaGrupo;
     setFechaGrupo(fechaActual);
   };
   const manejarCambioHora = (event, selectedTime) => {
+    if (Platform.OS === "android") {
+      setMostrarTimePicker(false);
+    }
     setFechaGrupo(selectedTime || fechaGrupo);
   };
 
@@ -413,24 +427,76 @@ const GruposScreen = ({ route }) => {
 
                 {/* Selector de fecha y hora */}
                 <Text style={styles.label}>Fecha y hora:</Text>
-                <View style={styles.dateTimeContainer}>
-                  <View style={styles.dateTimeButton}>
-                    <DateTimePicker
-                      value={fechaGrupo}
-                      mode="date"
-                      display="default"
-                      locale="es-ES"
-                      onChange={manejarCambioFecha}
-                    />
-                  </View>
-                  <View style={styles.dateTimeButton}>
-                    <DateTimePicker
-                      value={fechaGrupo}
-                      mode="time"
-                      display="default"
-                      onChange={manejarCambioHora}
-                    />
-                  </View>
+                <View style={pickerStyles.dateTimeContainer}>
+                  {/* Selector de fecha para iOS */}
+                  {Platform.OS === "ios" && (
+                    <View style={pickerStyles.dateTimeButton}>
+                      <DateTimePicker
+                        value={fechaGrupo}
+                        mode="date"
+                        onChange={manejarCambioFecha}
+                        locale="es-ES"
+                        style={{
+                          borderRadius: 10,
+                        }}
+                      />
+                    </View>
+                  )}
+                  {/* Selector de fecha para Android */}
+                  {Platform.OS === "android" && (
+                    <View style={pickerStyles.dateTimeButtonAndroid}>
+                      <Pressable onPress={() => setMostrarPicker(true)}>
+                        <Text>{fechaGrupo.toLocaleDateString("es-ES")}</Text>
+                      </Pressable>
+
+                      {mostrarPicker && (
+                        <DateTimePicker
+                          value={fechaGrupo}
+                          mode="date"
+                          onChange={manejarCambioFecha}
+                          locale="es-ES"
+                        />
+                      )}
+                    </View>
+                  )}
+                  {/* Selector de hora para iOS - Siempre visible */}
+                  {Platform.OS === "ios" && (
+                    <View style={pickerStyles.dateTimeButton}>
+                      <DateTimePicker
+                        value={fechaGrupo}
+                        mode="time"
+                        onChange={manejarCambioHora}
+                        locale="es-ES"
+                        style={{ borderRadius: 10 }}
+                      />
+                    </View>
+                  )}
+
+                  {/* Selector de hora para Android - Se muestra al presionar */}
+                  {Platform.OS === "android" && (
+                    <View style={pickerStyles.dateTimeButtonAndroid}>
+                      <Pressable onPress={() => setMostrarTimePicker(true)}>
+                        <Text>
+                          {fechaGrupo.toLocaleTimeString("es-ES", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </Text>
+                      </Pressable>
+
+                      {mostrarTimePicker && (
+                        <DateTimePicker
+                          value={fechaGrupo}
+                          mode="time"
+                          onChange={(event, time) => {
+                            setMostrarTimePicker(false);
+                            manejarCambioHora(event, time);
+                          }}
+                          locale="es-ES"
+                        />
+                      )}
+                    </View>
+                  )}
                 </View>
 
                 <View style={styles.contenedorBotones}>
@@ -480,16 +546,43 @@ const GruposScreen = ({ route }) => {
         <Text style={estilos.botonFLotante.buttonText}>+</Text>
       </Pressable>
 
-      {/* Picker flotante abajo a la derecha */}
-      {!residente?.id && (
-        <View style={styles.pickerFlotante}>
+      {/* Selector de fecha para iOS */}
+      {Platform.OS === "ios" && (
+        <View style={[pickerStyles.pickerFlotante, pickerStyles.pickerGrupos]}>
           <DateTimePicker
             value={fechaFiltro}
             mode="date"
-            onChange={cambioFecha}
+            onChange={manejarCambioFechaFiltro}
             locale="es-ES"
-            style={{ backgroundColor: "white", borderRadius: 10 }}
+            style={{
+              borderRadius: 10,
+            }}
           />
+        </View>
+      )}
+      {/* Selector de fecha para Android */}
+      {Platform.OS === "android" && (
+        <View style={pickerStyles.pickerFlotante}>
+          <Pressable onPress={() => setMostrarPicker(true)}>
+            <Text
+              style={[
+                pickerStyles.pickerGrupos,
+                pickerStyles.pickerFlotanteAndroid,
+                { right: 0, bottom: 80 },
+              ]}
+            >
+              {fechaFiltro.toLocaleDateString("es-ES")}
+            </Text>
+          </Pressable>
+
+          {mostrarPicker && (
+            <DateTimePicker
+              value={fechaFiltro}
+              mode="date"
+              onChange={manejarCambioFechaFiltro}
+              locale="es-ES"
+            />
+          )}
         </View>
       )}
     </View>
@@ -682,14 +775,6 @@ const styles = StyleSheet.create({
   chipText: {
     marginRight: 6,
     color: "#333",
-  },
-  pickerFlotante: {
-    position: "absolute",
-    bottom: 100,
-    right: 20,
-    borderRadius: 10,
-    elevation: 4,
-    zIndex: 10,
   },
 });
 

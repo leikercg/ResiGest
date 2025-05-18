@@ -16,10 +16,8 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import estilos from "../../../estilos/estilos";
 import pickerStyles from "../../../estilos/pickerStyles";
-
 import { AuthContext } from "../../../contexto/AuthContext";
 import DateTimePicker from "@react-native-community/datetimepicker";
-
 import VisitasControlador from "../../../controladores/visitaControlador";
 
 const VisitasScreen = ({ route }) => {

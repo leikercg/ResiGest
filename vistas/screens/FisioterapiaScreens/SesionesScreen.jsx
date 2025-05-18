@@ -15,6 +15,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import estilos from "../../../estilos/estilos";
+import pickerStyles from "../../../estilos/pickerStyles";
 import { AuthContext } from "../../../contexto/AuthContext";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import SesionesControlador from "../../../controladores/sesionCotrolador";
@@ -29,6 +30,8 @@ const SesionesScreen = ({ route }) => {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [descripcion, setMotivo] = useState("");
   const [fechaSesion, setFechaSesion] = useState(new Date());
+  const [mostrarPicker, setMostrarPicker] = useState(false); // Control de visibilidad de fecha
+  const [mostrarTimePicker, setMostrarTimePicker] = useState(false); // Control de visibilidad de hora
 
   // Efectos
   useEffect(() => {
@@ -134,10 +137,16 @@ const SesionesScreen = ({ route }) => {
   };
 
   const manejarCambioFecha = (event, selectedDate) => {
+    if (Platform.OS === "android") {
+      setMostrarPicker(false);
+    }
     setFechaSesion(selectedDate || fechaSesion);
   };
 
   const manejarCambioHora = (event, selectedTime) => {
+    if (Platform.OS === "android") {
+      setMostrarTimePicker(false);
+    }
     setFechaSesion(selectedTime || fechaSesion);
   };
 
@@ -179,7 +188,9 @@ const SesionesScreen = ({ route }) => {
                 {formatearFechaHora(item.fecha)}
               </Text>
             </View>
-            <Text style={styles.sesionMotivo}>{item.descripcion}</Text>
+            <Text style={styles.sesionMotivo}>
+              Descripción: {item.descripcion}
+            </Text>
             <Text style={styles.sesionUsuario}>
               Registrado por: {item.usuarioNombre || item.usuarioId}
             </Text>
@@ -241,75 +252,129 @@ const SesionesScreen = ({ route }) => {
       >
         <TouchableWithoutFeedback onPress={manejarCerrarModal}>
           <View style={styles.contenedorModal}>
-            <KeyboardAvoidingView
-              behavior={Platform.OS === "ios" ? "padding" : "height"}
-              style={styles.contenidoModal}
-            >
-              <Text style={styles.modalTitulo}>
-                {editando ? "Editar Sesión" : "Nueva Sesión"}
-              </Text>
+            <TouchableWithoutFeedback onPress={() => {}}>
+              <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                style={styles.contenidoModal}
+              >
+                <Text style={styles.modalTitulo}>
+                  {editando ? "Editar Sesión" : "Nueva Sesión"}
+                </Text>
 
-              <Text style={styles.label}>Descripción:</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Ingrese el descripción de la sesion"
-                value={descripcion}
-                onChangeText={setMotivo}
-                multiline
-              />
+                <Text style={styles.label}>Descripción:</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Ingrese el descripción de la sesion"
+                  value={descripcion}
+                  onChangeText={setMotivo}
+                  multiline
+                />
 
-              <Text style={styles.label}>Fecha y hora:</Text>
-              <View style={styles.dateTimeContainer}>
-                <View style={styles.dateTimeButton}>
-                  <DateTimePicker
-                    value={fechaSesion}
-                    mode="date"
-                    display="default"
-                    locale="es-ES"
-                    onChange={manejarCambioFecha}
-                  />
+                <Text style={styles.label}>Fecha y hora:</Text>
+                <View style={pickerStyles.dateTimeContainer}>
+                  {/* Selector de fecha para iOS */}
+                  {Platform.OS === "ios" && (
+                    <View style={pickerStyles.dateTimeButton}>
+                      <DateTimePicker
+                        value={fechaSesion}
+                        mode="date"
+                        onChange={manejarCambioFecha}
+                        locale="es-ES"
+                        style={{
+                          borderRadius: 10,
+                        }}
+                      />
+                    </View>
+                  )}
+                  {/* Selector de fecha para Android */}
+                  {Platform.OS === "android" && (
+                    <View style={pickerStyles.dateTimeButtonAndroid}>
+                      <Pressable onPress={() => setMostrarPicker(true)}>
+                        <Text>{fechaSesion.toLocaleDateString("es-ES")}</Text>
+                      </Pressable>
+
+                      {mostrarPicker && (
+                        <DateTimePicker
+                          value={fechaSesion}
+                          mode="date"
+                          onChange={manejarCambioFecha}
+                          locale="es-ES"
+                        />
+                      )}
+                    </View>
+                  )}
+                  {/* Selector de hora para iOS - Siempre visible */}
+                  {Platform.OS === "ios" && (
+                    <View style={pickerStyles.dateTimeButton}>
+                      <DateTimePicker
+                        value={fechaSesion}
+                        mode="time"
+                        onChange={manejarCambioHora}
+                        locale="es-ES"
+                        style={{ borderRadius: 10 }}
+                      />
+                    </View>
+                  )}
+
+                  {/* Selector de hora para Android - Se muestra al presionar */}
+                  {Platform.OS === "android" && (
+                    <View style={pickerStyles.dateTimeButtonAndroid}>
+                      <Pressable onPress={() => setMostrarTimePicker(true)}>
+                        <Text>
+                          {fechaSesion.toLocaleTimeString("es-ES", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </Text>
+                      </Pressable>
+
+                      {mostrarTimePicker && (
+                        <DateTimePicker
+                          value={fechaSesion}
+                          mode="time"
+                          onChange={(event, time) => {
+                            setMostrarTimePicker(false);
+                            manejarCambioHora(event, time);
+                          }}
+                          locale="es-ES"
+                        />
+                      )}
+                    </View>
+                  )}
                 </View>
-                <View style={styles.dateTimeButton}>
-                  <DateTimePicker
-                    value={fechaSesion}
-                    mode="time"
-                    display="default"
-                    onChange={manejarCambioHora}
-                  />
-                </View>
-              </View>
 
-              <View style={styles.contenedorBotones}>
-                <Pressable
-                  style={[styles.botonModal, styles.botonCancelar]}
-                  onPress={manejarCerrarModal}
-                >
-                  <Text style={styles.textoBotonModal}>Cancelar</Text>
-                </Pressable>
-                <Pressable
-                  style={[styles.botonModal, styles.botonAgregar]}
-                  onPress={() =>
-                    Alert.alert(
-                      "Confirmar",
-                      editando
-                        ? "¿Estás seguro de que deseas actualizar esta sesión?"
-                        : "¿Estás seguro de que deseas crear esta sesión?",
-                      [
-                        { text: "Cancelar", style: "cancel" },
-                        {
-                          text: editando ? "Actualizar" : "Crear",
-                          onPress: manejarGuardadoSesion,
-                        },
-                      ],
-                    )
-                  }
-                >
-                  <Text style={styles.textoBotonModal}>
-                    {editando ? "Actualizar" : "Crear"}
-                  </Text>
-                </Pressable>
-              </View>
-            </KeyboardAvoidingView>
+                <View style={styles.contenedorBotones}>
+                  <Pressable
+                    style={[styles.botonModal, styles.botonCancelar]}
+                    onPress={manejarCerrarModal}
+                  >
+                    <Text style={styles.textoBotonModal}>Cancelar</Text>
+                  </Pressable>
+                  <Pressable
+                    style={[styles.botonModal, styles.botonAgregar]}
+                    onPress={() =>
+                      Alert.alert(
+                        "Confirmar",
+                        editando
+                          ? "¿Estás seguro de que deseas actualizar esta sesión?"
+                          : "¿Estás seguro de que deseas crear esta sesión?",
+                        [
+                          { text: "Cancelar", style: "cancel" },
+                          {
+                            text: editando ? "Actualizar" : "Crear",
+                            onPress: manejarGuardadoSesion,
+                          },
+                        ],
+                      )
+                    }
+                  >
+                    <Text style={styles.textoBotonModal}>
+                      {editando ? "Actualizar" : "Crear"}
+                    </Text>
+                  </Pressable>
+                </View>
+              </KeyboardAvoidingView>
+            </TouchableWithoutFeedback>
           </View>
         </TouchableWithoutFeedback>
       </Modal>

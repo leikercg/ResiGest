@@ -12,6 +12,11 @@ const pickerStyles = {
     fontWeight: "600",
     color: "#333",
   },
+  pickerGrupos: {
+    position: "absolute",
+    bottom: 100,
+    right: 20,
+  },
 
   dateTimeButton: {
     flex: 1,
