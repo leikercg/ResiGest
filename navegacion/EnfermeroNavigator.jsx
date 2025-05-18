@@ -12,7 +12,9 @@ import CambiarContrasena from "../vistas/screens/ComunesScreens/CambiarContrasen
 import EditarContactoScreen from "../vistas/screens/ComunesScreens/EditarContactoScreen"; // Pantalla de editar contacto
 import CurasScreen from "../vistas/screens/EnfermeriaScreens/CurasScreen"; // Pantalla de curas
 import TareasScreen from "../vistas/screens/EnfermeriaScreens/TareasScreen"; // Pantalla de tareas
-import { Ionicons } from "@expo/vector-icons"; // Asegúrate de tener instalado @expo/vector-icons
+import ItinerarioResidenteScreen from "../vistas/screens/ComunesScreens/ItinerarioResidenteScreen"; // Pantalla de itinerario
+
+import { Ionicons } from "@expo/vector-icons";
 
 //import HistorialPaciente from "../screens/HistorialPaciente";
 
@@ -72,11 +74,11 @@ const InicioStack = () => {
         component={CurasScreen}
         options={{ headerShown: false, headerStyle: styles.headerStyle }}
       />
-      {/* <Stack.Screen
-        name="TareasScreen"
-        component={TareasScreen}
+      <Stack.Screen
+        name="ItinerarioResidenteScreen"
+        component={ItinerarioResidenteScreen}
         options={{ headerShown: false, headerStyle: styles.headerStyle }}
-      /> */}
+      />
     </Stack.Navigator>
   );
 };

@@ -9,7 +9,9 @@ import ResidentScreen from "../vistas/screens/ComunesScreens/ResidenteScreen"; /
 import SeguimientoScreen from "../vistas/screens/ComunesScreens/SeguimientoScreen";
 import CambiarContrasena from "../vistas/screens/ComunesScreens/CambiarContrasena";
 import EditarContactoScreen from "../vistas/screens/ComunesScreens/EditarContactoScreen"; // Pantalla de editar contacto
-import { Ionicons } from "@expo/vector-icons"; // Asegúrate de tener instalado @expo/vector-icons
+import ItinerarioResidenteScreen from "../vistas/screens/ComunesScreens/ItinerarioResidenteScreen"; // Pantalla de itinerario
+
+import { Ionicons } from "@expo/vector-icons";
 
 //import HistorialPaciente from "../screens/HistorialPaciente";
 
@@ -61,6 +63,11 @@ const InicioStack = () => {
       <Stack.Screen
         name="SeguimientoScreen"
         component={SeguimientoScreen}
+        options={{ headerShown: false, headerStyle: styles.headerStyle }}
+      />
+      <Stack.Screen
+        name="ItinerarioResidenteScreen"
+        component={ItinerarioResidenteScreen}
         options={{ headerShown: false, headerStyle: styles.headerStyle }}
       />
     </Stack.Navigator>

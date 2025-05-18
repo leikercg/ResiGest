@@ -12,6 +12,7 @@ import ResidentScreen from "../vistas/screens/ComunesScreens/ResidenteScreen";
 import FormResidente from "../vistas/screens/AdminScreens/FormResidente";
 import SeguimientoScreen from "../vistas/screens/ComunesScreens/SeguimientoScreen";
 import CambiarContrasena from "../vistas/screens/ComunesScreens/CambiarContrasena";
+import ItinerarioResidenteScreen from "../vistas/screens/ComunesScreens/ItinerarioResidenteScreen";
 import { Ionicons } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator(); // Para ver la navegacion por pestañas
@@ -67,6 +68,11 @@ const InicioStack = () => {
       <Stack.Screen
         name="SeguimientoScreen"
         component={SeguimientoScreen}
+        options={{ headerShown: false, headerStyle: styles.headerStyle }}
+      />
+      <Stack.Screen
+        name="ItinerarioResidenteScreen"
+        component={ItinerarioResidenteScreen}
         options={{ headerShown: false, headerStyle: styles.headerStyle }}
       />
     </Stack.Navigator>
