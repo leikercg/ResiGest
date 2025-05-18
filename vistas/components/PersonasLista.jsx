@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   FlatList,
   StyleSheet,
@@ -14,11 +14,12 @@ import ResidenteControlador from "../../controladores/residenteControlador";
 import EmpleadoControlador from "../../controladores/empleadoControlador";
 import DepartamentoControlador from "../../controladores/departamentoControlador";
 import FamiliarControlador from "../../controladores/familiarControlador";
-// Íconos
+import { AuthContext } from "../../contexto/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
 
 const PersonasLista = ({ navigation, tipo, filtro, fechaSeleccionada }) => {
   // Estados del componente
+  const { user, departamentoId } = useContext(AuthContext);
   const [data, setDatos] = useState([]); // Datos completos sin filtrar
   const [departamentos, setDepartamentos] = useState({}); // Mapa de departamentos
   const [residentesRelacionados, setResidentesRelacionados] = useState({}); // Residentes vinculados a familiares
@@ -28,6 +29,14 @@ const PersonasLista = ({ navigation, tipo, filtro, fechaSeleccionada }) => {
   // Efecto para filtrar datos cuando cambia la búsqueda, los datos originales o el filtro
   useEffect(() => {
     let resultados = data;
+    // Filtro para familiares para mostrar solo residentes relacionados
+    if (tipo === "residente" && departamentoId === 4) {
+      resultados = resultados.filter((residente) =>
+        residente.familiares?.includes(user.uid),
+      );
+      console.log("Residentes relacionados", resultados);
+      console.log(tipo, departamentoId);
+    }
 
     // Aplicar filtro por departamento si está definido y es del tipo empleado
     if (filtro && tipo === "empleado") {
@@ -48,7 +57,7 @@ const PersonasLista = ({ navigation, tipo, filtro, fechaSeleccionada }) => {
     }
 
     setDatosFiltrados(resultados);
-  }, [busqueda, data, filtro, tipo]);
+  }, [busqueda, data, filtro, tipo, user]);
 
   // Efecto principal para cargar datos según el tipo
   useEffect(() => {
