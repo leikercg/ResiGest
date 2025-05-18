@@ -5,10 +5,13 @@ import {
   ActivityIndicator,
   StyleSheet,
   Text,
+  Platform,
+  Pressable,
 } from "react-native";
 import { AuthContext } from "../../../contexto/AuthContext";
 import EmpladoControlador from "../../../controladores/empleadoControlador";
 import estilos from "../../../estilos/estilos";
+import pickerStyles from "../../../estilos/pickerStyles";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import AgendaItem from "./../../components/AgendaItem"; // Importa el componente contenedor
 
@@ -17,13 +20,18 @@ const AgendaScreen = () => {
   const { user, departamentoId } = useContext(AuthContext); // Obtenemos departamentoId
   const [data, setData] = useState([]); // Puede ser curas o visitas
   const [cargando, setCargando] = useState(true);
+  const [mostrarPicker, setMostrarPicker] = useState(false); // Control de visibilidad
 
   const cambioFecha = (event, fechaSeleccionada) => {
+    // Para Android, necesitamos ocultar el picker después de seleccionar
+    if (Platform.OS === "android") {
+      setMostrarPicker(false);
+    }
+
     if (fechaSeleccionada) {
       setFecha(fechaSeleccionada);
     }
   };
-
   useEffect(() => {
     if (departamentoId === 2) {
       // Si el departamento es 2, buscamos las visitas
@@ -128,18 +136,39 @@ const AgendaScreen = () => {
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
       />
+      {/* Selector de fecha para iOS */}
+      {Platform.OS === "ios" && (
+        <View style={pickerStyles.pickerFlotante}>
+          <DateTimePicker
+            value={fecha}
+            mode="date"
+            onChange={cambioFecha}
+            locale="es-ES"
+            style={{
+              borderRadius: 10,
+            }}
+          />
+        </View>
+      )}
+      {/* Selector de fecha para Android */}
+      {Platform.OS === "android" && (
+        <View style={pickerStyles.pickerFlotante}>
+          <Pressable onPress={() => setMostrarPicker(true)}>
+            <Text style={pickerStyles.pickerFlotanteAndroid}>
+              {fecha.toLocaleDateString("es-ES")}
+            </Text>
+          </Pressable>
 
-      <View style={styles.pickerFlotante}>
-        <DateTimePicker
-          value={fecha}
-          mode="date"
-          onChange={cambioFecha}
-          locale="es-ES"
-          style={{
-            borderRadius: 10,
-          }}
-        />
-      </View>
+          {mostrarPicker && (
+            <DateTimePicker
+              value={fecha}
+              mode="date"
+              onChange={cambioFecha}
+              locale="es-ES"
+            />
+          )}
+        </View>
+      )}
     </View>
   );
 };
@@ -210,11 +239,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 16,
     color: "#999",
-  },
-  pickerFlotante: {
-    position: "absolute",
-    bottom: 20,
-    right: 20,
   },
 });
 

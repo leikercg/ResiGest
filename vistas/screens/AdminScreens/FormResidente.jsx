@@ -6,6 +6,7 @@ import {
   Pressable,
   Alert,
   FlatList,
+  Platform,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import ResidenteControlador from "../../../controladores/residenteControlador";
@@ -13,6 +14,7 @@ import { Picker } from "@react-native-picker/picker";
 import familiarControlador from "../../../controladores/familiarControlador";
 import { Ionicons } from "@expo/vector-icons";
 import estilos from "../../../estilos/estilos";
+import pickerStyles from "../../../estilos/pickerStyles";
 
 const FormResidente = ({ navigation, route }) => {
   const [nombre, setNombre] = useState("");
@@ -21,6 +23,7 @@ const FormResidente = ({ navigation, route }) => {
   const [familiares, setFamiliares] = useState([]);
   const [todosFamiliares, setTodosFamiliares] = useState([]);
   const [familiarSeleccionado, setFamiliarSeleccionado] = useState("");
+  const [mostrarPicker, setMostrarPicker] = useState(false); // Control de visibilidad
 
   const { residente } = route.params || {}; // Si no está en parámetros se establece como objeto vacío, para que no salté error en caso de no existir
 
@@ -59,6 +62,11 @@ const FormResidente = ({ navigation, route }) => {
 
   // Función que actualiza el estado de la fecha cada vez que cambia
   const onChangeFecha = (event, fechaSeleccionada) => {
+    // Para Android, necesitamos ocultar el picker después de seleccionar
+    if (Platform.OS === "android") {
+      setMostrarPicker(false);
+    }
+
     if (fechaSeleccionada) {
       // Calcula la fecha mínima permitida (18 años atrás desde hoy)
       const fechaMinima = new Date();
@@ -157,14 +165,39 @@ const FormResidente = ({ navigation, route }) => {
           {/* Convierte la fecha a formato fecha local */}
           Fecha de Nacimiento:
         </Text>
-        <DateTimePicker
-          value={fechaNacimiento}
-          mode="date"
-          display="default"
-          locale="es-ES"
-          onChange={residente ? undefined : onChangeFecha} // Solo permite cambios si no está en modo edición
-          disabled={!!residente}
-        />
+        {/* Selector de fecha para iOS */}
+        {Platform.OS === "ios" && (
+          <View>
+            <DateTimePicker
+              value={fechaNacimiento}
+              mode="date"
+              onChange={onChangeFecha}
+              locale="es-ES"
+              style={{
+                borderRadius: 10,
+              }}
+            />
+          </View>
+        )}
+        {/* Selector de fecha para Android */}
+        {Platform.OS === "android" && (
+          <View>
+            <Pressable onPress={() => setMostrarPicker(true)}>
+              <Text style={pickerStyles.pickerFlotanteAndroid}>
+                {fechaNacimiento.toLocaleDateString("es-ES")}
+              </Text>
+            </Pressable>
+
+            {mostrarPicker && (
+              <DateTimePicker
+                value={fechaNacimiento}
+                mode="date"
+                onChange={onChangeFecha}
+                locale="es-ES"
+              />
+            )}
+          </View>
+        )}
       </View>
       <Text style={estilos.estilosformularioResidente.subtitulo}>
         Familiares Relacionados:
