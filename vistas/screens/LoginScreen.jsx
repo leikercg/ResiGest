@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { View, TextInput, Text, Pressable, StyleSheet } from "react-native";
+import {
+  View,
+  Image,
+  TextInput,
+  Text,
+  Pressable,
+  StyleSheet,
+} from "react-native";
 import {
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
@@ -77,7 +84,18 @@ const LoginScreen = () => {
 
   return (
     <View style={estilos.estilosLogin.contenedor}>
-      <Text style={estilos.estilosLogin.title}>ResiGest</Text>
+      <Image
+        source={require("../../assets/logo.png")}
+        style={{
+          top: 80,
+          height: 300,
+          width: 300,
+          resizeMode: "contain",
+          alignSelf: "center",
+          marginBottom: 20,
+          position: "absolute",
+        }}
+      />
 
       <TextInput
         style={estilos.estilosLogin.input}

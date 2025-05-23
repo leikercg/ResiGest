@@ -25,8 +25,6 @@ https://stackoverflow.com/questions/79602687/react-native-expo-firebase-auth-com
 https://www.reddit.com/r/expo/comments/1kcdipj/expo_sdk_53_is_out_of_beta/?rdt=47668 --> reparar conflictos de version expo
 https://firebase.google.com/docs/auth/admin/errors?hl=es-419 --> codigos de error firebase
 
+https://www.youtube.com/watch?v=9HcWyfF777k --> como cambiar icono app
 
-
-
-
-
+https://www.google.com/search?sca_esv=04268fcd01117b60&rlz=1C1VDKB_esES1021ES1021&sxsrf=AHTn8zpZfU6lQ-hADHsC7eYSXaDaFlODWw:1748016613715&q=how+to+deploy+expo+project+react+native&udm=7&fbs=ABzOT_BnMAgCWdhr5zilP5f1cnRvP2-Y6KonUBfitdrS1-nx1TDZHZ35wsBIxDGG4Q6GKHwL4EpOAgEv4ulbxpouAVbt0_vIDloVcDqEeIezG1FRjPqUU1XMRYDYexmOxryWICxke1C3KBYSYzQVIXIFyLS8iXEvg-NCdGGfYk8Iak9jiVsYiwtuEH5L8pCFEX1K8wREBHVf&sa=X&ved=2ahUKEwjZvcmq_bmNAxW-3AIHHWXUOswQtKgLegQIFRAB&biw=1522&bih=688&dpr=1.25#fpstate=ive&vld=cid:b1b4e883,vid:ByqYR1IwYKY,st:0 --> como desplegar app apk
