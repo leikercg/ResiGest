@@ -23,13 +23,10 @@ const FormResidente = ({ navigation, route }) => {
   const [familiares, setFamiliares] = useState([]);
   const [todosFamiliares, setTodosFamiliares] = useState([]);
   const [familiarSeleccionado, setFamiliarSeleccionado] = useState("");
-  const [mostrarPicker, setMostrarPicker] = useState(false); // Control de visibilidad
-
-  const { residente } = route.params || {}; // Si no está en parámetros se establece como objeto vacío, para que no salté error en caso de no existir
+  const [mostrarPicker, setMostrarPicker] = useState(false);
+  const { residente } = route.params || {};
 
   useEffect(() => {
-    // Se ejecuta cuando se monta el componente
-    // Establece los estados con las propiedades del residente
     if (residente) {
       setNombre(residente.nombre);
       setApellido(residente.apellido);
@@ -60,7 +57,6 @@ const FormResidente = ({ navigation, route }) => {
     setFamiliares(familiares.filter((id) => id !== familiarId));
   };
 
-  // Función que actualiza el estado de la fecha cada vez que cambia
   const manejarCambioFecha = (event, fechaSeleccionada) => {
     // Para Android, necesitamos ocultar el picker después de seleccionar
     if (Platform.OS === "android") {
@@ -83,7 +79,6 @@ const FormResidente = ({ navigation, route }) => {
     }
   };
 
-  // Función del componente que guarda o actualiza
   const guardarResidente = () => {
     // Validar campos obligatorios
     if (!nombre.trim() || !apellido.trim()) {
@@ -103,7 +98,6 @@ const FormResidente = ({ navigation, route }) => {
       familiares,
     };
 
-    // Se llama al método del modelo residente
     ResidenteControlador.guardarResidente(
       residente?.id, // En caso de no tener id (se está creando) se establece como undefined
       nuevoResidente,
@@ -112,9 +106,7 @@ const FormResidente = ({ navigation, route }) => {
     );
   };
 
-  // Función que renderiza la lista de familiares relacionados
   const renderFamiliar = ({ item }) => {
-    // Buscamos los familiares que coincidan con el id del familiar de los relacionados con el residente
     const familiar = todosFamiliares.find((f) => f.id === item);
     return (
       <View style={estilos.estilosformularioResidente.familiarItem}>
@@ -134,7 +126,6 @@ const FormResidente = ({ navigation, route }) => {
   return (
     <View style={estilos.estilosformularioResidente.container}>
       <Text style={estilos.estilosformularioResidente.titulo}>
-        {/* Si existe el residente muesta Editar, si es null, undefined o es un objeto vacío muestra Nuevo */}
         {residente ? "Editar Residente" : "Nuevo Residente"}
       </Text>
 
@@ -162,7 +153,6 @@ const FormResidente = ({ navigation, route }) => {
 
       <View style={estilos.estilosformularioResidente.botonFecha}>
         <Text style={estilos.estilosformularioResidente.botonFechaText}>
-          {/* Convierte la fecha a formato fecha local */}
           Fecha de Nacimiento:
         </Text>
         {/* Selector de fecha para iOS */}
@@ -206,7 +196,6 @@ const FormResidente = ({ navigation, route }) => {
         data={familiares}
         keyExtractor={(item) => item}
         renderItem={renderFamiliar}
-        // Que mostrar en caso de que la lista este vacía
         ListEmptyComponent={
           <Text style={estilos.estilosformularioResidente.textoVacio}>
             No hay familiares relacionados.
@@ -233,7 +222,6 @@ const FormResidente = ({ navigation, route }) => {
           ))}
         </Picker>
       </View>
-      {/* Agrega el familiar al array de familiares */}
       <Pressable
         style={estilos.estilosformularioResidente.botonAgregar}
         onPress={agregarFamiliar}

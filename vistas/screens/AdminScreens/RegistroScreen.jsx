@@ -15,15 +15,13 @@ import { db } from "../../../fireBaseConfig";
 const RegistroScreen = ({ navigation, route }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [departamentoId, setDepartamentoId] = useState("0"); // Valor por defecto
+  const [departamentoId, setDepartamentoId] = useState("0");
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [telefono, setTelefono] = useState("");
-  const [residenteId, setResidenteId] = useState("0"); // ID del residente seleccionado
-  const [residentes, setResidentes] = useState([]); // Lista de residentes
-  const { tipo } = route.params; // Obtenemos el tipo de registro desde los parámetros de navegación
-
-  // Lista de departamentos con sus IDs y nombres
+  const [residenteId, setResidenteId] = useState("0");
+  const [residentes, setResidentes] = useState([]);
+  const { tipo } = route.params;
   const departamentos = [
     { id: "0", nombre: "Seleccione un departamento" },
     { id: "2", nombre: "Medicina" },
@@ -32,8 +30,6 @@ const RegistroScreen = ({ navigation, route }) => {
     { id: "6", nombre: "Terapia" },
     { id: "7", nombre: "Asistencia" },
   ];
-
-  // Cargar la lista de residentes al montar el componente
   useEffect(() => {
     const cargarResidentes = async () => {
       const residentesRef = collection(db, "residentes");
@@ -72,9 +68,7 @@ const RegistroScreen = ({ navigation, route }) => {
     }
   };
 
-  // Función para mostrar el cuadro de diálogo de confirmación
   const confirmarGuardado = () => {
-    // Validar campos obligatorios
     if (
       !nombre.trim() ||
       !apellido.trim() ||
@@ -149,7 +143,7 @@ const RegistroScreen = ({ navigation, route }) => {
         style={styles.input}
         placeholder="Teléfono"
         value={telefono}
-        keyboardType="phone-pad" //abrir el teclado de numeros
+        keyboardType="phone-pad"
         onChangeText={setTelefono}
       />
 

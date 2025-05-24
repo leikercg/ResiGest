@@ -18,10 +18,9 @@ import { AuthContext } from "../../contexto/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
 
 const PersonasLista = ({ navigation, tipo, filtro, fechaSeleccionada }) => {
-  // Estados del componente
   const { user, departamentoId } = useContext(AuthContext);
   const [data, setDatos] = useState([]); // Datos completos sin filtrar
-  const [departamentos, setDepartamentos] = useState({}); // Mapa de departamentos
+  const [departamentos, setDepartamentos] = useState({});
   const [residentesRelacionados, setResidentesRelacionados] = useState({}); // Residentes vinculados a familiares
   const [busqueda, setBusqueda] = useState("");
   const [datosFiltrados, setDatosFiltrados] = useState([]); // Datos filtrados por búsqueda y/o departamento

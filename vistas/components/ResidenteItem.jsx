@@ -33,7 +33,7 @@ const ResidenteItem = ({ residente, navigation }) => {
       } // Navega a ResidenteScreen con el id del residente y su edad
       style={({ pressed }) => [
         estilos.personaItem.item,
-        pressed && estilos.personaItem.pressedItem, // Cambia el estilo cuando está presionado
+        pressed && estilos.personaItem.pressedItem,
       ]}
     >
       <View

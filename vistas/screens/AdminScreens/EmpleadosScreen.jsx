@@ -11,12 +11,7 @@ const EmpleadosScreen = ({ navigation }) => {
           Lista de empleados
         </Text>
       </View>
-
-      {/* Usar PersonasLista para mostrar la lista de empleados */}
-      <PersonasLista
-        navigation={navigation}
-        tipo="empleado" // Especificar el tipo de lista
-      />
+      <PersonasLista navigation={navigation} tipo="empleado" />
       <Pressable
         style={({ pressed }) => [
           estilos.botonFLotante.botonFLotante,

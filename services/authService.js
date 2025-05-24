@@ -43,7 +43,7 @@ export const eliminarUsuarioYCuenta = async (id) => {
     const deleteUserAccount = httpsCallable(functions, "deleteUserAccount");
 
     const result = await deleteUserAccount({ id });
-    console.log(result.data.message); // Mensaje de éxito
+    console.log(result.data.message);
   } catch (error) {
     console.error("Error al eliminar el empleado:", error);
     throw new Error("No se pudo eliminar el empleado.");

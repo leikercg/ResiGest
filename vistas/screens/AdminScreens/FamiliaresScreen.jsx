@@ -11,8 +11,6 @@ const FamiliaresScreen = ({ navigation }) => {
           Lista de familiares
         </Text>
       </View>
-
-      {/* Usar PersonasLista para mostrar la lista de empleados */}
       <PersonasLista navigation={navigation} tipo="familiar" />
 
       <Pressable
