@@ -8,6 +8,7 @@ import {
   Modal,
   TouchableWithoutFeedback,
   TextInput,
+  Platform,
   FlatList,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -17,6 +18,7 @@ import TareaControlador from "../../controladores/tareaControlador";
 import { AuthContext } from "../../contexto/AuthContext";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import residenteControlador from "../../controladores/residenteControlador";
+import pickerStyles from "../../estilos/pickerStyles";
 
 const EmpleadoItem = ({ item, departamentos, fechaSeleccionada }) => {
   // Obtener el departamentoId del contexto de autenticación
@@ -37,6 +39,7 @@ const EmpleadoItem = ({ item, departamentos, fechaSeleccionada }) => {
   // Para el modo edición
   const [editando, setEditando] = useState(false);
   const [tareaSeleccionada, setTareaSeleccionada] = useState(null);
+  const [mostrarPickerHora, setMostrarPickerHora] = useState(false);
 
   // Cargar la lista de residentes al montar el componente
   useEffect(() => {
@@ -385,14 +388,54 @@ const EmpleadoItem = ({ item, departamentos, fechaSeleccionada }) => {
 
                 {/* Picker de la hora */}
                 <Text style={styles.etiquetaModal}>Selecciona hora:</Text>
-                <DateTimePicker
-                  value={horaSeleccionada}
-                  mode="time"
-                  is24Hour={true}
-                  onChange={(event, date) => {
-                    if (date) setHoraSeleccionada(date);
-                  }}
-                />
+                {/* Selector de hora para iOS - Siempre visible */}
+                {Platform.OS === "ios" && (
+                  <View style={[pickerStyles.dateTimeButton, { margin: 15 }]}>
+                    <DateTimePicker
+                      value={horaSeleccionada}
+                      mode="time"
+                      onChange={(event, selectedDate) => {
+                        if (selectedDate) setHoraSeleccionada(selectedDate);
+                      }}
+                      locale="es-ES"
+                    />
+                  </View>
+                )}
+
+                {/* Selector de hora para Android - Se muestra al presionar */}
+                {Platform.OS === "android" && (
+                  <View
+                    style={{
+                      height: 30,
+                      alignItems: "center",
+                      marginBottom: 15,
+                      borderRadius: 10,
+                      backgroundColor: "#f0f0f0",
+                    }}
+                  >
+                    <Pressable onPress={() => setMostrarPickerHora(true)}>
+                      <Text style={[{ height: 200 }]}>
+                        {horaSeleccionada.toLocaleTimeString("es-ES", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          style: "short",
+                        })}
+                      </Text>
+                    </Pressable>
+
+                    {mostrarPickerHora && (
+                      <DateTimePicker
+                        value={horaSeleccionada}
+                        mode="time"
+                        display="default"
+                        onChange={(event, selectedDate) => {
+                          setMostrarPickerHora(false);
+                          if (selectedDate) setHoraSeleccionada(selectedDate);
+                        }}
+                      />
+                    )}
+                  </View>
+                )}
 
                 {/* Botones modal */}
                 <View style={styles.contenedorBotonesModal}>
