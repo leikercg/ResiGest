@@ -203,7 +203,7 @@ class ResidenteControlador {
 
   // Método para listar residentes en tiempo real
   static listarResidentes(callback) {
-    // Esto me ha pedido crear indices en la base de datos ----------------> REVISAR
+    // Esto me ha pedido crear indices en la base de datos ----------------> REVISARRRRRRRRRRRRRRRRRRRR
     try {
       const residentesRef = collection(db, "residentes");
       // Consulta con ordenamiento por apellido y nombre
@@ -374,7 +374,7 @@ class ResidenteControlador {
             const data = change.doc.data();
             resultados.push({
               id: change.doc.id,
-              tipo, // Tipo de actividad
+              tipo,
               fecha: data.fecha.toDate(),
               ...data,
             });

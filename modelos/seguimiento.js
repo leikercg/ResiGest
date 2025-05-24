@@ -4,7 +4,7 @@ class Seguimiento {
     this.id = id;
     this.departamentoId = departamentoId;
     this.residenteId = residenteId;
-    this.detalles = detalles; // Array de objetos { fecha, comentario }
+    this.detalles = detalles;
   }
 }
 

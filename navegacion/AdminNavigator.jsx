@@ -14,6 +14,7 @@ import SeguimientoScreen from "../vistas/screens/ComunesScreens/SeguimientoScree
 import CambiarContrasena from "../vistas/screens/ComunesScreens/CambiarContrasena";
 import ItinerarioResidenteScreen from "../vistas/screens/ComunesScreens/ItinerarioResidenteScreen";
 import { Ionicons } from "@expo/vector-icons";
+import NavigatorStyles from "../estilos/navigatorStyles.jsx";
 
 const Tab = createBottomTabNavigator(); // Para ver la navegacion por pestañas
 const Stack = createStackNavigator(); // Para ver la navegación por pila, creamos varias
@@ -53,27 +54,42 @@ const InicioStack = () => {
       <Stack.Screen
         name="InicioAdmin" // Nombre de la pantalla, es el que se usa para navegar
         component={AdminScreen}
-        options={{ headerShown: false, headerStyle: styles.headerStyle }} // Opciones de la pantalla, ocultamos header
+        options={{
+          headerShown: false,
+          headerStyle: NavigatorStyles.headerStyle,
+        }} // Opciones de la pantalla, ocultamos header
       />
       <Stack.Screen
         name="ResidenteScreen"
         component={ResidentScreen}
-        options={{ headerShown: false, headerStyle: styles.headerStyle }}
+        options={{
+          headerShown: false,
+          headerStyle: NavigatorStyles.headerStyle,
+        }}
       />
       <Stack.Screen
         name="FormResidente"
         component={FormResidente}
-        options={{ headerShown: false, headerStyle: styles.headerStyle }}
+        options={{
+          headerShown: false,
+          headerStyle: NavigatorStyles.headerStyle,
+        }}
       />
       <Stack.Screen
         name="SeguimientoScreen"
         component={SeguimientoScreen}
-        options={{ headerShown: false, headerStyle: styles.headerStyle }}
+        options={{
+          headerShown: false,
+          headerStyle: NavigatorStyles.headerStyle,
+        }}
       />
       <Stack.Screen
         name="ItinerarioResidenteScreen"
         component={ItinerarioResidenteScreen}
-        options={{ headerShown: false, headerStyle: styles.headerStyle }}
+        options={{
+          headerShown: false,
+          headerStyle: NavigatorStyles.headerStyle,
+        }}
       />
     </Stack.Navigator>
   );
@@ -85,12 +101,18 @@ const EmpleadoStack = () => {
       <Stack.Screen
         name="EmpleadosScreen" // Nombre de la pantalla, es el que se usa para navegar
         component={EmpleadosScreen}
-        options={{ headerShown: false, headerStyle: styles.headerStyle }} // Opciones de la pantalla, ocultamos header
+        options={{
+          headerShown: false,
+          headerStyle: NavigatorStyles.headerStyle,
+        }} // Opciones de la pantalla, ocultamos header
       />
       <Stack.Screen
         name="RegistroScreen"
         component={RegistroScreen}
-        options={{ headerShown: false, headerStyle: styles.headerStyle }}
+        options={{
+          headerShown: false,
+          headerStyle: NavigatorStyles.headerStyle,
+        }}
       />
     </Stack.Navigator>
   );
@@ -102,12 +124,18 @@ const FamiliaStack = () => {
       <Stack.Screen
         name="FamiliaresScreen" // Nombre de la pantalla, es el que se usa para navegar
         component={FamiliaresScreen}
-        options={{ headerShown: false, headerStyle: styles.headerStyle }} // Opciones de la pantalla, ocultamos header
+        options={{
+          headerShown: false,
+          headerStyle: NavigatorStyles.headerStyle,
+        }} // Opciones de la pantalla, ocultamos header
       />
       <Stack.Screen
         name="RegistroScreen"
         component={RegistroScreen}
-        options={{ headerShown: false, headerStyle: styles.headerStyle }}
+        options={{
+          headerShown: false,
+          headerStyle: NavigatorStyles.headerStyle,
+        }}
       />
     </Stack.Navigator>
   );
@@ -129,7 +157,7 @@ const AdminNavigator = () => {
         options={{
           title: null,
           tabBarLabel: "Inicio",
-          headerStyle: styles.headerStyle,
+          headerStyle: NavigatorStyles.headerStyle,
           tabBarIcon: ({ color, size }) => (
             // Recibe el color y un tamaño por defecto
             <Ionicons name="home" size={size} color={color} />
@@ -142,7 +170,7 @@ const AdminNavigator = () => {
         options={{
           title: null,
           tabBarLabel: "Equipo",
-          headerStyle: styles.headerStyle,
+          headerStyle: NavigatorStyles.headerStyle,
           tabBarIcon: ({ color, size }) => (
             // Recibe el color y un tamaño por defecto
             <Ionicons name="people" size={size} color={color} />
@@ -155,7 +183,7 @@ const AdminNavigator = () => {
         options={{
           title: null,
           tabBarLabel: "Familia",
-          headerStyle: styles.headerStyle,
+          headerStyle: NavigatorStyles.headerStyle,
           tabBarIcon: ({ color, size }) => (
             // Recibe el color y un tamaño por defecto
             <Ionicons name="people-circle" size={size} color={color} />
@@ -168,7 +196,7 @@ const AdminNavigator = () => {
         options={{
           title: null,
           tabBarLabel: "Opciones",
-          headerStyle: styles.headerStyle,
+          headerStyle: NavigatorStyles.headerStyle,
           tabBarIcon: ({ color, size }) => (
             // Recibe el color y un tamaño por defecto
             <Ionicons name="settings" size={size} color={color} />

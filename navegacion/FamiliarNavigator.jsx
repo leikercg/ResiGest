@@ -1,23 +1,19 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import FamiliareScreen from "../vistas/screens/FamiliaresScreens/FamiliarScreen";
-import { StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import CambiarIdioma from "../vistas/screens/ComunesScreens/CambiarIdioma"; // Otra pantalla de administrador
-import OpcionesScreen from "../vistas/screens/ComunesScreens/OpcionesScreen"; // Pantalla de opciones
-import ResidentScreen from "../vistas/screens/ComunesScreens/ResidenteScreen"; // Pantalla de detalle del residente
+import CambiarIdioma from "../vistas/screens/ComunesScreens/CambiarIdioma";
+import OpcionesScreen from "../vistas/screens/ComunesScreens/OpcionesScreen";
+import ResidentScreen from "../vistas/screens/ComunesScreens/ResidenteScreen";
 import SeguimientoScreen from "../vistas/screens/ComunesScreens/SeguimientoScreen";
 import CambiarContrasena from "../vistas/screens/ComunesScreens/CambiarContrasena";
-import EditarContactoScreen from "../vistas/screens/ComunesScreens/EditarContactoScreen"; // Pantalla de editar contacto
-import ItinerarioResidenteScreen from "../vistas/screens/ComunesScreens/ItinerarioResidenteScreen"; // Pantalla de itinerario
-
+import EditarContactoScreen from "../vistas/screens/ComunesScreens/EditarContactoScreen";
+import ItinerarioResidenteScreen from "../vistas/screens/ComunesScreens/ItinerarioResidenteScreen";
 import { Ionicons } from "@expo/vector-icons";
-
-//import HistorialPaciente from "../screens/HistorialPaciente";
+import NavigatorStyles from "../estilos/navigatorStyles";
 
 const Tab = createBottomTabNavigator(); // Para ver la navegacion por pestañas
 const Stack = createStackNavigator(); // Para ver la navegación por pila, creamos varias
-
 const OpcionesStack = () => {
   // Navegación para las opciones
   return (
@@ -53,22 +49,34 @@ const InicioStack = () => {
       <Stack.Screen
         name="InicioMedico" // Nombre de la pantalla, es el que se usa para navegar
         component={FamiliareScreen}
-        options={{ headerShown: false, headerStyle: styles.headerStyle }} // Opciones de la pantalla, ocultamos header
+        options={{
+          headerShown: false,
+          headerStyle: NavigatorStyles.headerStyle,
+        }} // Opciones de la pantalla, ocultamos header
       />
       <Stack.Screen
         name="ResidenteScreen"
         component={ResidentScreen}
-        options={{ headerShown: false, headerStyle: styles.headerStyle }}
+        options={{
+          headerShown: false,
+          headerStyle: NavigatorStyles.headerStyle,
+        }}
       />
       <Stack.Screen
         name="SeguimientoScreen"
         component={SeguimientoScreen}
-        options={{ headerShown: false, headerStyle: styles.headerStyle }}
+        options={{
+          headerShown: false,
+          headerStyle: NavigatorStyles.headerStyle,
+        }}
       />
       <Stack.Screen
         name="ItinerarioResidenteScreen"
         component={ItinerarioResidenteScreen}
-        options={{ headerShown: false, headerStyle: styles.headerStyle }}
+        options={{
+          headerShown: false,
+          headerStyle: NavigatorStyles.headerStyle,
+        }}
       />
     </Stack.Navigator>
   );
@@ -90,7 +98,7 @@ const FamiliarNavigator = () => {
         options={{
           title: null,
           tabBarLabel: "Inicio",
-          headerStyle: styles.headerStyle,
+          headerStyle: NavigatorStyles.headerStyle,
           tabBarIcon: ({ color, size }) => (
             // Recibe el color y un tamaño por defecto
             <Ionicons name="home" size={size} color={color} />
@@ -103,7 +111,7 @@ const FamiliarNavigator = () => {
         options={{
           title: null,
           tabBarLabel: "Opciones",
-          headerStyle: styles.headerStyle,
+          headerStyle: NavigatorStyles.headerStyle,
           tabBarIcon: ({ color, size }) => (
             // Recibe el color y un tamaño por defecto
             <Ionicons name="settings" size={size} color={color} />
@@ -113,18 +121,5 @@ const FamiliarNavigator = () => {
     </Tab.Navigator>
   );
 };
-
-// Estilos
-const styles = StyleSheet.create({
-  headerStyle: {
-    height: 50, // Reducir la altura del header
-    shadowColor: "transparent", // Eliminar sombra entre la barrad de estado y la aop
-  },
-  headerText: {
-    // Estilos de texto
-    fontSize: 24,
-    fontWeight: "bold",
-  },
-});
 
 export default FamiliarNavigator;

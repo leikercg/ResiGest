@@ -3,21 +3,19 @@ import { createStackNavigator } from "@react-navigation/stack";
 import EnfermeroScreen from "../vistas/screens/EnfermeriaScreens/EnfermeroScreen";
 import { StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import CambiarIdioma from "../vistas/screens/ComunesScreens/CambiarIdioma"; // Otra pantalla de administrador
-import AgendaScreen from "../vistas/screens/ComunesScreens/AgendaScreen"; // Pantalla dr agenda
-import OpcionesScreen from "../vistas/screens/ComunesScreens/OpcionesScreen"; // Pantalla de opciones
-import ResidentScreen from "../vistas/screens/ComunesScreens/ResidenteScreen"; // Pantalla de detalle del residente
-import SeguimientoScreen from "../vistas/screens/ComunesScreens/SeguimientoScreen"; // Pantalla de seguimiento
-import CambiarContrasena from "../vistas/screens/ComunesScreens/CambiarContrasena"; // Pantalla de cambiar contraseña
-import EditarContactoScreen from "../vistas/screens/ComunesScreens/EditarContactoScreen"; // Pantalla de editar contacto
-import CurasScreen from "../vistas/screens/EnfermeriaScreens/CurasScreen"; // Pantalla de curas
-import TareasScreen from "../vistas/screens/EnfermeriaScreens/TareasScreen"; // Pantalla de tareas
-import ItinerarioResidenteScreen from "../vistas/screens/ComunesScreens/ItinerarioResidenteScreen"; // Pantalla de itinerario
+import CambiarIdioma from "../vistas/screens/ComunesScreens/CambiarIdioma";
+import AgendaScreen from "../vistas/screens/ComunesScreens/AgendaScreen";
+import OpcionesScreen from "../vistas/screens/ComunesScreens/OpcionesScreen";
+import ResidentScreen from "../vistas/screens/ComunesScreens/ResidenteScreen";
+import SeguimientoScreen from "../vistas/screens/ComunesScreens/SeguimientoScreen";
+import CambiarContrasena from "../vistas/screens/ComunesScreens/CambiarContrasena";
+import EditarContactoScreen from "../vistas/screens/ComunesScreens/EditarContactoScreen";
+import CurasScreen from "../vistas/screens/EnfermeriaScreens/CurasScreen";
+import TareasScreen from "../vistas/screens/EnfermeriaScreens/TareasScreen";
+import ItinerarioResidenteScreen from "../vistas/screens/ComunesScreens/ItinerarioResidenteScreen";
+import NavigatorStyles from "../estilos/navigatorStyles";
 
 import { Ionicons } from "@expo/vector-icons";
-
-//import HistorialPaciente from "../screens/HistorialPaciente";
-
 const Tab = createBottomTabNavigator(); // Para ver la navegacion por pestañas
 const Stack = createStackNavigator(); // Para ver la navegación por pila, creamos varias
 
@@ -57,27 +55,42 @@ const InicioStack = () => {
       <Stack.Screen
         name="InicioEnfermero" // Nombre de la pantalla, es el que se usa para navegar
         component={EnfermeroScreen}
-        options={{ headerShown: false, headerStyle: styles.headerStyle }} // Opciones de la pantalla, ocultamos header
+        options={{
+          headerShown: false,
+          headerStyle: NavigatorStyles.headerStyle,
+        }} // Opciones de la pantalla, ocultamos header
       />
       <Stack.Screen
         name="ResidenteScreen"
         component={ResidentScreen}
-        options={{ headerShown: false, headerStyle: styles.headerStyle }}
+        options={{
+          headerShown: false,
+          headerStyle: NavigatorStyles.headerStyle,
+        }}
       />
       <Stack.Screen
         name="SeguimientoScreen"
         component={SeguimientoScreen}
-        options={{ headerShown: false, headerStyle: styles.headerStyle }}
+        options={{
+          headerShown: false,
+          headerStyle: NavigatorStyles.headerStyle,
+        }}
       />
       <Stack.Screen
         name="CurasScreen"
         component={CurasScreen}
-        options={{ headerShown: false, headerStyle: styles.headerStyle }}
+        options={{
+          headerShown: false,
+          headerStyle: NavigatorStyles.headerStyle,
+        }}
       />
       <Stack.Screen
         name="ItinerarioResidenteScreen"
         component={ItinerarioResidenteScreen}
-        options={{ headerShown: false, headerStyle: styles.headerStyle }}
+        options={{
+          headerShown: false,
+          headerStyle: NavigatorStyles.headerStyle,
+        }}
       />
     </Stack.Navigator>
   );
@@ -89,7 +102,10 @@ const AgendaStack = () => {
       <Stack.Screen
         name="AgendaScreen" // Nombre de la pantalla, es el que se usa para navegar
         component={AgendaScreen}
-        options={{ headerShown: false, headerStyle: styles.headerStyle }} // Opciones de la pantalla, ocultamos header
+        options={{
+          headerShown: false,
+          headerStyle: NavigatorStyles.headerStyle,
+        }} // Opciones de la pantalla, ocultamos header
       />
     </Stack.Navigator>
   );
@@ -102,7 +118,10 @@ const TareasStack = () => {
       <Stack.Screen
         name="TareasScreen"
         component={TareasScreen}
-        options={{ headerShown: false, headerStyle: styles.headerStyle }}
+        options={{
+          headerShown: false,
+          headerStyle: NavigatorStyles.headerStyle,
+        }}
       />
     </Stack.Navigator>
   );
@@ -124,7 +143,7 @@ const EnfermeroNavigator = () => {
         options={{
           title: null,
           tabBarLabel: "Inicio",
-          headerStyle: styles.headerStyle,
+          headerStyle: NavigatorStyles.headerStyle,
           tabBarIcon: ({ color, size }) => (
             // Recibe el color y un tamaño por defecto
             <Ionicons name="home" size={size} color={color} />
@@ -137,7 +156,7 @@ const EnfermeroNavigator = () => {
         options={{
           title: null,
           tabBarLabel: "Tareas",
-          headerStyle: styles.headerStyle,
+          headerStyle: NavigatorStyles.headerStyle,
           tabBarIcon: ({ color, size }) => (
             // Recibe el color y un tamaño por defecto
             <Ionicons name="list" size={size} color={color} />
@@ -151,7 +170,7 @@ const EnfermeroNavigator = () => {
         options={{
           title: null,
           tabBarLabel: "Agenda",
-          headerStyle: styles.headerStyle,
+          headerStyle: NavigatorStyles.headerStyle,
           tabBarIcon: ({ color, size }) => (
             // Recibe el color y un tamaño por defecto
             <Ionicons name="calendar" size={size} color={color} />
@@ -165,7 +184,7 @@ const EnfermeroNavigator = () => {
         options={{
           title: null,
           tabBarLabel: "Opciones",
-          headerStyle: styles.headerStyle,
+          headerStyle: NavigatorStyles.headerStyle,
           tabBarIcon: ({ color, size }) => (
             // Recibe el color y un tamaño por defecto
             <Ionicons name="settings" size={size} color={color} />
@@ -175,18 +194,5 @@ const EnfermeroNavigator = () => {
     </Tab.Navigator>
   );
 };
-
-// Estilos
-const styles = StyleSheet.create({
-  headerStyle: {
-    height: 50, // Reducir la altura del header
-    shadowColor: "transparent", // Eliminar sombra entre la barrad de estado y la aop
-  },
-  headerText: {
-    // Estilos de texto
-    fontSize: 24,
-    fontWeight: "bold",
-  },
-});
 
 export default EnfermeroNavigator;

@@ -9,9 +9,7 @@ import FamiliarNavigator from "./FamiliarNavigator";
 import FisioterapiaNavigator from "./FisioterapiaNavigator";
 import TerapiaNavigator from "./TerapiaNavigator";
 import AsistencialNavigator from "./AsistencialNavigator";
-
 import { ActivityIndicator, View } from "react-native";
-
 // Creamos una pila de navegación
 const Stack = createStackNavigator();
 
