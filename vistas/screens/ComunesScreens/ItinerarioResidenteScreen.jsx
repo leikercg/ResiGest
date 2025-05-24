@@ -17,6 +17,7 @@ import VisitaItem from "./../../components/VisitaItem";
 import SesionItem from "./../../components/SesionItem";
 import GrupoItem from "./../../components/GrupoItem";
 import TareaItem from "./../../components/TareaItem";
+import { useTranslation } from "react-i18next";
 const ItinerarioResidenteScreen = ({ route }) => {
   const { residente } = route.params;
   const nombreResidente = `${residente.nombre} ${residente.apellido}`;
@@ -24,6 +25,7 @@ const ItinerarioResidenteScreen = ({ route }) => {
   const [data, setData] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [mostrarPicker, setMostrarPicker] = useState(false);
+  const { t, i18n } = useTranslation();
 
   const cambioFecha = (event, fechaSeleccionada) => {
     // Para Android, necesitamos ocultar el picker después de seleccionar
@@ -77,7 +79,7 @@ const ItinerarioResidenteScreen = ({ route }) => {
     <View style={estilos.estilosListaPersonasVentana.contenedor}>
       <View style={estilos.estilosListaPersonasVentana.titulo}>
         <Text style={estilos.estilosListaPersonasVentana.tituloTexto}>
-          Agenda de {nombreResidente}
+          {t("agendaDeResidente", { nombreResidente })}
         </Text>
       </View>
 
@@ -87,9 +89,7 @@ const ItinerarioResidenteScreen = ({ route }) => {
         renderItem={renderItem}
         ListEmptyComponent={
           <View style={styles.contenedorVacio}>
-            <Text style={styles.textoVacio}>
-              No hay registros para este día
-            </Text>
+            <Text style={styles.textoVacio}>{t("noHayRegistrosDia")} </Text>
           </View>
         }
         contentContainerStyle={styles.listContent}

@@ -12,8 +12,10 @@ import estilos from "../../../estilos/estilos";
 import ResidenteControlador from "../../../controladores/residenteControlador";
 import { ScrollView } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 
 const ResidenteScreen = ({ route, navigation }) => {
+  const { t } = useTranslation();
   const { departamentoId } = useContext(AuthContext);
   const { residente: residenteInicial } = route.params;
   const [residente, setResidente] = useState(residenteInicial);
@@ -21,33 +23,31 @@ const ResidenteScreen = ({ route, navigation }) => {
   const [familiares, setFamiliares] = useState([]);
 
   useEffect(() => {
-    if (!residenteInicial?.id) return; // Si no hay ID, no hacemos nada
+    if (!residenteInicial?.id) return;
 
     const desuscribirResidente = ResidenteControlador.escucharCambiosResidente(
       residenteInicial.id,
       async (residenteActualizado) => {
-        setResidente(residenteActualizado); // Actualizar el estado con el residente actualizado
-        setCargando(false); // Finalizar la carga
+        setResidente(residenteActualizado);
+        setCargando(false);
 
-        // Obtener los familiares del residente actualizado en tiempo real
         const desuscribirseFamiliares = residenteActualizado.obtenerFamiliares(
           (familiares) => {
-            setFamiliares(familiares || []); // Actualizar el estado con los familiares
+            setFamiliares(familiares || []);
           },
         );
 
-        // Limpiar la suscripción de familiares cuando el componente se desmonta
         return () => {
           if (desuscribirseFamiliares) desuscribirseFamiliares();
         };
       },
     );
 
-    // Limpiar la suscripción del residente cuando el componente se desmonta
     return () => {
       desuscribirResidente();
     };
   }, [residenteInicial.id]);
+
   if (cargando) {
     return (
       <View style={styles.cargandocontenedor}>
@@ -60,46 +60,52 @@ const ResidenteScreen = ({ route, navigation }) => {
     <View style={estilos.estilosListaPersonasVentana.contenedor}>
       <View style={estilos.estilosListaPersonasVentana.titulo}>
         <Text style={estilos.estilosListaPersonasVentana.tituloTexto}>
-          Ficha de Residente
+          {t("tituloFichaResidente")}
         </Text>
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View>
-          <View style={styles.contenedorDatos}>
-            <Text style={styles.texto}>Nombre: {residente.nombre}</Text>
-            <Text style={styles.texto}>Apellido: {residente.apellido}</Text>
-            <Text style={styles.texto}>Edad: {residente.calcularEdad()}</Text>
-            <Text style={styles.texto}>
-              Fecha de ingreso: {residente.devolverFechaIngreso()}
-            </Text>
-          </View>
+        <View style={styles.contenedorDatos}>
+          <Text style={styles.texto}>
+            {t("labelNombre")} {residente.nombre}
+          </Text>
+          <Text style={styles.texto}>
+            {t("labelApellido")} {residente.apellido}
+          </Text>
+          <Text style={styles.texto}>
+            {t("labelEdad")} {residente.calcularEdad()}
+          </Text>
+          <Text style={styles.texto}>
+            {t("labelFechaIngreso")} {residente.devolverFechaIngreso()}
+          </Text>
         </View>
-        {/* Separador */}
+
         <View style={styles.separador} />
 
         <View style={styles.contenedorFamiliares}>
-          <Text style={styles.tituloFamiliares}>Familiares</Text>
+          <Text style={styles.tituloFamiliares}>{t("tituloFamiliares")}</Text>
           {familiares && familiares.length > 0 ? (
             familiares.map((familiar) => (
               <View key={familiar.id} style={styles.contenedorDatos}>
                 <Text style={styles.texto}>
                   {familiar.nombre} {familiar.apellido}
                 </Text>
-                <Text style={styles.texto}>Teléfono: {familiar.telefono}</Text>
+                <Text style={styles.texto}>
+                  {t("labelTelefono") || "Teléfono"}: {familiar.telefono}
+                </Text>
               </View>
             ))
           ) : (
-            <Text style={styles.texto}>No hay familiares registrados.</Text>
+            <Text style={styles.texto}>{t("mensajeSinFamiliares")}</Text>
           )}
         </View>
 
-        {/* Separador */}
         <View style={styles.separador} />
 
         <View style={styles.contenedorSeguimientos}>
-          <Text style={styles.tituloSeguimientos}>Seguimientos</Text>
+          <Text style={styles.tituloSeguimientos}>
+            {t("tituloSeguimientos")}
+          </Text>
           <View style={styles.contenedorBotones}>
-            {/* Botón de medicina */}
             <Pressable
               style={({ pressed }) => [
                 styles.boton,
@@ -112,10 +118,9 @@ const ResidenteScreen = ({ route, navigation }) => {
                 })
               }
             >
-              <Text style={styles.textoBoton}>Medicina</Text>
+              <Text style={styles.textoBoton}>{t("botonMedicina")}</Text>
             </Pressable>
 
-            {/* Botón de enfermería */}
             <Pressable
               style={({ pressed }) => [
                 styles.boton,
@@ -128,10 +133,9 @@ const ResidenteScreen = ({ route, navigation }) => {
                 })
               }
             >
-              <Text style={styles.textoBoton}>Enfermería</Text>
+              <Text style={styles.textoBoton}>{t("botonEnfermeria")}</Text>
             </Pressable>
 
-            {/* Botón de fisioterapia */}
             <Pressable
               style={({ pressed }) => [
                 styles.boton,
@@ -144,10 +148,9 @@ const ResidenteScreen = ({ route, navigation }) => {
                 })
               }
             >
-              <Text style={styles.textoBoton}>Fisioterápia</Text>
+              <Text style={styles.textoBoton}>{t("botonFisioterapia")}</Text>
             </Pressable>
 
-            {/* Botón terapia */}
             <Pressable
               style={({ pressed }) => [
                 styles.boton,
@@ -160,10 +163,9 @@ const ResidenteScreen = ({ route, navigation }) => {
                 })
               }
             >
-              <Text style={styles.textoBoton}>Terapia</Text>
+              <Text style={styles.textoBoton}>{t("botonTerapia")}</Text>
             </Pressable>
 
-            {/* Botón de asistencial */}
             <View style={styles.contenedorBotonAsistencial}>
               <Pressable
                 style={({ pressed }) => [
@@ -177,12 +179,11 @@ const ResidenteScreen = ({ route, navigation }) => {
                   })
                 }
               >
-                <Text style={styles.textoBoton}>Asistencial</Text>
+                <Text style={styles.textoBoton}>{t("botonAsistencial")}</Text>
               </Pressable>
             </View>
           </View>
 
-          {/* Botón del itinerario */}
           <View style={styles.contenedorBotonItinerario}>
             <Pressable
               style={({ pressed }) => [
@@ -196,12 +197,11 @@ const ResidenteScreen = ({ route, navigation }) => {
               }
             >
               <Text style={styles.textoBotonItinerario}>
-                Itinerario residente
+                {t("botonItinerarioResidente")}
               </Text>
             </Pressable>
           </View>
 
-          {/* Botón de visita medicina */}
           {departamentoId === 2 && (
             <View style={styles.contenedorBotonItinerario}>
               <Pressable
@@ -215,12 +215,13 @@ const ResidenteScreen = ({ route, navigation }) => {
                   })
                 }
               >
-                <Text style={styles.textoBotonItinerario}>Visitas</Text>
+                <Text style={styles.textoBotonItinerario}>
+                  {t("botonVisitas")}
+                </Text>
               </Pressable>
             </View>
           )}
 
-          {/* Botón de cura en enfermería */}
           {departamentoId === 3 && (
             <View style={styles.contenedorBotonItinerario}>
               <Pressable
@@ -234,12 +235,13 @@ const ResidenteScreen = ({ route, navigation }) => {
                   })
                 }
               >
-                <Text style={styles.textoBotonItinerario}>Curas</Text>
+                <Text style={styles.textoBotonItinerario}>
+                  {t("botonCuras")}
+                </Text>
               </Pressable>
             </View>
           )}
 
-          {/* Botón de sesiones en fisioterapia */}
           {departamentoId === 5 && (
             <View style={styles.contenedorBotonItinerario}>
               <Pressable
@@ -254,13 +256,12 @@ const ResidenteScreen = ({ route, navigation }) => {
                 }
               >
                 <Text style={styles.textoBotonItinerario}>
-                  Sesiones de fisioterapia
+                  {t("botonSesionesFisioterapia")}
                 </Text>
               </Pressable>
             </View>
           )}
 
-          {/* Botón de grupos en terapia */}
           {departamentoId === 6 && (
             <View style={styles.contenedorBotonItinerario}>
               <Pressable
@@ -270,12 +271,12 @@ const ResidenteScreen = ({ route, navigation }) => {
                 ]}
                 onPress={() =>
                   navigation.navigate("GruposScreen", {
-                    residente: residente, // Enviamos el residente
+                    residente: residente,
                   })
                 }
               >
                 <Text style={styles.textoBotonItinerario}>
-                  Grupos de terapia
+                  {t("botonGruposTerapia")}
                 </Text>
               </Pressable>
             </View>
@@ -283,12 +284,11 @@ const ResidenteScreen = ({ route, navigation }) => {
         </View>
       </ScrollView>
 
-      {/* Botón flotante de edición sólo visble en la administración */}
       {departamentoId === 1 && (
         <TouchableOpacity
           style={estilos.botonFLotante.botonFLotante}
-          onPress={
-            () => navigation.navigate("FormResidente", { residente: residente }) // Navega a la pantalla de edición
+          onPress={() =>
+            navigation.navigate("FormResidente", { residente: residente })
           }
         >
           <Ionicons name="pencil" size={24} color="white" />

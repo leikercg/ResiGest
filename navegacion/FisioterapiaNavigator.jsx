@@ -13,6 +13,7 @@ import ItinerarioResidenteScreen from "../vistas/screens/ComunesScreens/Itinerar
 import { Ionicons } from "@expo/vector-icons";
 import SesionesScreen from "../vistas/screens/FisioterapiaScreens/SesionesScreen";
 import NavigatorStyles from "../estilos/navigatorStyles.jsx";
+import { useTranslation } from "react-i18next";
 
 const Tab = createBottomTabNavigator(); // Para ver la navegacion por pestañas
 const Stack = createStackNavigator(); // Para ver la navegación por pila, creamos varias
@@ -109,6 +110,8 @@ const AgendaStack = () => {
 };
 
 const FisioterapiaNavigator = () => {
+  const { t } = useTranslation();
+
   return (
     <Tab.Navigator
       lazy={false}
@@ -123,7 +126,7 @@ const FisioterapiaNavigator = () => {
         component={InicioStack}
         options={{
           title: null,
-          tabBarLabel: "Inicio",
+          tabBarLabel: t("inicio"),
           headerStyle: NavigatorStyles.headerStyle,
           tabBarIcon: ({ color, size }) => (
             // Recibe el color y un tamaño por defecto
@@ -136,7 +139,7 @@ const FisioterapiaNavigator = () => {
         component={AgendaStack}
         options={{
           title: null,
-          tabBarLabel: "Agenda",
+          tabBarLabel: t("agenda"),
           headerStyle: NavigatorStyles.headerStyle,
           tabBarIcon: ({ color, size }) => (
             // Recibe el color y un tamaño por defecto
@@ -150,7 +153,7 @@ const FisioterapiaNavigator = () => {
         component={OpcionesStack}
         options={{
           title: null,
-          tabBarLabel: "Opciones",
+          tabBarLabel: t("opciones"),
           headerStyle: NavigatorStyles.headerStyle,
           tabBarIcon: ({ color, size }) => (
             // Recibe el color y un tamaño por defecto

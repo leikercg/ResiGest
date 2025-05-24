@@ -15,6 +15,7 @@ import {
 } from "firebase/auth";
 import { Ionicons } from "@expo/vector-icons";
 import estilos from "../../../estilos/estilos";
+import { useTranslation } from "react-i18next";
 
 const CambiarContrasena = ({ navigation }) => {
   const [contrasenaActual, setContrasenaActual] = useState("");
@@ -24,33 +25,34 @@ const CambiarContrasena = ({ navigation }) => {
   const [mostrarnuevaContrasena, setMostrarNuevaContrasena] = useState(false);
   const [mostrarconfirmarContrasena, setMostrarConfirmarContrasena] =
     useState(false);
+  const { t } = useTranslation();
 
   const mostrarAlertaConfirmacion = () => {
     if (!contrasenaActual || !nuevaContrasena || !confirmarContrasena) {
-      Alert.alert("Error", "Todos los campos son obligatorios");
+      Alert.alert(t("alertaErrorTitulo"), t("errorCamposVacios"));
       return;
     }
 
     if (nuevaContrasena !== confirmarContrasena) {
-      Alert.alert("Error", "Las contraseñas no coinciden");
+      Alert.alert(t("alertaErrorTitulo"), t("errorContrasenasNoCoinciden"));
       return;
     }
 
     if (nuevaContrasena.length < 6) {
-      Alert.alert("Error", "La contraseña debe tener al menos 6 caracteres");
+      Alert.alert(t("alertaErrorTitulo"), t("errorContrasenaCorta"));
       return;
     }
 
     Alert.alert(
-      "Confirmar cambio de contraseña",
-      "¿Estás seguro de que deseas cambiar tu contraseña?",
+      t("alertaConfirmacionContraseña"),
+      t("alertaConfirmacionMensaje"),
       [
         {
-          text: "Cancelar",
+          text: t("cancelar") || "Cancelar", // If you want to add "cancelar" key in translation file
           style: "cancel",
         },
         {
-          text: "Confirmar",
+          text: t("confirmar") || "Confirmar", // Same for "confirmar"
           onPress: () => cambiarContrasena(),
         },
       ],
@@ -69,7 +71,7 @@ const CambiarContrasena = ({ navigation }) => {
       await reauthenticateWithCredential(user, credential);
       await updatePassword(user, nuevaContrasena);
 
-      Alert.alert("Éxito", "Contraseña actualizada correctamente", [
+      Alert.alert(t("alertaExitoTitulo"), t("alertaExitoMensaje"), [
         { text: "OK", onPress: () => navigation.goBack() },
       ]);
 
@@ -77,16 +79,16 @@ const CambiarContrasena = ({ navigation }) => {
       setNuevaContrasena("");
       setConfirmarContrasena("");
     } catch (error) {
-      let errorMessage = "Las contraseña es incorrecta";
+      let errorMessage = t("errorContrasenaIncorrecta");
       switch (error.code) {
         case "auth/wrong-password":
-          errorMessage = "La contraseña actual es incorrecta";
+          errorMessage = t("errorContrasenaIncorrecta");
           break;
         case "auth/weak-password":
-          errorMessage = "La nueva contraseña es demasiado débil";
+          errorMessage = t("errorContrasenaDebil");
           break;
       }
-      Alert.alert("Error", errorMessage);
+      Alert.alert(t("alertaErrorTitulo"), errorMessage);
     }
   };
 
@@ -94,17 +96,17 @@ const CambiarContrasena = ({ navigation }) => {
     <View style={estilos.estilosListaPersonasVentana.contenedor}>
       <View style={estilos.estilosListaPersonasVentana.titulo}>
         <Text style={estilos.estilosListaPersonasVentana.tituloTexto}>
-          Cambiar Contraseña
+          {t("cambiar_contraseña")}
         </Text>
       </View>
 
       <View style={styles.contenedorFormulario}>
         <View style={styles.contenedorInput}>
-          <Text style={styles.label}>Contraseña actual</Text>
+          <Text style={styles.label}>{t("contrasenaActual")}</Text>
           <View style={styles.passwordInput}>
             <TextInput
               style={styles.input}
-              placeholder="Ingresa tu contraseña actual"
+              placeholder={t("placeholderContrasenaActual")}
               secureTextEntry={!mostrarContrasenaActual}
               value={contrasenaActual}
               onChangeText={setContrasenaActual}
@@ -126,11 +128,11 @@ const CambiarContrasena = ({ navigation }) => {
         </View>
 
         <View style={styles.contenedorInput}>
-          <Text style={styles.label}>Nueva contraseña</Text>
+          <Text style={styles.label}>{t("nuevaContrasena")}</Text>
           <View style={styles.passwordInput}>
             <TextInput
               style={styles.input}
-              placeholder="Ingresa tu nueva contraseña"
+              placeholder={t("placeholderNuevaContrasena")}
               secureTextEntry={!mostrarnuevaContrasena}
               value={nuevaContrasena}
               onChangeText={setNuevaContrasena}
@@ -150,11 +152,11 @@ const CambiarContrasena = ({ navigation }) => {
         </View>
 
         <View style={styles.contenedorInput}>
-          <Text style={styles.label}>Confirmar nueva contraseña</Text>
+          <Text style={styles.label}>{t("confirmarNuevaContrasena")}</Text>
           <View style={styles.passwordInput}>
             <TextInput
               style={styles.input}
-              placeholder="Confirma tu nueva contraseña"
+              placeholder={t("placeholderConfirmarNuevaContrasena")}
               secureTextEntry={!mostrarconfirmarContrasena}
               value={confirmarContrasena}
               onChangeText={setConfirmarContrasena}
@@ -179,12 +181,12 @@ const CambiarContrasena = ({ navigation }) => {
           style={styles.botonCambio}
           onPress={mostrarAlertaConfirmacion}
         >
-          <Text style={styles.textoBotonCambio}>Cambiar Contraseña</Text>
+          <Text style={styles.textoBotonCambio}>
+            {t("botonCambiarContrasena")}
+          </Text>
         </TouchableOpacity>
 
-        <Text style={styles.textoNota}>
-          La contraseña debe tener al menos 6 caracteres
-        </Text>
+        <Text style={styles.textoNota}>{t("notaContrasena")}</Text>
       </View>
     </View>
   );

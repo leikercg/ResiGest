@@ -12,6 +12,7 @@ import CambiarContrasena from "../vistas/screens/ComunesScreens/CambiarContrasen
 import EditarContactoScreen from "../vistas/screens/ComunesScreens/EditarContactoScreen";
 import ItinerarioResidenteScreen from "../vistas/screens/ComunesScreens/ItinerarioResidenteScreen";
 import NavigatorStyles from "../estilos/navigatorStyles.jsx";
+import { useTranslation } from "react-i18next";
 
 import { Ionicons } from "@expo/vector-icons";
 
@@ -102,6 +103,8 @@ const AgendaAuxStack = () => {
 };
 
 const AsistencialNavigator = () => {
+  const { t, i18n } = useTranslation();
+
   return (
     <Tab.Navigator
       lazy={false}
@@ -116,7 +119,7 @@ const AsistencialNavigator = () => {
         component={InicioStack}
         options={{
           title: null,
-          tabBarLabel: "Inicio",
+          tabBarLabel: t("inicio"),
           headerStyle: NavigatorStyles.headerStyle,
           tabBarIcon: ({ color, size }) => (
             // Recibe el color y un tamaño por defecto
@@ -129,7 +132,7 @@ const AsistencialNavigator = () => {
         component={AgendaAuxStack}
         options={{
           title: null,
-          tabBarLabel: "Agenda",
+          tabBarLabel: t("agenda"),
           headerStyle: NavigatorStyles.headerStyle,
           tabBarIcon: ({ color, size }) => (
             // Recibe el color y un tamaño por defecto
@@ -143,7 +146,7 @@ const AsistencialNavigator = () => {
         component={OpcionesStack}
         options={{
           title: null,
-          tabBarLabel: "Opciones",
+          tabBarLabel: t("opciones"),
           headerStyle: NavigatorStyles.headerStyle,
           tabBarIcon: ({ color, size }) => (
             // Recibe el color y un tamaño por defecto

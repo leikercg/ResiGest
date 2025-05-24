@@ -11,6 +11,7 @@ import EditarContactoScreen from "../vistas/screens/ComunesScreens/EditarContact
 import ItinerarioResidenteScreen from "../vistas/screens/ComunesScreens/ItinerarioResidenteScreen";
 import { Ionicons } from "@expo/vector-icons";
 import NavigatorStyles from "../estilos/navigatorStyles";
+import { useTranslation } from "react-i18next";
 
 const Tab = createBottomTabNavigator(); // Para ver la navegacion por pestañas
 const Stack = createStackNavigator(); // Para ver la navegación por pila, creamos varias
@@ -83,6 +84,7 @@ const InicioStack = () => {
 };
 
 const FamiliarNavigator = () => {
+  const { t } = useTranslation();
   return (
     <Tab.Navigator
       lazy={false}
@@ -97,7 +99,7 @@ const FamiliarNavigator = () => {
         component={InicioStack}
         options={{
           title: null,
-          tabBarLabel: "Inicio",
+          tabBarLabel: t("inicio"),
           headerStyle: NavigatorStyles.headerStyle,
           tabBarIcon: ({ color, size }) => (
             // Recibe el color y un tamaño por defecto
@@ -110,7 +112,7 @@ const FamiliarNavigator = () => {
         component={OpcionesStack}
         options={{
           title: null,
-          tabBarLabel: "Opciones",
+          tabBarLabel: t("opciones"),
           headerStyle: NavigatorStyles.headerStyle,
           tabBarIcon: ({ color, size }) => (
             // Recibe el color y un tamaño por defecto

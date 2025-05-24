@@ -32,7 +32,7 @@ const LoginScreen = () => {
 
   const iniciarSesion = async () => {
     if (!email || !password) {
-      setMensaje("Por favor ingresa un correo y una contraseña.");
+      setMensaje(t("camposVacios"));
       return;
     }
 
@@ -48,13 +48,13 @@ const LoginScreen = () => {
 
       switch (error.code) {
         case "auth/invalid-email":
-          mensajeError = t("errorMessages.invalidEmail");
+          mensajeError = t("correoInvalido");
           break;
         case "auth/too-many-requests":
-          mensajeError = t("errorMessages.tooManyRequests");
+          mensajeError = t("demasiadosIntentos");
           break;
         default:
-          mensajeError = t("errorMessages.invalidCredentials");
+          mensajeError = t("credencialesInvalidas");
       }
 
       setMensaje(mensajeError);
@@ -69,20 +69,20 @@ const LoginScreen = () => {
 
     try {
       await sendPasswordResetEmail(auth, email);
-      setMensaje(t("correo_enviado"));
+      setMensaje(t("exitoRestablecerContrasena"));
       setOlvidoContrasena(false);
     } catch (error) {
       let mensajeError = "";
 
       switch (error.code) {
         case "auth/invalid-email":
-          mensajeError = t("error_email_invalido");
+          mensajeError = t("correoInvalido");
           break;
         case "auth/user-not-found":
-          mensajeError = t("error_usuario_no_encontrado");
+          mensajeError = t("usuarioNoEncontrado");
           break;
         default:
-          mensajeError = t("error_envio_correo");
+          mensajeError = t("errorRestablecerContrasena");
       }
 
       setMensaje(mensajeError);
@@ -106,7 +106,7 @@ const LoginScreen = () => {
 
       <TextInput
         style={estilos.estilosLogin.input}
-        placeholder={t("email")}
+        placeholder={t("correoElectronico")}
         placeholderTextColor="#999"
         value={email}
         onChangeText={setEmail}
@@ -115,19 +115,17 @@ const LoginScreen = () => {
         autoComplete="email"
       />
 
-      {/* Solo mostrar contraseña si no estamos en la vista de olvido contraseña */}
       {!olvidoContrasena && (
         <View style={styles.contenedorContrsena}>
           <TextInput
             style={[estilos.estilosLogin.input, styles.inputContrasena]}
-            placeholder={t("password")}
+            placeholder={t("contrasena")}
             placeholderTextColor="#999"
             value={password}
             secureTextEntry={!mostrarContrasena}
             onChangeText={setPassword}
             autoComplete="password"
           />
-          {/* Botón para mostrar contraseña */}
           <Pressable
             style={styles.iconoOjo}
             onPress={() => setVerContrasena(!mostrarContrasena)}
@@ -141,32 +139,30 @@ const LoginScreen = () => {
         </View>
       )}
 
-      {/* Enlace para recuperar contraseña */}
       <Pressable
         onPress={() => setOlvidoContrasena(true)}
         style={styles.olvidarContrasena}
       >
         <Text style={styles.textoOlvidarContrasena}>
-          {t("forgotPassword")}{" "}
+          {t("olvidasteContrasena")}{" "}
         </Text>
       </Pressable>
 
-      {/* Mostrar mensajes de error/éxito */}
       {mensaje ? (
         <Text style={estilos.estilosLogin.error}>{mensaje}</Text>
       ) : null}
 
-      {/* Mostrar botón de restaurar contraseña en vez de iniciar sesión si estamos en la vista de olvido de contraseña */}
       {olvidoContrasena ? (
         <View>
           <Pressable
             style={estilos.estilosLogin.button}
             onPress={restaurarContrasena}
           >
-            <Text style={estilos.estilosLogin.buttonText}>Restuarar</Text>
+            <Text style={estilos.estilosLogin.buttonText}>
+              {t("restaurar")}
+            </Text>
           </Pressable>
 
-          {/* Botón para cancelar y volver al login */}
           <Pressable
             onPress={() => {
               setOlvidoContrasena(false);
@@ -174,12 +170,14 @@ const LoginScreen = () => {
             }}
             style={styles.botonCancelar}
           >
-            <Text style={styles.textoCancelar}>{t("cancel")}</Text>
+            <Text style={styles.textoCancelar}>{t("cancelar")}</Text>
           </Pressable>
         </View>
       ) : (
         <Pressable style={estilos.estilosLogin.button} onPress={iniciarSesion}>
-          <Text style={estilos.estilosLogin.buttonText}>{t("login")}</Text>
+          <Text style={estilos.estilosLogin.buttonText}>
+            {t("iniciarSesion")}
+          </Text>
         </Pressable>
       )}
       <Pressable
@@ -187,9 +185,7 @@ const LoginScreen = () => {
         style={{ marginTop: 20, alignSelf: "center" }}
       >
         <Text style={{ color: "#2F80ED" }}>
-          {i18n.language === "es"
-            ? t("Switch to English")
-            : t("Cambiar a Español")}
+          {i18n.language === "es" ? t("cambiarAIngles") : t("cambiarAEspanol")}
         </Text>
       </Pressable>
     </View>

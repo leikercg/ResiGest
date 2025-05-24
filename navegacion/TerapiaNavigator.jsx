@@ -13,6 +13,7 @@ import ItinerarioResidenteScreen from "../vistas/screens/ComunesScreens/Itinerar
 import { Ionicons } from "@expo/vector-icons";
 import GruposScreen from "../vistas/screens/TerapiaScreens/GruposScreen";
 import NavigatorStyles from "../estilos/navigatorStyles.jsx";
+import { useTranslation } from "react-i18next";
 
 const Tab = createBottomTabNavigator(); // Para ver la navegacion por pestañas
 const Stack = createStackNavigator(); // Para ver la navegación por pila, creamos varias
@@ -124,6 +125,7 @@ const TodosGruposStack = () => {
   );
 };
 const TerapiaNavigator = () => {
+  const { t } = useTranslation();
   return (
     <Tab.Navigator
       lazy={false}
@@ -138,7 +140,7 @@ const TerapiaNavigator = () => {
         component={InicioStack}
         options={{
           title: null,
-          tabBarLabel: "Inicio",
+          tabBarLabel: t("inicio"),
           headerStyle: NavigatorStyles.headerStyle,
           tabBarIcon: ({ color, size }) => (
             // Recibe el color y un tamaño por defecto
@@ -152,7 +154,7 @@ const TerapiaNavigator = () => {
         component={TodosGruposStack}
         options={{
           title: null,
-          tabBarLabel: "Grupos",
+          tabBarLabel: t("grupos"),
           headerStyle: NavigatorStyles.headerStyle,
           tabBarIcon: ({ color, size }) => (
             // Recibe el color y un tamaño por defecto
@@ -165,7 +167,7 @@ const TerapiaNavigator = () => {
         component={AgendaStack}
         options={{
           title: null,
-          tabBarLabel: "Agenda",
+          tabBarLabel: t("agenda"),
           headerStyle: NavigatorStyles.headerStyle,
           tabBarIcon: ({ color, size }) => (
             // Recibe el color y un tamaño por defecto
@@ -178,7 +180,7 @@ const TerapiaNavigator = () => {
         component={OpcionesStack}
         options={{
           title: null,
-          tabBarLabel: "Opciones",
+          tabBarLabel: t("opciones"),
           headerStyle: NavigatorStyles.headerStyle,
           tabBarIcon: ({ color, size }) => (
             // Recibe el color y un tamaño por defecto

@@ -18,6 +18,7 @@ import estilos from "../../../estilos/estilos";
 import { getAuth } from "firebase/auth";
 import { AuthContext } from "../../../contexto/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 
 const auth = getAuth();
 
@@ -30,6 +31,7 @@ const SeguimientoScreen = ({ route, navigation }) => {
   const [mostrarModal, setMostrarModal] = useState(false);
   const { departamentoId: usuarioDepartamentoId } = useContext(AuthContext);
   const mostrarBotonFlotante = usuarioDepartamentoId == departamentoId;
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!residente) {
@@ -57,17 +59,17 @@ const SeguimientoScreen = ({ route, navigation }) => {
   const obtenerNombreDepartamento = (id) => {
     switch (id) {
       case 2:
-        return "Medicina";
+        return t("departamentoMedicina");
       case 3:
-        return "Enfermería";
+        return t("departamentoEnfermeria");
       case 5:
-        return "Fisioterapia";
+        return t("departamentoFisioterapia");
       case 6:
-        return "Terapia Ocupacional";
+        return t("departamentoTerapiaOcupacional");
       case 7:
-        return "Asistencial";
+        return t("departamentoAsistencial");
       default:
-        return "Desconocido";
+        return t("departamentoDesconocido");
     }
   };
 
@@ -84,17 +86,17 @@ const SeguimientoScreen = ({ route, navigation }) => {
 
   const manejarAgregarDetalle = async () => {
     if (!nuevoDetalle.trim()) {
-      Alert.alert("Error", "El detalle no puede estar vacío.");
+      Alert.alert(t("alertErrorDetalleVacio"), t("alertErrorDetalleVacio"));
       return;
     }
 
     Alert.alert(
-      "Confirmar",
-      "¿Estás seguro de que deseas agregar este seguimiento?",
+      t("alertConfirmarAgregar"),
+      t("alertConfirmarAgregar"),
       [
-        { text: "Cancelar", style: "cancel" },
+        { text: t("botonCancelar"), style: "cancel" },
         {
-          text: "Confirmar",
+          text: t("botonAgregar"),
           onPress: async () => {
             try {
               await SeguimientoControlador.agregarDetalleSeguimiento(
@@ -133,7 +135,7 @@ const SeguimientoScreen = ({ route, navigation }) => {
   if (!seguimiento) {
     return (
       <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>No se encontró ningún seguimiento.</Text>
+        <Text style={styles.emptyText}>{t("mensajeNoSeguimiento")}</Text>
       </View>
     );
   }
@@ -150,7 +152,7 @@ const SeguimientoScreen = ({ route, navigation }) => {
           </View>
           <Text style={styles.detalleMotivo}>{item.comentario}</Text>
           <Text style={styles.detalleUsuario}>
-            Registrado por: {item.usuarioNombre}
+            {t("labelRegistradoPor")} {item.usuarioNombre}
           </Text>
         </View>
       </View>
@@ -162,7 +164,7 @@ const SeguimientoScreen = ({ route, navigation }) => {
       {/* Cabecera */}
       <View style={estilos.estilosListaPersonasVentana.titulo}>
         <Text style={estilos.estilosListaPersonasVentana.tituloTexto}>
-          Seguimiento
+          {t("tituloSeguimiento")}
         </Text>
       </View>
 
@@ -174,14 +176,12 @@ const SeguimientoScreen = ({ route, navigation }) => {
       {/* Lista principal */}
       <FlatList
         data={seguimiento.detalles || []}
-        keyExtractor={(item, index) => index.toString()} // Daba error, por venir de un array no traida id, por lo que usamos el índice
+        keyExtractor={(item, index) => index.toString()} // Daba error, por venir de un array no traia id, por lo que usamos el índice
         //keyExtractor={(item) => item.id}
         renderItem={renderItem}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>
-              Aún no se ha realizado ningún seguimiento
-            </Text>
+            <Text style={styles.emptyText}>{t("mensajeSinDetalles")}</Text>
           </View>
         }
         contentContainerStyle={styles.listContent}
@@ -201,12 +201,14 @@ const SeguimientoScreen = ({ route, navigation }) => {
               behavior={Platform.OS === "ios" ? "padding" : "height"}
               style={styles.contenidoModal}
             >
-              <Text style={styles.modalTitulo}>Nuevo Seguimiento</Text>
+              <Text style={styles.modalTitulo}>
+                {t("nuevoSeguimientoTitulo")}
+              </Text>
 
-              <Text style={styles.label}>Detalles:</Text>
+              <Text style={styles.label}>{t("labelDetalles")}</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Agregar un nuevo seguimiento"
+                placeholder={t("placeholderAgregarSeguimiento")}
                 value={nuevoDetalle}
                 onChangeText={setNuevoDetalle}
                 multiline
@@ -217,13 +219,17 @@ const SeguimientoScreen = ({ route, navigation }) => {
                   style={[styles.botonModal, styles.botonCancelar]}
                   onPress={() => setMostrarModal(false)}
                 >
-                  <Text style={styles.textoBotonModal}>Cancelar</Text>
+                  <Text style={styles.textoBotonModal}>
+                    {t("botonCancelar")}
+                  </Text>
                 </Pressable>
                 <Pressable
                   style={[styles.botonModal, styles.botonAgregar]}
                   onPress={manejarAgregarDetalle}
                 >
-                  <Text style={styles.textoBotonModal}>Agregar</Text>
+                  <Text style={styles.textoBotonModal}>
+                    {t("botonAgregar")}
+                  </Text>
                 </Pressable>
               </View>
             </KeyboardAvoidingView>

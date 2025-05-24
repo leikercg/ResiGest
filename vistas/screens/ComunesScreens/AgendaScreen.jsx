@@ -14,6 +14,7 @@ import estilos from "../../../estilos/estilos";
 import pickerStyles from "../../../estilos/pickerStyles";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import AgendaItem from "./../../components/AgendaItem";
+import { useTranslation } from "react-i18next";
 
 const AgendaScreen = () => {
   const [fecha, setFecha] = useState(new Date());
@@ -21,6 +22,7 @@ const AgendaScreen = () => {
   const [data, setData] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [mostrarPicker, setMostrarPicker] = useState(false);
+  const { t } = useTranslation();
 
   const manejarCambioFecha = (event, fechaSeleccionada) => {
     // Para Android, necesitamos ocultar el picker después de seleccionar
@@ -118,7 +120,7 @@ const AgendaScreen = () => {
     <View style={estilos.estilosListaPersonasVentana.contenedor}>
       <View style={estilos.estilosListaPersonasVentana.titulo}>
         <Text style={estilos.estilosListaPersonasVentana.tituloTexto}>
-          Agenda
+          {t("agendaTitulo")}
         </Text>
       </View>
 
@@ -128,9 +130,7 @@ const AgendaScreen = () => {
         renderItem={renderItem}
         ListEmptyComponent={
           <View style={styles.contenedorVacio}>
-            <Text style={styles.textoVacio}>
-              No hay registros para este día
-            </Text>
+            <Text style={styles.textoVacio}>{t("agendaNoRegistros")} </Text>
           </View>
         }
         contentContainerStyle={styles.listContent}

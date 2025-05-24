@@ -10,8 +10,10 @@ import {
 } from "react-native";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db, auth } from "../../../fireBaseConfig";
+import { useTranslation } from "react-i18next";
 
 const EditarTelefonoScreen = ({ navigation }) => {
+  const { t } = useTranslation();
   const [telefono, setTelefono] = useState("");
   const [telefonoOriginal, setTelefonoOriginal] = useState("");
   const [cargando, setCargando] = useState(true);
@@ -31,7 +33,10 @@ const EditarTelefonoScreen = ({ navigation }) => {
         }
       } catch (error) {
         console.error("Error cargando teléfono:", error);
-        Alert.alert("Error", "No se pudo cargar el teléfono actual");
+        Alert.alert(
+          t("alertaErrorTitulo"),
+          t("error") + ": No se pudo cargar el teléfono actual",
+        );
       } finally {
         setCargando(false);
       }
@@ -41,22 +46,24 @@ const EditarTelefonoScreen = ({ navigation }) => {
   }, []);
 
   const mostrarAlertaConfirmacion = () => {
-    // Verificar si el teléfono es otro
     if (telefono.trim() === telefonoOriginal.trim()) {
-      Alert.alert("Aviso", "No has realizado ningún cambio en el teléfono");
+      Alert.alert(
+        t("alertaAvisoTitulo"),
+        "No has realizado ningún cambio en el teléfono",
+      );
       return;
     }
 
     Alert.alert(
-      "Confirmar cambio",
-      "¿Estás seguro de que deseas actualizar tu número de teléfono?",
+      t("alertaConfirmacionTitulo"),
+      t("alertaConfirmacionActualizarTelefono"),
       [
         {
           text: "Cancelar",
           style: "cancel",
         },
         {
-          text: "Confirmar",
+          text: t("confirmar"),
           onPress: guardarTelefono,
         },
       ],
@@ -66,7 +73,7 @@ const EditarTelefonoScreen = ({ navigation }) => {
 
   const guardarTelefono = async () => {
     if (!telefono.trim()) {
-      Alert.alert("Error", "El teléfono no puede estar vacío");
+      Alert.alert(t("alertaErrorTitulo"), "El teléfono no puede estar vacío");
       return;
     }
 
@@ -74,11 +81,11 @@ const EditarTelefonoScreen = ({ navigation }) => {
       await updateDoc(doc(db, "usuarios", auth.currentUser.uid), {
         telefono: telefono.trim(),
       });
-      Alert.alert("Éxito", "Teléfono actualizado correctamente");
+      Alert.alert(t("exito"), "Teléfono actualizado correctamente");
       navigation.goBack();
     } catch (error) {
       console.error("Error actualizando teléfono:", error);
-      Alert.alert("Error", "No se pudo guardar el teléfono");
+      Alert.alert(t("alertaErrorTitulo"), "No se pudo guardar el teléfono");
     }
   };
 
@@ -92,12 +99,12 @@ const EditarTelefonoScreen = ({ navigation }) => {
 
   return (
     <View style={styles.contenedor}>
-      <Text style={styles.titulo}>Editar Teléfono</Text>
+      <Text style={styles.titulo}>{t("editarTelefonoTitulo")}</Text>
 
-      <Text style={styles.label}>Nuevo teléfono:</Text>
+      <Text style={styles.label}>{t("labelNuevoTelefono")}</Text>
       <TextInput
         style={styles.input}
-        placeholder="Ingrese su número de teléfono"
+        placeholder={t("placeholderTelefono")}
         value={telefono}
         onChangeText={setTelefono}
         keyboardType="phone-pad"
@@ -107,7 +114,9 @@ const EditarTelefonoScreen = ({ navigation }) => {
         style={styles.botonGuardar}
         onPress={mostrarAlertaConfirmacion}
       >
-        <Text style={styles.textoBotonGuardar}>Guardar Teléfono</Text>
+        <Text style={styles.textoBotonGuardar}>
+          {t("botonGuardarTelefono")}
+        </Text>
       </Pressable>
     </View>
   );

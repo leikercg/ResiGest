@@ -15,7 +15,6 @@ const OpcionesScreen = ({ navigation }) => {
 
   useEffect(() => {
     const cargarDatosUsuario = async () => {
-      // Usar if exists para evitar errores al cerrar sesión
       if (user) {
         try {
           const userDocRef = doc(db, "usuarios", user.uid);
@@ -25,31 +24,32 @@ const OpcionesScreen = ({ navigation }) => {
             setdatosUsuario(userDocSnap.data());
           }
 
-          // Obtener nombre del departamento
           if (departamentoId) {
             let nombreDep = "";
             switch (departamentoId) {
               case 1:
-                nombreDep = "Administración";
+                nombreDep = t("depAdministracion");
                 break;
               case 2:
-                nombreDep = "Medicina";
+                nombreDep = t("depMedicina");
                 break;
               case 3:
-                nombreDep = "Enfermería";
+                nombreDep = t("depEnfermeria");
                 break;
               case 4:
-                nombreDep = "Familiar";
+                nombreDep = t("depFamiliar");
                 break;
               case 5:
-                nombreDep = "Fisioterapia";
+                nombreDep = t("depFisioterapia");
                 break;
               case 6:
-                nombreDep = "Terapia Ocupacional";
+                nombreDep = t("depTerapiaOcupacional");
                 break;
               case 7:
-                nombreDep = "Asistencial";
+                nombreDep = t("depAsistencial");
                 break;
+              default:
+                nombreDep = t("departamentoTexto");
             }
             setNombreDepartamento(nombreDep);
           }
@@ -60,19 +60,19 @@ const OpcionesScreen = ({ navigation }) => {
     };
 
     cargarDatosUsuario();
-  }, [user, departamentoId]);
+  }, [user, departamentoId, t]);
 
   const mostrarAlertaCerrarSesion = () => {
     Alert.alert(
-      "Confirmar cierre de sesión",
-      "¿Estás seguro de que deseas cerrar tu sesión?",
+      t("alertaCerrarSesionTitulo"),
+      t("alertaCerrarSesionMensaje"),
       [
         {
-          text: "Cancelar",
+          text: t("btnCancelar"),
           style: "cancel",
         },
         {
-          text: "Cerrar sesión",
+          text: t("alertaCerrarSesionConfirmar"),
           onPress: () => auth.signOut(),
           style: "destructive",
         },
@@ -86,7 +86,7 @@ const OpcionesScreen = ({ navigation }) => {
       {/* Título */}
       <View style={estilos.estilosListaPersonasVentana.titulo}>
         <Text style={estilos.estilosListaPersonasVentana.tituloTexto}>
-          Opciones
+          {t("opcionesTitulo")}
         </Text>
       </View>
 
@@ -103,7 +103,7 @@ const OpcionesScreen = ({ navigation }) => {
           <View style={styles.departamento}>
             <Ionicons name="business" size={16} color="#4CAF50" />
             <Text style={styles.textoDepartamento}>
-              {nombreDepartamento || "Departamento"}
+              {nombreDepartamento || t("departamentoTexto")}
             </Text>
           </View>
         </View>
@@ -113,7 +113,6 @@ const OpcionesScreen = ({ navigation }) => {
       <View style={styles.contenedorOpciones}>
         {departamentoId !== 1 && (
           <View>
-            {/* Separador */}
             <View style={styles.separator} />
             <TouchableOpacity
               style={[styles.botonOpciones, styles.botonEditarContacto]}
@@ -123,17 +122,15 @@ const OpcionesScreen = ({ navigation }) => {
               <Text
                 style={[styles.botonOpcionesTexto, styles.textoEditarContacto]}
               >
-                Editar contacto
+                {t("btnEditarContacto")}
               </Text>
               <Ionicons name="chevron-forward" size={20} color="#999" />
             </TouchableOpacity>
           </View>
         )}
 
-        {/* Separador */}
         <View style={styles.separator} />
 
-        {/* Cambiar Idioma */}
         <TouchableOpacity
           style={[styles.botonOpciones, styles.botonIdioma]}
           onPress={() =>
@@ -141,41 +138,38 @@ const OpcionesScreen = ({ navigation }) => {
           }
         >
           <Ionicons name="language" size={24} color="#2F80ED" />
-          <Text style={styles.botonOpcionesTexto}>{t("changeLanguage")}</Text>
+          <Text style={styles.botonOpcionesTexto}>{t("btnCambiarIdioma")}</Text>
         </TouchableOpacity>
 
-        {/* Separador */}
         <View style={styles.separator} />
 
-        {/* Botón Cambiar Contraseña */}
         <TouchableOpacity
           style={[styles.botonOpciones, styles.botonContrasena]}
           onPress={() => navigation.navigate("CambiarContrasena")}
         >
           <Ionicons name="key" size={24} color="#4CAF50" />
           <Text style={[styles.botonOpcionesTexto, styles.contrasenaTexto]}>
-            Cambiar contraseña
+            {t("btnCambiarContrasena")}
           </Text>
           <Ionicons name="chevron-forward" size={20} color="#999" />
         </TouchableOpacity>
 
-        {/* Separador */}
         <View style={styles.separator} />
 
-        {/* Botón Cerrar Sesión */}
         <TouchableOpacity
           style={[styles.botonOpciones, styles.botonCerrarSesion]}
           onPress={mostrarAlertaCerrarSesion}
         >
           <Ionicons name="log-out" size={24} color="#EB5757" />
           <Text style={[styles.botonOpcionesTexto, styles.cerrarSesionTexto]}>
-            Cerrar sesión
+            {t("btnCerrarSesion")}
           </Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   contenedorInfoUsuario: {
     flexDirection: "row",

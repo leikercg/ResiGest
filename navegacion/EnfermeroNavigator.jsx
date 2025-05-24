@@ -1,7 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import EnfermeroScreen from "../vistas/screens/EnfermeriaScreens/EnfermeroScreen";
-import { StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import CambiarIdioma from "../vistas/screens/ComunesScreens/CambiarIdioma";
 import AgendaScreen from "../vistas/screens/ComunesScreens/AgendaScreen";
@@ -14,6 +13,7 @@ import CurasScreen from "../vistas/screens/EnfermeriaScreens/CurasScreen";
 import TareasScreen from "../vistas/screens/EnfermeriaScreens/TareasScreen";
 import ItinerarioResidenteScreen from "../vistas/screens/ComunesScreens/ItinerarioResidenteScreen";
 import NavigatorStyles from "../estilos/navigatorStyles";
+import { useTranslation } from "react-i18next";
 
 import { Ionicons } from "@expo/vector-icons";
 const Tab = createBottomTabNavigator(); // Para ver la navegacion por pestañas
@@ -128,6 +128,8 @@ const TareasStack = () => {
 };
 
 const EnfermeroNavigator = () => {
+  const { t } = useTranslation();
+
   return (
     <Tab.Navigator
       lazy={false}
@@ -142,7 +144,7 @@ const EnfermeroNavigator = () => {
         component={InicioStack}
         options={{
           title: null,
-          tabBarLabel: "Inicio",
+          tabBarLabel: t("inicio"),
           headerStyle: NavigatorStyles.headerStyle,
           tabBarIcon: ({ color, size }) => (
             // Recibe el color y un tamaño por defecto
@@ -155,7 +157,7 @@ const EnfermeroNavigator = () => {
         component={TareasStack}
         options={{
           title: null,
-          tabBarLabel: "Tareas",
+          tabBarLabel: t("tareas"),
           headerStyle: NavigatorStyles.headerStyle,
           tabBarIcon: ({ color, size }) => (
             // Recibe el color y un tamaño por defecto
@@ -169,7 +171,7 @@ const EnfermeroNavigator = () => {
         component={AgendaStack}
         options={{
           title: null,
-          tabBarLabel: "Agenda",
+          tabBarLabel: t("agenda"),
           headerStyle: NavigatorStyles.headerStyle,
           tabBarIcon: ({ color, size }) => (
             // Recibe el color y un tamaño por defecto
@@ -183,7 +185,7 @@ const EnfermeroNavigator = () => {
         component={OpcionesStack}
         options={{
           title: null,
-          tabBarLabel: "Opciones",
+          tabBarLabel: t("opciones"),
           headerStyle: NavigatorStyles.headerStyle,
           tabBarIcon: ({ color, size }) => (
             // Recibe el color y un tamaño por defecto

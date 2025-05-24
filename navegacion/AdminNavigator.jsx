@@ -15,6 +15,7 @@ import CambiarContrasena from "../vistas/screens/ComunesScreens/CambiarContrasen
 import ItinerarioResidenteScreen from "../vistas/screens/ComunesScreens/ItinerarioResidenteScreen";
 import { Ionicons } from "@expo/vector-icons";
 import NavigatorStyles from "../estilos/navigatorStyles.jsx";
+import { useTranslation } from "react-i18next";
 
 const Tab = createBottomTabNavigator(); // Para ver la navegacion por pestañas
 const Stack = createStackNavigator(); // Para ver la navegación por pila, creamos varias
@@ -142,6 +143,8 @@ const FamiliaStack = () => {
 };
 
 const AdminNavigator = () => {
+  const { t, i18n } = useTranslation();
+
   return (
     <Tab.Navigator
       lazy={false}
@@ -156,7 +159,7 @@ const AdminNavigator = () => {
         component={InicioStack}
         options={{
           title: null,
-          tabBarLabel: "Inicio",
+          tabBarLabel: t("inicio"),
           headerStyle: NavigatorStyles.headerStyle,
           tabBarIcon: ({ color, size }) => (
             // Recibe el color y un tamaño por defecto
@@ -169,7 +172,7 @@ const AdminNavigator = () => {
         component={EmpleadoStack}
         options={{
           title: null,
-          tabBarLabel: "Equipo",
+          tabBarLabel: t("equipo"),
           headerStyle: NavigatorStyles.headerStyle,
           tabBarIcon: ({ color, size }) => (
             // Recibe el color y un tamaño por defecto
@@ -182,7 +185,7 @@ const AdminNavigator = () => {
         component={FamiliaStack}
         options={{
           title: null,
-          tabBarLabel: "Familia",
+          tabBarLabel: t("familia"),
           headerStyle: NavigatorStyles.headerStyle,
           tabBarIcon: ({ color, size }) => (
             // Recibe el color y un tamaño por defecto
@@ -195,7 +198,7 @@ const AdminNavigator = () => {
         component={OpcionesStack}
         options={{
           title: null,
-          tabBarLabel: "Opciones",
+          tabBarLabel: t("opciones"),
           headerStyle: NavigatorStyles.headerStyle,
           tabBarIcon: ({ color, size }) => (
             // Recibe el color y un tamaño por defecto
