@@ -21,9 +21,9 @@ const ItinerarioResidenteScreen = ({ route }) => {
   const { residente } = route.params;
   const nombreResidente = `${residente.nombre} ${residente.apellido}`;
   const [fecha, setFecha] = useState(new Date());
-  const [data, setData] = useState([]); // Puede ser curas o visitas
+  const [data, setData] = useState([]);
   const [cargando, setCargando] = useState(true);
-  const [mostrarPicker, setMostrarPicker] = useState(false); // Control de visibilidad
+  const [mostrarPicker, setMostrarPicker] = useState(false);
 
   const cambioFecha = (event, fechaSeleccionada) => {
     // Para Android, necesitamos ocultar el picker después de seleccionar

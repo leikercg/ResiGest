@@ -18,10 +18,9 @@ import estilos from "../../../estilos/estilos";
 import pickerStyles from "../../../estilos/pickerStyles";
 import { AuthContext } from "../../../contexto/AuthContext";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import CurasControlador from "../../../controladores/curaControlador"; // Cambiado el import
+import CurasControlador from "../../../controladores/curaControlador";
 
 const CurasScreen = ({ route }) => {
-  // Estados
   const { user } = useContext(AuthContext);
   const { residente } = route.params;
   const [editando, setEditando] = useState(null);
@@ -31,10 +30,9 @@ const CurasScreen = ({ route }) => {
   const [zona, setZona] = useState("");
   const [observacion, setObservacion] = useState("");
   const [fechaCura, setFechaCura] = useState(new Date());
-  const [mostrarPicker, setMostrarPicker] = useState(false); // Control de visibilidad de fecha
-  const [mostrarTimePicker, setMostrarTimePicker] = useState(false); // Control de visibilidad de hora
+  const [mostrarPicker, setMostrarPicker] = useState(false);
+  const [mostrarTimePicker, setMostrarTimePicker] = useState(false);
 
-  // Efectos
   useEffect(() => {
     const desuscribirse = CurasControlador.obtenerCuras(
       residente.id,
@@ -56,7 +54,6 @@ const CurasScreen = ({ route }) => {
     );
   };
 
-  // Manejadores de eventos
   const manejarEditarCura = (cura) => {
     setEditando(cura);
     setZona(cura.zona);
@@ -160,7 +157,6 @@ const CurasScreen = ({ route }) => {
     setFechaCura(selectedTime || fechaCura);
   };
 
-  // Renderizado condicional
   if (cargando) {
     return (
       <View style={styles.loadingContainer}>
@@ -169,7 +165,6 @@ const CurasScreen = ({ route }) => {
     );
   }
 
-  // Renderizado de items
   const renderItem = ({ item }) => {
     const esMiCura = item.usuarioId === user?.uid;
     const ahora = new Date();

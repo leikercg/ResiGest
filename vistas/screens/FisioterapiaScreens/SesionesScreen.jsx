@@ -21,7 +21,6 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import SesionesControlador from "../../../controladores/sesionCotrolador";
 
 const SesionesScreen = ({ route }) => {
-  // Estados
   const { user } = useContext(AuthContext);
   const { residente } = route.params;
   const [editando, setEditando] = useState(null);
@@ -30,10 +29,9 @@ const SesionesScreen = ({ route }) => {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [descripcion, setMotivo] = useState("");
   const [fechaSesion, setFechaSesion] = useState(new Date());
-  const [mostrarPicker, setMostrarPicker] = useState(false); // Control de visibilidad de fecha
-  const [mostrarTimePicker, setMostrarTimePicker] = useState(false); // Control de visibilidad de hora
+  const [mostrarPicker, setMostrarPicker] = useState(false);
+  const [mostrarTimePicker, setMostrarTimePicker] = useState(false);
 
-  // Efectos
   useEffect(() => {
     const desuscribirse = SesionesControlador.obtenerSesiones(
       residente.id,
@@ -46,7 +44,6 @@ const SesionesScreen = ({ route }) => {
     return () => desuscribirse();
   }, [residente.id]);
 
-  // Funciones complementarias
   const formatearFechaHora = (fecha) => {
     const date = fecha.toDate ? fecha.toDate() : new Date(fecha);
     return (
@@ -56,7 +53,6 @@ const SesionesScreen = ({ route }) => {
     );
   };
 
-  // Manejadores de eventos
   const manejarEditarSesion = (sesion) => {
     setEditando(sesion);
     setMotivo(sesion.descripcion);
@@ -150,7 +146,6 @@ const SesionesScreen = ({ route }) => {
     setFechaSesion(selectedTime || fechaSesion);
   };
 
-  // Renderizado condicional
   if (cargando) {
     return (
       <View style={styles.loadingContainer}>

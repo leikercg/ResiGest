@@ -1,0 +1,19 @@
+{
+  "email": "Email",
+  "password": "Password",
+  "forgotPassword": "Forgot your password?",
+  "login": "Log in",
+  "restore": "Restore",
+  "cancel": "Cancel",
+  "switchToEnglish": "Switch to English",
+  "switchToSpanish": "Switch to Spanish",
+  "errorMessages": {
+    "invalidEmail": "Invalid email format",
+    "tooManyRequests": "Too many attempts. Account temporarily blocked",
+    "invalidCredentials": "Incorrect password or invalid user",
+    "userNotFound": "No user found with this email.",
+    "resetPasswordError": "An error occurred while trying to send the email.",
+    "emptyFields": "Please enter an email and password.",
+    "resetPasswordSuccess": "A password reset email has been sent."
+  }
+}

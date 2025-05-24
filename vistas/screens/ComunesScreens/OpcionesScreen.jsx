@@ -1,24 +1,23 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native"; // Añadido Alert para las alertas
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { auth, db } from "../../../fireBaseConfig";
 import { Ionicons } from "@expo/vector-icons";
 import estilos from "../../../estilos/estilos";
 import { AuthContext } from "../../../contexto/AuthContext";
 import { doc, getDoc } from "firebase/firestore";
+import { useTranslation } from "react-i18next";
 
 const OpcionesScreen = ({ navigation }) => {
-  // Obtenemos el usuario del contexto
+  const { t, i18n } = useTranslation();
   const { user, departamentoId } = useContext(AuthContext);
   const [datosUsuario, setdatosUsuario] = useState(null);
   const [nombreDepartamento, setNombreDepartamento] = useState("");
 
-  // Cargar los datos adicionales del usuario
   useEffect(() => {
     const cargarDatosUsuario = async () => {
       // Usar if exists para evitar errores al cerrar sesión
       if (user) {
         try {
-          // Obtener datos del documento del usuario
           const userDocRef = doc(db, "usuarios", user.uid);
           const userDocSnap = await getDoc(userDocRef);
 
@@ -63,23 +62,22 @@ const OpcionesScreen = ({ navigation }) => {
     cargarDatosUsuario();
   }, [user, departamentoId]);
 
-  // Función para mostrar alerta de confirmación antes de cerrar sesión
   const mostrarAlertaCerrarSesion = () => {
     Alert.alert(
-      "Confirmar cierre de sesión", // Título de la alerta
-      "¿Estás seguro de que deseas cerrar tu sesión?", // Mensaje de confirmación
+      "Confirmar cierre de sesión",
+      "¿Estás seguro de que deseas cerrar tu sesión?",
       [
         {
-          text: "Cancelar", // Botón para cancelar
-          style: "cancel", // Estilo del botón
+          text: "Cancelar",
+          style: "cancel",
         },
         {
-          text: "Cerrar sesión", // Botón para confirmar
-          onPress: () => auth.signOut(), // Acción al confirmar
-          style: "destructive", // Estilo destructivo (rojo en iOS)
+          text: "Cerrar sesión",
+          onPress: () => auth.signOut(),
+          style: "destructive",
         },
       ],
-      { cancelable: true }, // Permite cerrar la alerta tocando fuera
+      { cancelable: true },
     );
   };
 
@@ -113,7 +111,6 @@ const OpcionesScreen = ({ navigation }) => {
 
       {/* Opciones */}
       <View style={styles.contenedorOpciones}>
-        {/* Editar contacto */}
         {departamentoId !== 1 && (
           <View>
             {/* Separador */}
@@ -139,11 +136,12 @@ const OpcionesScreen = ({ navigation }) => {
         {/* Cambiar Idioma */}
         <TouchableOpacity
           style={[styles.botonOpciones, styles.botonIdioma]}
-          onPress={() => navigation.navigate("CambiarIdioma")}
+          onPress={() =>
+            i18n.changeLanguage(i18n.language === "es" ? "en" : "es")
+          }
         >
           <Ionicons name="language" size={24} color="#2F80ED" />
-          <Text style={styles.botonOpcionesTexto}>Cambiar idioma</Text>
-          <Ionicons name="chevron-forward" size={20} color="#999" />
+          <Text style={styles.botonOpcionesTexto}>{t("changeLanguage")}</Text>
         </TouchableOpacity>
 
         {/* Separador */}

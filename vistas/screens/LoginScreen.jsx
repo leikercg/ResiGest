@@ -14,6 +14,8 @@ import {
 import { auth } from "../../fireBaseConfig";
 import { Ionicons } from "@expo/vector-icons";
 import estilos from "../../estilos/estilos";
+import { useTranslation } from "react-i18next";
+import i18n from "../../i18n";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
@@ -21,8 +23,13 @@ const LoginScreen = () => {
   const [mensaje, setMensaje] = useState("");
   const [mostrarContrasena, setVerContrasena] = useState(false);
   const [olvidoContrasena, setOlvidoContrasena] = useState(false);
+  const { t } = useTranslation();
 
-  // Iniciar sesión
+  const cambiarIdioma = async () => {
+    const nuevoIdioma = i18n.language === "es" ? "en" : "es";
+    await i18n.changeLanguage(nuevoIdioma);
+  };
+
   const iniciarSesion = async () => {
     if (!email || !password) {
       setMensaje("Por favor ingresa un correo y una contraseña.");
@@ -41,13 +48,13 @@ const LoginScreen = () => {
 
       switch (error.code) {
         case "auth/invalid-email":
-          mensajeError = "El formato del correo es inválido";
+          mensajeError = t("errorMessages.invalidEmail");
           break;
         case "auth/too-many-requests":
-          mensajeError = "Demasiados intentos. Cuenta temporalmente bloqueada";
+          mensajeError = t("errorMessages.tooManyRequests");
           break;
         default:
-          mensajeError = "Contraseña incorrecta o usuario no válido";
+          mensajeError = t("errorMessages.invalidCredentials");
       }
 
       setMensaje(mensajeError);
@@ -62,20 +69,20 @@ const LoginScreen = () => {
 
     try {
       await sendPasswordResetEmail(auth, email);
-      setMensaje("Se ha enviado un correo para restablecer contraseña.");
+      setMensaje(t("correo_enviado"));
       setOlvidoContrasena(false);
     } catch (error) {
       let mensajeError = "";
 
       switch (error.code) {
         case "auth/invalid-email":
-          mensajeError = "El formato del correo es inválido.";
+          mensajeError = t("error_email_invalido");
           break;
         case "auth/user-not-found":
-          mensajeError = "No hay ningún usuario registrado con ese correo.";
+          mensajeError = t("error_usuario_no_encontrado");
           break;
         default:
-          mensajeError = "Ocurrió un error al intentar enviar el correo.";
+          mensajeError = t("error_envio_correo");
       }
 
       setMensaje(mensajeError);
@@ -99,7 +106,7 @@ const LoginScreen = () => {
 
       <TextInput
         style={estilos.estilosLogin.input}
-        placeholder="Correo electrónico"
+        placeholder={t("email")}
         placeholderTextColor="#999"
         value={email}
         onChangeText={setEmail}
@@ -113,7 +120,7 @@ const LoginScreen = () => {
         <View style={styles.contenedorContrsena}>
           <TextInput
             style={[estilos.estilosLogin.input, styles.inputContrasena]}
-            placeholder="Contraseña"
+            placeholder={t("password")}
             placeholderTextColor="#999"
             value={password}
             secureTextEntry={!mostrarContrasena}
@@ -140,7 +147,7 @@ const LoginScreen = () => {
         style={styles.olvidarContrasena}
       >
         <Text style={styles.textoOlvidarContrasena}>
-          ¿Olvidaste tu contraseña?
+          {t("forgotPassword")}{" "}
         </Text>
       </Pressable>
 
@@ -167,14 +174,24 @@ const LoginScreen = () => {
             }}
             style={styles.botonCancelar}
           >
-            <Text style={styles.textoCancelar}>Cancelar</Text>
+            <Text style={styles.textoCancelar}>{t("cancel")}</Text>
           </Pressable>
         </View>
       ) : (
         <Pressable style={estilos.estilosLogin.button} onPress={iniciarSesion}>
-          <Text style={estilos.estilosLogin.buttonText}>Iniciar sesión</Text>
+          <Text style={estilos.estilosLogin.buttonText}>{t("login")}</Text>
         </Pressable>
       )}
+      <Pressable
+        onPress={cambiarIdioma}
+        style={{ marginTop: 20, alignSelf: "center" }}
+      >
+        <Text style={{ color: "#2F80ED" }}>
+          {i18n.language === "es"
+            ? t("Switch to English")
+            : t("Cambiar a Español")}
+        </Text>
+      </Pressable>
     </View>
   );
 };

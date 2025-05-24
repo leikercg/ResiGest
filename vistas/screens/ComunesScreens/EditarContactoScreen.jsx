@@ -16,7 +16,6 @@ const EditarTelefonoScreen = ({ navigation }) => {
   const [telefonoOriginal, setTelefonoOriginal] = useState("");
   const [cargando, setCargando] = useState(true);
 
-  // Cargar el teléfono actual del usuario
   useEffect(() => {
     const cargarTelefono = async () => {
       try {
@@ -42,7 +41,7 @@ const EditarTelefonoScreen = ({ navigation }) => {
   }, []);
 
   const mostrarAlertaConfirmacion = () => {
-    // Verificar si el teléfono realmente cambió
+    // Verificar si el teléfono es otro
     if (telefono.trim() === telefonoOriginal.trim()) {
       Alert.alert("Aviso", "No has realizado ningún cambio en el teléfono");
       return;
@@ -101,8 +100,7 @@ const EditarTelefonoScreen = ({ navigation }) => {
         placeholder="Ingrese su número de teléfono"
         value={telefono}
         onChangeText={setTelefono}
-        keyboardType="phone-pad" //abrir el teclado de numeros
-        // autoFocus // llevar el foco a este elemento
+        keyboardType="phone-pad"
       />
 
       <Pressable
@@ -119,7 +117,7 @@ const styles = StyleSheet.create({
   contenedor: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#fff",
+    backgroundColor: "#FFF",
   },
   contenedorCargando: {
     flex: 1,
@@ -140,13 +138,13 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 50,
-    borderColor: "#ccc",
+    borderColor: "#CCC",
     borderWidth: 1,
     borderRadius: 8,
     marginBottom: 25,
     paddingHorizontal: 15,
     fontSize: 16,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#F9F9F9",
   },
   botonGuardar: {
     height: 50,
@@ -158,7 +156,7 @@ const styles = StyleSheet.create({
   },
   textoBotonGuardar: {
     fontSize: 18,
-    color: "#fff",
+    color: "#FFF",
     fontWeight: "600",
   },
 });

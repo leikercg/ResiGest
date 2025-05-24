@@ -10,7 +10,6 @@ const AdminScreen = ({ navigation }) => {
           Lista de residentes
         </Text>
       </View>
-      {/* Componente personalizado, en base al tipo */}
       <PersonasLista navigation={navigation} tipo={"residente"} />
       <Pressable
         style={({ pressed }) => [

@@ -25,9 +25,7 @@ const CambiarContrasena = ({ navigation }) => {
   const [mostrarconfirmarContrasena, setMostrarConfirmarContrasena] =
     useState(false);
 
-  // Función para mostrar alerta de confirmación
   const mostrarAlertaConfirmacion = () => {
-    // Validaciones básicas primero
     if (!contrasenaActual || !nuevaContrasena || !confirmarContrasena) {
       Alert.alert("Error", "Todos los campos son obligatorios");
       return;
@@ -43,7 +41,6 @@ const CambiarContrasena = ({ navigation }) => {
       return;
     }
 
-    // Mostrar alerta de confirmación
     Alert.alert(
       "Confirmar cambio de contraseña",
       "¿Estás seguro de que deseas cambiar tu contraseña?",
@@ -54,14 +51,13 @@ const CambiarContrasena = ({ navigation }) => {
         },
         {
           text: "Confirmar",
-          onPress: () => cambiarContrasena(), // Llamar a la función de cambio si confirman
+          onPress: () => cambiarContrasena(),
         },
       ],
       { cancelable: false },
     );
   };
 
-  // Función para cambiar la contraseña
   const cambiarContrasena = async () => {
     try {
       const user = auth.currentUser;
@@ -77,7 +73,6 @@ const CambiarContrasena = ({ navigation }) => {
         { text: "OK", onPress: () => navigation.goBack() },
       ]);
 
-      // Limpiar campos después de éxito
       setContrasenaActual("");
       setNuevaContrasena("");
       setConfirmarContrasena("");
@@ -97,16 +92,13 @@ const CambiarContrasena = ({ navigation }) => {
 
   return (
     <View style={estilos.estilosListaPersonasVentana.contenedor}>
-      {/* Encabezado */}
       <View style={estilos.estilosListaPersonasVentana.titulo}>
         <Text style={estilos.estilosListaPersonasVentana.tituloTexto}>
           Cambiar Contraseña
         </Text>
       </View>
 
-      {/* Formulario */}
       <View style={styles.contenedorFormulario}>
-        {/* Campos del formulario */}
         <View style={styles.contenedorInput}>
           <Text style={styles.label}>Contraseña actual</Text>
           <View style={styles.passwordInput}>
@@ -183,7 +175,6 @@ const CambiarContrasena = ({ navigation }) => {
           </View>
         </View>
 
-        {/* Botón de cambio - ahora llama a mostrarAlertaConfirmacion en lugar de cambiarContrasena directamente */}
         <TouchableOpacity
           style={styles.botonCambio}
           onPress={mostrarAlertaConfirmacion}
@@ -191,7 +182,6 @@ const CambiarContrasena = ({ navigation }) => {
           <Text style={styles.textoBotonCambio}>Cambiar Contraseña</Text>
         </TouchableOpacity>
 
-        {/* Nota sobre requisitos */}
         <Text style={styles.textoNota}>
           La contraseña debe tener al menos 6 caracteres
         </Text>

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../../contexto/AuthContext"; // Añadir este import
+import { AuthContext } from "../../../contexto/AuthContext";
 import {
   View,
   Text,
@@ -14,17 +14,15 @@ import { ScrollView } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 
 const ResidenteScreen = ({ route, navigation }) => {
-  const { departamentoId } = useContext(AuthContext); // Id del departamento del usuario
-  const { residente: residenteInicial } = route.params; // Recibimos el residente inicial desde los parámetros de navegación
-  const [residente, setResidente] = useState(residenteInicial); // Estado para almacenar el residente
-  const [loading, setCargando] = useState(!residenteInicial); // Estado para manejar la carga
-  const [familiares, setFamiliares] = useState([]); // Estado para almacenar los familiares
+  const { departamentoId } = useContext(AuthContext);
+  const { residente: residenteInicial } = route.params;
+  const [residente, setResidente] = useState(residenteInicial);
+  const [cargando, setCargando] = useState(!residenteInicial);
+  const [familiares, setFamiliares] = useState([]);
 
-  // Escuchar cambios en tiempo real del residente
   useEffect(() => {
     if (!residenteInicial?.id) return; // Si no hay ID, no hacemos nada
 
-    // Escuchar cambios en el residente
     const desuscribirResidente = ResidenteControlador.escucharCambiosResidente(
       residenteInicial.id,
       async (residenteActualizado) => {
@@ -50,10 +48,9 @@ const ResidenteScreen = ({ route, navigation }) => {
       desuscribirResidente();
     };
   }, [residenteInicial.id]);
-  // Si está cargando mostramos un ActivityIndicator
-  if (loading) {
+  if (cargando) {
     return (
-      <View style={styles.loadingcontenedor}>
+      <View style={styles.cargandocontenedor}>
         <ActivityIndicator size="large" color="#0000ff" />
       </View>
     );
@@ -66,7 +63,6 @@ const ResidenteScreen = ({ route, navigation }) => {
           Ficha de Residente
         </Text>
       </View>
-      {/* Usamos Scrollview en lugar de FlatList por que quiero que se carge todos los elementos a la vez */}
       <ScrollView showsVerticalScrollIndicator={false}>
         <View>
           <View style={styles.contenedorDatos}>
@@ -111,8 +107,8 @@ const ResidenteScreen = ({ route, navigation }) => {
               ]}
               onPress={() =>
                 navigation.navigate("SeguimientoScreen", {
-                  residente: residente, // Enviamos el residente
-                  departamentoId: 2, // Enviamos el deparatamento
+                  residente: residente,
+                  departamentoId: 2,
                 })
               }
             >
@@ -127,8 +123,8 @@ const ResidenteScreen = ({ route, navigation }) => {
               ]}
               onPress={() =>
                 navigation.navigate("SeguimientoScreen", {
-                  residente: residente, // Enviamos el residente
-                  departamentoId: 3, // Enviamos el deparatamento
+                  residente: residente,
+                  departamentoId: 3,
                 })
               }
             >
@@ -143,8 +139,8 @@ const ResidenteScreen = ({ route, navigation }) => {
               ]}
               onPress={() =>
                 navigation.navigate("SeguimientoScreen", {
-                  residente: residente, // Enviamos el residente
-                  departamentoId: 5, // Enviamos el deparatamento
+                  residente: residente,
+                  departamentoId: 5,
                 })
               }
             >
@@ -159,8 +155,8 @@ const ResidenteScreen = ({ route, navigation }) => {
               ]}
               onPress={() =>
                 navigation.navigate("SeguimientoScreen", {
-                  residente: residente, // Enviamos el residente
-                  departamentoId: 6, // Enviamos el deparatamento
+                  residente: residente,
+                  departamentoId: 6,
                 })
               }
             >
@@ -176,8 +172,8 @@ const ResidenteScreen = ({ route, navigation }) => {
                 ]}
                 onPress={() =>
                   navigation.navigate("SeguimientoScreen", {
-                    residente: residente, // Enviamos el residente
-                    departamentoId: 7, // Enviamos el deparatamento
+                    residente: residente,
+                    departamentoId: 7,
                   })
                 }
               >
@@ -195,7 +191,7 @@ const ResidenteScreen = ({ route, navigation }) => {
               ]}
               onPress={() =>
                 navigation.navigate("ItinerarioResidenteScreen", {
-                  residente: residente, // Enviamos el residente
+                  residente: residente,
                 })
               }
             >
@@ -215,7 +211,7 @@ const ResidenteScreen = ({ route, navigation }) => {
                 ]}
                 onPress={() =>
                   navigation.navigate("Visitas", {
-                    residente: residente, // Enviamos el residente
+                    residente: residente,
                   })
                 }
               >
@@ -234,7 +230,7 @@ const ResidenteScreen = ({ route, navigation }) => {
                 ]}
                 onPress={() =>
                   navigation.navigate("CurasScreen", {
-                    residente: residente, // Enviamos el residente
+                    residente: residente,
                   })
                 }
               >
@@ -253,7 +249,7 @@ const ResidenteScreen = ({ route, navigation }) => {
                 ]}
                 onPress={() =>
                   navigation.navigate("SesionesScreen", {
-                    residente: residente, // Enviamos el residente
+                    residente: residente,
                   })
                 }
               >
@@ -304,10 +300,10 @@ const ResidenteScreen = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
   contenedorFamiliares: {
-    backgroundColor: "#fff",
+    backgroundColor: "#FFF",
   },
   contenedorSeguimientos: {
-    backgroundColor: "#fff",
+    backgroundColor: "#FFF",
   },
   tituloFamiliares: {
     fontSize: 16,
@@ -321,7 +317,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 20,
   },
-  loadingcontenedor: {
+  cargandocontenedor: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
@@ -330,7 +326,7 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: "#FFF",
   },
   tituloTexto: {
     fontSize: 24,
@@ -338,7 +334,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   contenedorDatos: {
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#F9F9F9",
     padding: 20,
     borderRadius: 10,
     shadowColor: "#000",
@@ -351,7 +347,7 @@ const styles = StyleSheet.create({
   familiarItem: {
     marginBottom: 10,
     padding: 10,
-    backgroundColor: "#e9e9e9",
+    backgroundColor: "#E9E9E9",
     borderRadius: 5,
   },
   contenedorBotones: {
@@ -378,7 +374,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 255, 0.8)", // Cambia el color cuando está presionado
   },
   textoBoton: {
-    color: "#fff",
+    color: "#FFF",
     fontSize: 16,
     fontWeight: "bold",
   },
@@ -396,7 +392,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 15, 0.8)", // Cambia el color cuando está presionado
   },
   textoBotonItinerario: {
-    color: "#fff",
+    color: "#FFF",
     fontSize: 16,
     fontWeight: "bold",
   },

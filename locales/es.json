@@ -1,0 +1,21 @@
+{
+  "email": "Correo electrónico",
+  "password": "Contraseña",
+  "forgotPassword": "¿Olvidaste tu contraseña?",
+  "login": "Iniciar sesión",
+  "restore": "Restaurar",
+  "cancel": "Cancelar",
+  "switchToEnglish": "Cambiar a inglés",
+  "switchToSpanish": "Cambiar a español",
+  "errorMessages": {
+    "invalidEmail": "El formato del correo es inválido",
+    "tooManyRequests": "Demasiados intentos. Cuenta temporalmente bloqueada",
+    "invalidCredentials": "Contraseña incorrecta o usuario no válido",
+    "userNotFound": "No hay ningún usuario registrado con ese correo.",
+    "resetPasswordError": "Ocurrió un error al intentar enviar el correo.",
+    "emptyFields": "Por favor ingresa un correo y una contraseña.",
+    "resetPasswordSuccess": "Se ha enviado un correo para restablecer contraseña."
+
+
+  }
+}

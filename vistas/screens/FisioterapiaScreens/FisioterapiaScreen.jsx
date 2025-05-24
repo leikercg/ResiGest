@@ -1,6 +1,6 @@
 import React from "react";
-import estilos from "../../../estilos/estilos"; // Estilos
-import PersonasLista from "../../components/PersonasLista"; // Componente ResidentesLista
+import estilos from "../../../estilos/estilos";
+import PersonasLista from "../../components/PersonasLista";
 import { View, Text } from "react-native";
 
 const FisioterapiaScreen = ({ navigation }) => {
@@ -11,7 +11,7 @@ const FisioterapiaScreen = ({ navigation }) => {
           Lista de residentes
         </Text>
       </View>
-      {/* Componente personalizado, en base al tipo */}
+
       <PersonasLista navigation={navigation} tipo={"residente"} />
     </View>
   );

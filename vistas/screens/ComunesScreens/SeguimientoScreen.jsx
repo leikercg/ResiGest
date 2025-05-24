@@ -22,15 +22,12 @@ import { Ionicons } from "@expo/vector-icons";
 const auth = getAuth();
 
 const SeguimientoScreen = ({ route, navigation }) => {
-  // Estados
   const residente = route.params.residente;
   const departamentoId = route.params.departamentoId;
   const [seguimiento, setSeguimiento] = useState(null);
   const [cargando, setCargando] = useState(true);
   const [nuevoDetalle, setNuevoDetalle] = useState("");
   const [mostrarModal, setMostrarModal] = useState(false);
-
-  // Contexto
   const { departamentoId: usuarioDepartamentoId } = useContext(AuthContext);
   const mostrarBotonFlotante = usuarioDepartamentoId == departamentoId;
 
@@ -57,8 +54,6 @@ const SeguimientoScreen = ({ route, navigation }) => {
 
     obtenerSeguimiento();
   }, [residente, departamentoId]);
-
-  // Funciones complementarias
   const obtenerNombreDepartamento = (id) => {
     switch (id) {
       case 2:
@@ -87,7 +82,6 @@ const SeguimientoScreen = ({ route, navigation }) => {
     );
   };
 
-  // Manejadores de eventos
   const manejarAgregarDetalle = async () => {
     if (!nuevoDetalle.trim()) {
       Alert.alert("Error", "El detalle no puede estar vacío.");
@@ -128,7 +122,6 @@ const SeguimientoScreen = ({ route, navigation }) => {
     );
   };
 
-  // Renderizado condicional
   if (cargando) {
     return (
       <View style={styles.contenedorCargando}>
@@ -145,7 +138,6 @@ const SeguimientoScreen = ({ route, navigation }) => {
     );
   }
 
-  // Renderizado de items
   const renderItem = ({ item }) => (
     <Pressable style={styles.detalleItem}>
       <View style={styles.detalleContenido}>

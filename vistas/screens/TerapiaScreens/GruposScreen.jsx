@@ -21,9 +21,8 @@ import GrupoControlador from "../../../controladores/grupoControlador";
 import ResidenteControlador from "../../../controladores/residenteControlador";
 
 const GruposScreen = ({ route }) => {
-  // Estados (mantenemos los mismos)
   const { user } = useContext(AuthContext);
-  const { residente } = route.params || {}; // Protección contra undefined
+  const { residente } = route.params || {};
   const [editando, setEditando] = useState(null);
   const [grupos, setGrupos] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -34,10 +33,9 @@ const GruposScreen = ({ route }) => {
   const [residentesSeleccionados, setResidentesSeleccionados] = useState([]);
   const [mostrarSelectorResidente, setMostrarSelectorResidente] =
     useState(false);
-
   const [fechaFiltro, setFechaFiltro] = useState(new Date());
-  const [mostrarPicker, setMostrarPicker] = useState(false); // Control de visibilidad de fecha
-  const [mostrarTimePicker, setMostrarTimePicker] = useState(false); // Control de visibilidad de hora
+  const [mostrarPicker, setMostrarPicker] = useState(false);
+  const [mostrarTimePicker, setMostrarTimePicker] = useState(false);
 
   const manejarCambioFechaFiltro = (event, fechaSeleccionada) => {
     if (Platform.OS === "android") {
@@ -47,7 +45,6 @@ const GruposScreen = ({ route }) => {
       setFechaFiltro(fechaSeleccionada);
     }
   };
-  // Efectos
   useEffect(() => {
     let desuscribirse;
 
@@ -56,7 +53,7 @@ const GruposScreen = ({ route }) => {
 
       try {
         if (residente?.id) {
-          // Caso con residente - buscar solo sus grupos
+          // Caso con residente
           desuscribirse = GrupoControlador.obtenerGruposPorResidente(
             residente.id,
             (grupos) => {
@@ -65,7 +62,7 @@ const GruposScreen = ({ route }) => {
             },
           );
         } else {
-          // Caso sin residente - buscar grupos por fecha seleccionada
+          // Caso sin residente, buscar grupos por fecha seleccionada
           desuscribirse = GrupoControlador.obtenerTodosLosGrupos(
             fechaFiltro,
             (grupos) => {
@@ -85,15 +82,14 @@ const GruposScreen = ({ route }) => {
     return () => {
       if (desuscribirse) desuscribirse();
     };
-  }, [residente?.id, fechaFiltro]); // Añadir fechaFiltro como dependencia
+  }, [residente?.id, fechaFiltro]);
 
   useEffect(() => {
     const desuscribirse =
       ResidenteControlador.listarResidentes(setListaResidentes);
-    return () => desuscribirse(); // Muy importante: cancelar suscripción al desmontar
+    return () => desuscribirse();
   }, []);
 
-  // Función para formatear fecha (sin cambios)
   const formatearFechaHora = (fecha) => {
     const date = fecha.toDate ? fecha.toDate() : new Date(fecha);
     return (
@@ -103,7 +99,6 @@ const GruposScreen = ({ route }) => {
     );
   };
 
-  // Manejador de edición con validación
   const manejarEditarGrupo = (grupo) => {
     const fechaGrupo = grupo.fecha.toDate
       ? grupo.fecha.toDate()
@@ -113,7 +108,6 @@ const GruposScreen = ({ route }) => {
     setDescripcion(grupo.descripcion);
     setFechaGrupo(fechaGrupo);
 
-    // Convertir los IDs de residentes a objetos residente completos
     const residentesCompletos = grupo.residentes
       ? listaResidentes.filter((residente) =>
           grupo.residentes.includes(residente.id),
@@ -133,7 +127,6 @@ const GruposScreen = ({ route }) => {
     setMostrarSelectorResidente(false);
   };
 
-  // Manejador de eliminación con validación
   const manejarEliminarGrupo = (grupo) => {
     Alert.alert(
       "Eliminar residente",
@@ -172,15 +165,13 @@ const GruposScreen = ({ route }) => {
     setFechaGrupo(selectedTime || fechaGrupo);
   };
 
-  // Manejador de guardado con validación de fecha
   const manejarGuardadoGrupo = async () => {
-    // Validación: Descripción vacía
     if (!descripcion.trim()) {
       Alert.alert("Error", "Debes ingresar una descripción para el grupo");
       return;
     }
 
-    // Validación: Al menos un residente (solo para creación)
+    // Debe haber al menos un residente
     if (!editando && residentesSeleccionados.length === 0) {
       Alert.alert(
         "Error",
@@ -188,8 +179,6 @@ const GruposScreen = ({ route }) => {
       );
       return;
     }
-
-    // Validación: Fecha/hora pasada
     const ahora = new Date();
     if (fechaGrupo < ahora) {
       const esHoy = fechaGrupo.toDateString() === ahora.toDateString();
@@ -202,7 +191,7 @@ const GruposScreen = ({ route }) => {
 
     try {
       if (editando) {
-        // Modo edición: actualizar grupo existente
+        // Modo edición
         await GrupoControlador.actualizarGrupo(editando.id, {
           descripcion: descripcion.trim(),
           fecha: fechaGrupo,
@@ -223,7 +212,7 @@ const GruposScreen = ({ route }) => {
         Alert.alert("Éxito", "Grupo creado correctamente");
       }
 
-      manejarCerrarModal(); // Cierra el modal al finalizar
+      manejarCerrarModal();
     } catch (error) {
       const mensajeError =
         error?.message || "Ocurrió un error inesperado. Inténtalo de nuevo.";
@@ -232,7 +221,6 @@ const GruposScreen = ({ route }) => {
     }
   };
 
-  // Renderizado condicional
   if (cargando) {
     return (
       <View style={styles.loadingContainer}>
@@ -240,7 +228,6 @@ const GruposScreen = ({ route }) => {
       </View>
     );
   }
-  // Renderizado de item
   const renderItem = ({ item }) => {
     const esMiGrupo = item.usuarioId === user?.uid;
     const ahora = new Date();
@@ -596,7 +583,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   listContent: {
-    paddingBottom: 80, // Espacio para el botón flotante
+    paddingBottom: 80,
   },
   grupoItem: {
     backgroundColor: "white",
@@ -738,9 +725,9 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: "#CCC",
     padding: 12,
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#F0F0F0",
   },
   listaResidentes: {
     maxHeight: 150,
@@ -763,14 +750,13 @@ const styles = StyleSheet.create({
   },
   residenteChip: {
     flexDirection: "row",
-    justifyContent: "space-between", // Esto separará el texto y el ícono
-    alignItems: "center",
-    backgroundColor: "#e0e0e0",
+    justifyContent: "space-between",
+    backgroundColor: "#E0E0E0",
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 8,
-    marginBottom: 8, // Espacio entre chips
-    width: "100%", // Ocupa todo el ancho
+    marginBottom: 8,
+    width: "100%",
   },
   chipText: {
     marginRight: 6,

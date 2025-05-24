@@ -14,7 +14,7 @@ const estilosformularioResidente = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: "#ccc",
+    borderColor: "#CCC",
     borderWidth: 1,
     borderRadius: 5,
     marginBottom: 15,
@@ -22,7 +22,7 @@ const estilosformularioResidente = StyleSheet.create({
   },
   botonFecha: {
     height: 40,
-    borderColor: "#ccc",
+    borderColor: "#CCC",
     borderWidth: 1,
     borderRadius: 5,
     marginBottom: 15,
@@ -61,7 +61,7 @@ const estilosformularioResidente = StyleSheet.create({
     marginBottom: 10,
   },
   familiarItem: {
-    backgroundColor: "#e9e9e9",
+    backgroundColor: "#E9E9E9",
     padding: 10,
     borderRadius: 5,
     marginBottom: 10,
@@ -91,7 +91,7 @@ const estilosformularioResidente = StyleSheet.create({
   },
   textoBotonAgregar: {
     fontSize: 16,
-    color: "#fff",
+    color: "#FFF",
     fontWeight: "bold",
   },
   label: {
@@ -100,7 +100,7 @@ const estilosformularioResidente = StyleSheet.create({
     marginBottom: 10,
   },
   pickerContenedor: {
-    borderColor: "#ccc",
+    borderColor: "#CCC",
     borderWidth: 1,
     borderRadius: 5,
     marginBottom: 15,
@@ -117,7 +117,7 @@ const estilosformularioResidente = StyleSheet.create({
 const estilosLogin = StyleSheet.create({
   contenedor: {
     flex: 1,
-    backgroundColor: "white", // Fondo blanco
+    backgroundColor: "white",
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 20,
@@ -125,25 +125,25 @@ const estilosLogin = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: "bold",
-    color: "black", // Azul oscuro
+    color: "black",
     marginBottom: 20,
   },
   input: {
     width: "100%",
     height: 45,
-    borderColor: "blue", // Azul
+    borderColor: "blue",
     borderWidth: 1,
-    borderRadius: 10, // Bordes redondeados
+    borderRadius: 10,
     marginBottom: 15,
     paddingLeft: 10,
-    backgroundColor: "#F9F9F9", // Fondo gris claro
+    backgroundColor: "#F9F9F9",
   },
   error: {
     color: "red",
     marginBottom: 10,
   },
   button: {
-    backgroundColor: "blue", // Azul fuerte
+    backgroundColor: "blue",
     paddingVertical: 12,
     paddingHorizontal: 30,
     borderRadius: 10,
@@ -151,7 +151,7 @@ const estilosLogin = StyleSheet.create({
     width: "100%",
   },
   buttonText: {
-    color: "white", // Texto blanco
+    color: "white",
     fontSize: 18,
     fontWeight: "bold",
   },
@@ -189,8 +189,8 @@ const botonFLotante = StyleSheet.create({
     borderRadius: 100,
     justifyContent: "center",
     alignItems: "center",
-    elevation: 5, // Agrega sombra en Android
-    shadowColor: "#000", // Sombra en iOS
+    elevation: 5,
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 1,
     shadowRadius: 9,
@@ -216,7 +216,7 @@ const personaItem = StyleSheet.create({
     elevation: 3,
   },
   pressedItem: {
-    backgroundColor: "#b0b4b6", // Color más oscuro cuando está presionado
+    backgroundColor: "#B0B4B6",
   },
   nombre: {
     fontSize: 18,

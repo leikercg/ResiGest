@@ -13,14 +13,14 @@ import EmpladoControlador from "../../../controladores/empleadoControlador";
 import estilos from "../../../estilos/estilos";
 import pickerStyles from "../../../estilos/pickerStyles";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import AgendaItem from "./../../components/AgendaItem"; // Importa el componente contenedor
+import AgendaItem from "./../../components/AgendaItem";
 
 const AgendaScreen = () => {
   const [fecha, setFecha] = useState(new Date());
-  const { user, departamentoId } = useContext(AuthContext); // Obtenemos departamentoId
-  const [data, setData] = useState([]); // Puede ser curas o visitas
+  const { user, departamentoId } = useContext(AuthContext);
+  const [data, setData] = useState([]);
   const [cargando, setCargando] = useState(true);
-  const [mostrarPicker, setMostrarPicker] = useState(false); // Control de visibilidad
+  const [mostrarPicker, setMostrarPicker] = useState(false);
 
   const manejarCambioFecha = (event, fechaSeleccionada) => {
     // Para Android, necesitamos ocultar el picker después de seleccionar

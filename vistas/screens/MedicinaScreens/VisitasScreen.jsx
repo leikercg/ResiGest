@@ -30,10 +30,9 @@ const VisitasScreen = ({ route }) => {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [motivo, setMotivo] = useState("");
   const [fechaVisita, setFechaVisita] = useState(new Date());
-  const [mostrarPicker, setMostrarPicker] = useState(false); // Control de visibilidad de fecha
-  const [mostrarTimePicker, setMostrarTimePicker] = useState(false); // Control de visibilidad de hora
+  const [mostrarPicker, setMostrarPicker] = useState(false);
+  const [mostrarTimePicker, setMostrarTimePicker] = useState(false);
 
-  // Efectos
   useEffect(() => {
     const desuscribirse = VisitasControlador.obtenerVisitas(
       residente.id,
@@ -46,7 +45,6 @@ const VisitasScreen = ({ route }) => {
     return () => desuscribirse();
   }, [residente.id]);
 
-  // Funciones complementarias
   const formatearFechaHora = (fecha) => {
     const date = fecha.toDate ? fecha.toDate() : new Date(fecha);
     return (
@@ -56,7 +54,6 @@ const VisitasScreen = ({ route }) => {
     );
   };
 
-  // Manejadores de eventos
   const manejarEditarVisita = (visita) => {
     setEditando(visita);
     setMotivo(visita.motivo);
@@ -158,7 +155,6 @@ const VisitasScreen = ({ route }) => {
     );
   }
 
-  // Renderizado de items
   const renderItem = ({ item }) => {
     const esMiVisita = item.usuarioId === user?.uid;
     const ahora = new Date();
