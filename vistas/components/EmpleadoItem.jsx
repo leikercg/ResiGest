@@ -19,8 +19,10 @@ import { AuthContext } from "../../contexto/AuthContext";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import residenteControlador from "../../controladores/residenteControlador";
 import pickerStyles from "../../estilos/pickerStyles";
+import { useTranslation } from "react-i18next";
 
 const EmpleadoItem = ({ item, departamentos, fechaSeleccionada }) => {
+  const { t } = useTranslation();
   // Obtener el departamentoId del contexto de autenticación
   const { departamentoId } = useContext(AuthContext);
   // Para expansión y visualización de tareas
@@ -207,10 +209,11 @@ const EmpleadoItem = ({ item, departamentos, fechaSeleccionada }) => {
             {departamentoId !== 3 && (
               <View>
                 <Text style={styles.textoDetalle}>
-                  Departamento: {obtenerNombreDepartamento(item.departamentoId)}
+                  {t("departamento")}{" "}
+                  {obtenerNombreDepartamento(item.departamentoId)}
                 </Text>
                 <Text style={styles.textoDetalle}>
-                  Teléfono: {item.telefono}
+                  {t("telefono")} {item.telefono}
                 </Text>
               </View>
             )}
@@ -246,7 +249,7 @@ const EmpleadoItem = ({ item, departamentos, fechaSeleccionada }) => {
                     Residente: {tarea.residenteNombre}
                   </Text>
                   <Text style={styles.textoDetalleTarea}>
-                    Hora:{" "}
+                    {t("hora")}{" "}
                     {tarea.fecha.toLocaleTimeString("es-ES", {
                       hour: "2-digit",
                       minute: "2-digit",

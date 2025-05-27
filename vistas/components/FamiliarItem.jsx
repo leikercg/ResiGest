@@ -3,8 +3,10 @@ import { Pressable, View, Text, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import estilos from "../../estilos/estilos";
 import FamiliarControlador from "../../controladores/familiarControlador";
+import { useTranslation } from "react-i18next";
 
 const FamiliarItem = ({ item, residentesRelacionados }) => {
+  const { t } = useTranslation();
   const manejarEliminacion = () => {
     FamiliarControlador.eliminarFamiliar(item.id, Alert.alert);
   };
@@ -30,12 +32,12 @@ const FamiliarItem = ({ item, residentesRelacionados }) => {
           </Text>
           <View>
             <Text style={estilos.personaItem.edad}>
-              Teléfono: {item.telefono}
+              {t("telefono")} {item.telefono}
             </Text>
             {residentesRelacionados?.map((residente) => (
               <View key={residente.id}>
                 <Text style={estilos.personaItem.edad}>
-                  Residente: {residente.nombre} {residente.apellido}
+                  {t("residente")} {residente.nombre} {residente.apellido}
                 </Text>
               </View>
             ))}

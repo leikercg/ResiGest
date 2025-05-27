@@ -16,7 +16,12 @@ import { Ionicons } from "@expo/vector-icons";
 import estilos from "../../../estilos/estilos";
 import pickerStyles from "../../../estilos/pickerStyles";
 
+// Importa el hook o función i18n
+import { useTranslation } from "react-i18next";
+
 const FormResidente = ({ navigation, route }) => {
+  const { t } = useTranslation();
+
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [fechaNacimiento, setFechaNacimiento] = useState(new Date());
@@ -58,35 +63,49 @@ const FormResidente = ({ navigation, route }) => {
   };
 
   const manejarCambioFecha = (event, fechaSeleccionada) => {
-    // Para Android, necesitamos ocultar el picker después de seleccionar
     if (Platform.OS === "android") {
       setMostrarPicker(false);
     }
 
     if (fechaSeleccionada) {
-      // Calcula la fecha mínima permitida (18 años atrás desde hoy)
       const fechaMinima = new Date();
       fechaMinima.setFullYear(fechaMinima.getFullYear() - 18);
 
       if (fechaSeleccionada > fechaMinima) {
         Alert.alert(
-          "Fecha inválida",
-          "El residente debe ser mayor de edad (18 años o más)",
+          t("alert_fecha_invalida_titulo"),
+          t("alert_fecha_invalida_mensaje"),
         );
-      } else {
-        setFechaNacimiento(fechaSeleccionada);
+        return; // <-- IMPORTANTE: no seguir si la fecha es inválida
       }
+
+      setFechaNacimiento(fechaSeleccionada);
     }
   };
 
   const guardarResidente = () => {
     // Validar campos obligatorios
     if (!nombre.trim() || !apellido.trim()) {
-      Alert.alert("Error", "Nombre y apellido son campos obligatorios");
+      Alert.alert(
+        t("alert_guardar_error_titulo"),
+        t("alert_guardar_error_mensaje"),
+      );
       return;
     }
 
-    // Crea un residente con los datos en mayúsculas
+    // Validar edad (mayores de 18 años)
+    const fechaMinima = new Date();
+    fechaMinima.setFullYear(fechaMinima.getFullYear() - 18);
+
+    if (fechaNacimiento > fechaMinima) {
+      Alert.alert(
+        t("alert_fecha_invalida_titulo"),
+        t("alert_fecha_invalida_mensaje"),
+      );
+      return;
+    }
+
+    // Crear objeto residente
     const nuevoResidente = {
       nombre:
         nombre.charAt(0).toUpperCase() + nombre.slice(1).toLowerCase().trim(),
@@ -99,7 +118,7 @@ const FormResidente = ({ navigation, route }) => {
     };
 
     ResidenteControlador.guardarResidente(
-      residente?.id, // En caso de no tener id (se está creando) se establece como undefined
+      residente?.id,
       nuevoResidente,
       navigation,
       Alert.alert,
@@ -111,7 +130,9 @@ const FormResidente = ({ navigation, route }) => {
     return (
       <View style={estilos.estilosformularioResidente.familiarItem}>
         <Text style={estilos.estilosformularioResidente.familiarText}>
-          {familiar ? `${familiar.nombre} ${familiar.apellido}` : "Cargando..."}
+          {familiar
+            ? `${familiar.nombre} ${familiar.apellido}`
+            : t("familiar_item_cargando")}
         </Text>
         <Pressable
           onPress={() => eliminarFamiliar(item)}
@@ -126,7 +147,7 @@ const FormResidente = ({ navigation, route }) => {
   return (
     <View style={estilos.estilosformularioResidente.container}>
       <Text style={estilos.estilosformularioResidente.titulo}>
-        {residente ? "Editar Residente" : "Nuevo Residente"}
+        {residente ? t("form_editar_residente") : t("form_nuevo_residente")}
       </Text>
 
       <TextInput
@@ -134,7 +155,7 @@ const FormResidente = ({ navigation, route }) => {
           estilos.estilosformularioResidente.input,
           residente && estilos.estilosformularioResidente.inputDisabled,
         ]}
-        placeholder="Nombre"
+        placeholder={t("placeholder_nombre")}
         value={nombre}
         onChangeText={setNombre}
         editable={!residente}
@@ -145,7 +166,7 @@ const FormResidente = ({ navigation, route }) => {
           estilos.estilosformularioResidente.input,
           residente && estilos.estilosformularioResidente.inputDisabled,
         ]}
-        placeholder="Apellido"
+        placeholder={t("placeholder_apellido")}
         value={apellido}
         onChangeText={setApellido}
         editable={!residente}
@@ -153,7 +174,7 @@ const FormResidente = ({ navigation, route }) => {
 
       <View style={estilos.estilosformularioResidente.botonFecha}>
         <Text style={estilos.estilosformularioResidente.botonFechaText}>
-          Fecha de Nacimiento:
+          {t("label_fecha_nacimiento")}
         </Text>
         {/* Selector de fecha para iOS */}
         {Platform.OS === "ios" && (
@@ -190,7 +211,7 @@ const FormResidente = ({ navigation, route }) => {
         )}
       </View>
       <Text style={estilos.estilosformularioResidente.subtitulo}>
-        Familiares Relacionados:
+        {t("label_familiares_relacionados")}
       </Text>
       <FlatList
         data={familiares}
@@ -198,13 +219,13 @@ const FormResidente = ({ navigation, route }) => {
         renderItem={renderFamiliar}
         ListEmptyComponent={
           <Text style={estilos.estilosformularioResidente.textoVacio}>
-            No hay familiares relacionados.
+            {t("texto_sin_familiares")}
           </Text>
         }
       />
 
       <Text style={estilos.estilosformularioResidente.label}>
-        Agregar Familiar:
+        {t("label_agregar_familiar")}
       </Text>
       <View style={estilos.estilosformularioResidente.pickerContenedor}>
         <Picker
@@ -212,7 +233,7 @@ const FormResidente = ({ navigation, route }) => {
           onValueChange={(itemValue) => setFamiliarSeleccionado(itemValue)}
           style={estilos.estilosformularioResidente.picker}
         >
-          <Picker.Item label="Seleccione un familiar" value="" />
+          <Picker.Item label={t("picker_seleccionar_familiar")} value="" />
           {todosFamiliares.map((familiar) => (
             <Picker.Item
               key={familiar.id}
@@ -227,7 +248,7 @@ const FormResidente = ({ navigation, route }) => {
         onPress={agregarFamiliar}
       >
         <Text style={estilos.estilosformularioResidente.textoBotonAgregar}>
-          Agregar Familiar
+          {t("boton_agregar_familiar")}
         </Text>
       </Pressable>
 
@@ -236,7 +257,7 @@ const FormResidente = ({ navigation, route }) => {
         onPress={guardarResidente}
       >
         <Text style={estilos.estilosformularioResidente.guardarBotonText}>
-          {residente ? "Actualizar" : "Guardar"}
+          {residente ? t("boton_actualizar") : t("boton_guardar")}
         </Text>
       </Pressable>
     </View>

@@ -16,8 +16,10 @@ import DepartamentoControlador from "../../controladores/departamentoControlador
 import FamiliarControlador from "../../controladores/familiarControlador";
 import { AuthContext } from "../../contexto/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 
 const PersonasLista = ({ navigation, tipo, filtro, fechaSeleccionada }) => {
+  const { t } = useTranslation();
   const { user, departamentoId } = useContext(AuthContext);
   const [data, setDatos] = useState([]); // Datos completos sin filtrar
   const [departamentos, setDepartamentos] = useState({});
@@ -25,26 +27,22 @@ const PersonasLista = ({ navigation, tipo, filtro, fechaSeleccionada }) => {
   const [busqueda, setBusqueda] = useState("");
   const [datosFiltrados, setDatosFiltrados] = useState([]); // Datos filtrados por búsqueda y/o departamento
 
-  // Efecto para filtrar datos cuando cambia la búsqueda, los datos originales o el filtro
   useEffect(() => {
     let resultados = data;
-    // Filtro para familiares para mostrar solo residentes relacionados
     if (tipo === "residente" && departamentoId === 4) {
       resultados = resultados.filter((residente) =>
         residente.familiares?.includes(user.uid),
       );
-      console.log("Residentes relacionados", resultados);
+      console.log(t("residentes_relacionados"), resultados);
       console.log(tipo, departamentoId);
     }
 
-    // Aplicar filtro por departamento si está definido y es del tipo empleado
     if (filtro && tipo === "empleado") {
       resultados = resultados.filter(
         (item) => item.departamentoId === filtro.departamento,
       );
     }
 
-    // Aplicar filtro por búsqueda de texto
     if (busqueda) {
       const textoBusqueda = busqueda.toLowerCase();
       resultados = resultados.filter((item) => {
@@ -58,37 +56,30 @@ const PersonasLista = ({ navigation, tipo, filtro, fechaSeleccionada }) => {
     setDatosFiltrados(resultados);
   }, [busqueda, data, filtro, tipo, user]);
 
-  // Efecto principal para cargar datos según el tipo
   useEffect(() => {
-    let desuscribirse; // Para cancelar suscripción principal
-    let desuscribirseDepartamentos; // Para cancelar suscripción a departamentos
-    let desuscribirseResidentesRelacionados = {}; // Para cancelar múltiples suscripciones
+    let desuscribirse;
+    let desuscribirseDepartamentos;
+    let desuscribirseResidentesRelacionados = {};
 
-    // Suscribirse a cambios en la lista de departamentos
     desuscribirseDepartamentos = DepartamentoControlador.listarDepartamentos(
       (departamentosData) => {
         setDepartamentos(departamentosData);
       },
     );
 
-    // Configurar suscripciones según el tipo de lista
     switch (tipo) {
       case "residente":
-        // Suscribirse a residentes
         desuscribirse = ResidenteControlador.listarResidentes((residentes) => {
           setDatos(residentes);
         });
         break;
       case "empleado":
-        // Suscribirse a empleados
         desuscribirse = EmpleadoControlador.listarEmpleados((empleados) => {
           setDatos(empleados);
         });
         break;
       case "familiar":
-        // Suscribirse a familiares y sus residentes relacionados
         desuscribirse = FamiliarControlador.listarFamiliares((familiares) => {
-          // Mapear datos básicos de familiares
           const docs = familiares.map((familiar) => ({
             id: familiar.id,
             nombre: familiar.nombre,
@@ -98,7 +89,6 @@ const PersonasLista = ({ navigation, tipo, filtro, fechaSeleccionada }) => {
           }));
           setDatos(docs);
 
-          // Para cada familiar, escuchar cambios en sus residentes relacionados
           familiares.forEach((familiar) => {
             desuscribirseResidentesRelacionados[familiar.id] =
               FamiliarControlador.escucharResidentesRelacionados(
@@ -115,18 +105,15 @@ const PersonasLista = ({ navigation, tipo, filtro, fechaSeleccionada }) => {
         break;
     }
 
-    // Función de limpieza al desmontar el componente o cambiar el tipo
     return () => {
-      // Cancelar todas las suscripciones activas
       if (desuscribirse) desuscribirse();
       if (desuscribirseDepartamentos) desuscribirseDepartamentos();
       Object.values(desuscribirseResidentesRelacionados).forEach((desuscribe) =>
         desuscribe(),
       );
     };
-  }, [tipo]); // Se ejecuta cuando cambia el tipo de lista
+  }, [tipo]);
 
-  // Función para renderizar cada ítem según el tipo
   const renderItem = ({ item }) => {
     switch (tipo) {
       case "residente":
@@ -136,10 +123,9 @@ const PersonasLista = ({ navigation, tipo, filtro, fechaSeleccionada }) => {
           <EmpleadoItem
             item={item}
             departamentos={departamentos}
-            fechaSeleccionada={fechaSeleccionada} // Con la fecha seleccionada
+            fechaSeleccionada={fechaSeleccionada}
           />
         );
-
       case "familiar":
         return (
           <FamiliarItem
@@ -154,7 +140,6 @@ const PersonasLista = ({ navigation, tipo, filtro, fechaSeleccionada }) => {
 
   return (
     <View>
-      {/* Barra de búsqueda */}
       <View style={styles.buscadorContainer}>
         <Ionicons
           name="search"
@@ -164,12 +149,11 @@ const PersonasLista = ({ navigation, tipo, filtro, fechaSeleccionada }) => {
         />
         <TextInput
           style={styles.buscador}
-          placeholder={`Buscar ${tipo}...`}
+          placeholder={t(`buscar_${tipo}`)}
           placeholderTextColor="#999"
           value={busqueda}
           onChangeText={setBusqueda}
         />
-        {/* Botón para limpiar búsqueda, solo visible cuando hay texto */}
         {busqueda !== "" && (
           <Pressable
             onPress={() => setBusqueda("")}
@@ -180,7 +164,6 @@ const PersonasLista = ({ navigation, tipo, filtro, fechaSeleccionada }) => {
         )}
       </View>
 
-      {/* Lista de resultados */}
       <FlatList
         showsVerticalScrollIndicator={false}
         data={datosFiltrados}
@@ -189,9 +172,7 @@ const PersonasLista = ({ navigation, tipo, filtro, fechaSeleccionada }) => {
         contentContainerStyle={styles.flatListContenedor}
         ListEmptyComponent={
           <Text style={styles.textoVacio}>
-            {busqueda
-              ? "No se encontraron resultados"
-              : "No hay datos disponibles"}
+            {busqueda ? t("no_resultados") : t("no_datos")}
           </Text>
         }
       />
@@ -222,10 +203,9 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   flatListContenedor: {
-    paddingBottom: 20,
+    paddingBottom: 200,
     minHeight: "100%",
   },
-
   textoVacio: {
     textAlign: "center",
     marginTop: 20,

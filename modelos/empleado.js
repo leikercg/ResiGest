@@ -2,12 +2,13 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../fireBaseConfig";
 
 class Empleado {
-  constructor(id, email, nombre, apellido, departamentoId) {
+  constructor(id, email, nombre, apellido, departamentoId, telefono) {
     this.id = id;
     this.email = email;
     this.nombre = nombre;
     this.apellido = apellido;
     this.departamentoId = departamentoId;
+    this.telefono = telefono;
   }
 
   // Relaciones con las demas entidades

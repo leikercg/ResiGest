@@ -1,12 +1,14 @@
 import React, { useContext } from "react";
 import { View, Text, Pressable, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import estilos from "../../estilos/estilos"; // Estilos
-import ResidenteControlador from "../../controladores/residenteControlador"; // Importar el controlador
-import { AuthContext } from "../../contexto/AuthContext"; // Importar el contexto de autenticación
+import estilos from "../../estilos/estilos";
+import ResidenteControlador from "../../controladores/residenteControlador";
+import { AuthContext } from "../../contexto/AuthContext";
+import { useTranslation } from "react-i18next";
 
 // Recibe una instancia del modelo Residente y la navegación como argumentos
 const ResidenteItem = ({ residente, navigation }) => {
+  const { t } = useTranslation();
   // Obtener el departamentoId del usuario autenticado
   const { departamentoId } = useContext(AuthContext);
 
@@ -49,7 +51,7 @@ const ResidenteItem = ({ residente, navigation }) => {
             {residente.apellido}, {residente.nombre}
           </Text>
           <Text style={estilos.personaItem.edad}>
-            Edad: {residente.calcularEdad()}
+            {t("labelEdad")} {residente.calcularEdad()}
           </Text>
         </View>
         {puedeEliminar && (

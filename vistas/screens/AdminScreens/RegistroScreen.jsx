@@ -11,8 +11,10 @@ import { Picker } from "@react-native-picker/picker";
 import { registerUser } from "../../../services/authService";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../fireBaseConfig";
+import { useTranslation } from "react-i18next";
 
 const RegistroScreen = ({ navigation, route }) => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [departamentoId, setDepartamentoId] = useState("0");
@@ -23,12 +25,12 @@ const RegistroScreen = ({ navigation, route }) => {
   const [residentes, setResidentes] = useState([]);
   const { tipo } = route.params;
   const departamentos = [
-    { id: "0", nombre: "Seleccione un departamento" },
-    { id: "2", nombre: "Medicina" },
-    { id: "3", nombre: "Enfermería" },
-    { id: "5", nombre: "Fisioterapia" },
-    { id: "6", nombre: "Terapia" },
-    { id: "7", nombre: "Asistencia" },
+    { id: "0", nombre: t("picker_departamento_default") },
+    { id: "2", nombre: t("depMedicina") },
+    { id: "3", nombre: t("depEnfermeria") },
+    { id: "5", nombre: t("depFisioterapia") },
+    { id: "6", nombre: t("depTerapiaOcupacional") },
+    { id: "7", nombre: t("depAsistencial") },
   ];
   useEffect(() => {
     const cargarResidentes = async () => {
@@ -62,9 +64,9 @@ const RegistroScreen = ({ navigation, route }) => {
         idResidente, // Pasar el ID del residente seleccionado
       );
       navigation.goBack();
-      Alert.alert("Éxito", "Usuario registrado correctamente.");
+      Alert.alert(t("exito"), t("alert_exito_mensaje"));
     } catch (error) {
-      Alert.alert("Error", error.message);
+      Alert.alert(t("error"), error.message);
     }
   };
 
@@ -76,27 +78,27 @@ const RegistroScreen = ({ navigation, route }) => {
       !password.trim() ||
       !telefono.trim()
     ) {
-      Alert.alert("Error", "Todos los campos son obligatorios");
+      Alert.alert(t("error"), t("alert_error_campos_obligatorios"));
       return;
     }
     if (tipo === "empleado" && departamentoId === "0") {
-      Alert.alert("Error", "Por favor seleccione un departamento.");
+      Alert.alert(t("error"), t("alert_error_departamento"));
       return;
     }
     if (tipo === "familiar" && residenteId === "0") {
-      Alert.alert("Error", "Por favor seleccione un residente.");
+      Alert.alert(t("error"), t("alert_error_residente"));
       return;
     }
     Alert.alert(
-      "Confirmar",
-      "¿Estás seguro de que deseas registrar este usuario?",
+      t("alert_confirmar_titulo"),
+      t("alert_confirmar_mensaje"),
       [
         {
-          text: "Cancelar",
+          text: t("alert_confirmar_cancelar"),
           style: "cancel",
         },
         {
-          text: "Confirmar",
+          text: t("alert_confirmar_confirmar"),
           onPress: guardarUsuario,
         },
       ],
@@ -107,19 +109,21 @@ const RegistroScreen = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>
-        {tipo === "empleado" ? "Registro de Empleado" : "Registro de Familiar"}
+        {tipo === "empleado"
+          ? t("registro_empleado_titulo")
+          : t("registro_familiar_titulo")}
       </Text>
 
       <TextInput
         style={styles.input}
-        placeholder="Correo"
+        placeholder={t("placeholder_email")}
         value={email}
         onChangeText={setEmail}
       />
 
       <TextInput
         style={styles.input}
-        placeholder="Contraseña"
+        placeholder={t("placeholder_password")}
         value={password}
         onChangeText={setPassword}
         secureTextEntry
@@ -127,21 +131,21 @@ const RegistroScreen = ({ navigation, route }) => {
 
       <TextInput
         style={styles.input}
-        placeholder="Nombre"
+        placeholder={t("placeholder_nombre")}
         value={nombre}
         onChangeText={setNombre}
       />
 
       <TextInput
         style={styles.input}
-        placeholder="Apellido"
+        placeholder={t("placeholder_apellido")}
         value={apellido}
         onChangeText={setApellido}
       />
 
       <TextInput
         style={styles.input}
-        placeholder="Teléfono"
+        placeholder={t("placeholder_telefono")}
         value={telefono}
         keyboardType="phone-pad"
         onChangeText={setTelefono}
@@ -149,7 +153,7 @@ const RegistroScreen = ({ navigation, route }) => {
 
       {tipo === "empleado" ? (
         <View>
-          <Text style={styles.label}>Departamento:</Text>
+          <Text style={styles.label}>{t("label_departamento")}</Text>
           <View style={styles.pickerContainer}>
             <Picker
               selectedValue={departamentoId}
@@ -168,14 +172,18 @@ const RegistroScreen = ({ navigation, route }) => {
         </View>
       ) : (
         <View>
-          <Text style={styles.label}>Residente:</Text>
+          <Text style={styles.label}>{t("label_residente")}</Text>
           <View style={styles.pickerContainer}>
             <Picker
               selectedValue={residenteId}
               onValueChange={(itemValue) => setResidenteId(itemValue)}
               style={styles.picker}
             >
-              <Picker.Item label="Seleccione un residente" value="0" key="0" />
+              <Picker.Item
+                label={t("picker_residente_default")}
+                value="0"
+                key="0"
+              />
               {residentes.map((residente) => (
                 <Picker.Item
                   key={residente.id}
@@ -189,7 +197,7 @@ const RegistroScreen = ({ navigation, route }) => {
       )}
 
       <Pressable style={styles.guardarButton} onPress={confirmarGuardado}>
-        <Text style={styles.guardarButtonText}>Registrar</Text>
+        <Text style={styles.guardarButtonText}>{t("boton_registrar")}</Text>
       </Pressable>
     </View>
   );

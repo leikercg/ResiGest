@@ -2,13 +2,16 @@ import React from "react";
 import { View, Text, Pressable } from "react-native";
 import estilos from "../../../estilos/estilos";
 import PersonasLista from "../../components/PersonasLista";
+import { useTranslation } from "react-i18next";
 
 const EmpleadosScreen = ({ navigation }) => {
+  const { t } = useTranslation();
+
   return (
     <View style={estilos.estilosListaPersonasVentana.contenedor}>
       <View style={estilos.estilosListaPersonasVentana.titulo}>
         <Text style={estilos.estilosListaPersonasVentana.tituloTexto}>
-          Lista de empleados
+          {t("lista_empleados")}
         </Text>
       </View>
       <PersonasLista navigation={navigation} tipo="empleado" />
