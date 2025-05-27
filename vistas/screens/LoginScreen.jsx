@@ -94,13 +94,12 @@ const LoginScreen = () => {
       <Image
         source={require("../../assets/logo.png")}
         style={{
-          top: 80,
-          height: 300,
-          width: 300,
+          top: 30,
+          height: 250,
+          width: 250,
           resizeMode: "contain",
           alignSelf: "center",
-          marginBottom: 20,
-          position: "absolute",
+          position: "relative",
         }}
       />
 
