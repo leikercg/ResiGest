@@ -19,13 +19,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.leikercg.ProProyectoFinal"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-
-    ]
+    "plugins": [],
+    "extra": {
+      "eas": {
+        "projectId": "5d5dcdae-850e-4293-8e88-a1caeefa0817"
+      }
+    }
   }
 }

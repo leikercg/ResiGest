@@ -184,8 +184,8 @@
   "exitoActualizacion": "Tarea actualizada correctamente",
   "noHayTareas": "No hay tareas asignadas.",
   "departamento": "Departamento:",
-  "telefono": "Teléfono: {numero}",
-  "residente": "Residente: {nombre}",
+  "telefono": "Teléfono:",
+  "residente": "Residente:",
   "hora": "Hora: {hora}",
   "nuevaTareaBoton": "+ Nueva Tarea"
 
