@@ -187,8 +187,17 @@
   "telefono": "Teléfono:",
   "residente": "Residente:",
   "hora": "Hora: {hora}",
-  "nuevaTareaBoton": "+ Nueva Tarea"
+  "nuevaTareaBoton": "+ Nueva Tarea",
 
+
+  "Eliminar_Residente": "Eliminar Residente",
+  "Confirmar_eliminacion_residente": "¿Estás seguro de que deseas eliminar a este residente?",
+  "Cancelar": "Cancelar",
+  "Eliminar": "Eliminar",
+  "Confirmar_guardado_residente": "¿Estás seguro de que deseas guardar este residente?",
+  "Confirmar": "Confirmar",
+  "No_se_encuentra_el_residente": "No se encuentra el residente",
+  "alert_residente_guardado_mensaje" : "Residente guardado correctamente."
 
 
 

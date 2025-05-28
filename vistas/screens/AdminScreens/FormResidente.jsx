@@ -30,6 +30,7 @@ const FormResidente = ({ navigation, route }) => {
   const [familiarSeleccionado, setFamiliarSeleccionado] = useState("");
   const [mostrarPicker, setMostrarPicker] = useState(false);
   const { residente } = route.params || {};
+  console.log("Residente:", residente);
 
   useEffect(() => {
     if (residente) {
@@ -121,7 +122,9 @@ const FormResidente = ({ navigation, route }) => {
       residente?.id,
       nuevoResidente,
       navigation,
-      Alert.alert,
+      (titulo, mensaje, botones, opciones) => {
+        Alert.alert(titulo, mensaje, botones, opciones);
+      },
     );
   };
 

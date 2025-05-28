@@ -76,8 +76,8 @@
   "labelApellido": "Last Name:",
   "labelEdad": "Age:",
   "labelFechaIngreso": "Admission Date:",
-  "tituloFamiliares": "Family Members",
-  "mensajeSinFamiliares": "No family members registered.",
+  "tituloFamiliares": "Relatives",
+  "mensajeSinFamiliares": "No relatives registered.",
   "tituloSeguimientos": "Follow-ups",
   "botonMedicina": "Medicine",
   "botonEnfermeria": "Nursing",
@@ -119,14 +119,14 @@
 
   "buscar_residente": "Search resident...",
   "buscar_empleado": "Search employee...",
-  "buscar_familiar": "Search family member...",
+  "buscar_familiar": "Search relatives...",
   "no_resultados": "No results found",
   "no_datos": "No data available",
   "residentes_relacionados": "Related residents",
 
   "lista_residentes": "List of residents",
   "lista_empleados": "List of employees",
-  "lista_familiares": "List of family members",
+  "lista_familiares": "List of relatives",
 
   "form_nuevo_residente": "New Resident",
   "form_editar_residente": "Edit Resident",
@@ -137,17 +137,17 @@
   "alert_fecha_invalida_mensaje": "The resident must be 18 years or older",
   "alert_guardar_error_titulo": "Error",
   "alert_guardar_error_mensaje": "First name and last name are required fields",
-  "label_familiares_relacionados": "Related Family Members:",
-  "texto_sin_familiares": "No related family members.",
-  "label_agregar_familiar": "Add Family Member:",
-  "picker_seleccionar_familiar": "Select a family member",
-  "boton_agregar_familiar": "Add Family Member",
+  "label_familiares_relacionados": "Related Relatives:",
+  "texto_sin_familiares": "No related frelatives.",
+  "label_agregar_familiar": "Add Relative:",
+  "picker_seleccionar_familiar": "Select a frelative",
+  "boton_agregar_familiar": "Add Relative",
   "boton_guardar": "Save",
   "boton_actualizar": "Update",
   "familiar_item_cargando": "Loading...",
 
   "registro_empleado_titulo": "Employee Registration",
-  "registro_familiar_titulo": "Family Member Registration",
+  "registro_familiar_titulo": "Relative Registration",
   "placeholder_email": "Email",
   "placeholder_password": "Password",
   "placeholder_telefono": "Phone",
@@ -188,7 +188,19 @@
   "telefono": "Phone:",
   "residente": "Resident:",
   "hora": "Time:",
-  "nuevaTareaBoton": "+ New Task"
+  "nuevaTareaBoton": "+ New Task",
+
+
+  "Eliminar_Residente": "Delete Resident",
+  "Confirmar_eliminacion_residente": "Are you sure you want to delete this resident?",
+  "Cancelar": "Cancel",
+  "Eliminar": "Delete",
+  "Confirmar_guardado_residente": "Are you sure you want to save this resident?",
+  "Confirmar": "Confirm",
+  "No_se_encuentra_el_residente": "Resident not found",
+  "alert_residente_guardado_mensaje": "Resident saved successfully."
+
+
 
 
 }

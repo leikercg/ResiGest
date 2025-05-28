@@ -250,9 +250,10 @@ class ResidenteControlador {
   // Método para guardar un residente con confirmación
   static async guardarResidente(id, residente, navigation, mostrarAlerta) {
     try {
+      console.log("Residente a guardar:", id);
       mostrarAlerta(
         "Confirmar",
-        "¿Estás seguro de que deseas guardar este residente?",
+        "¿Estás seguro de que deseas guardar este residenteeee?",
         [
           {
             text: "Cancelar",
@@ -283,10 +284,20 @@ class ResidenteControlador {
                     residenteId,
                   );
                 }
-
-                /////////////////////////////////////////////////////////////////////////////////añadir aqui debug
-                // Navegar de regreso
-                navigation.goBack();
+                //////////////////////////////////////////////////////////////////////////////añadir aqui debug
+                mostrarAlerta(
+                  "Éxito",
+                  "Residente guardado correctamente.",
+                  [
+                    {
+                      text: "OK",
+                      onPress: () => {
+                        navigation.goBack();
+                      },
+                    },
+                  ],
+                  { cancelable: false },
+                );
               } catch (error) {
                 console.error("Error al guardar el residente:", error);
                 mostrarAlerta("Error", "No se pudo guardar el residente.");
