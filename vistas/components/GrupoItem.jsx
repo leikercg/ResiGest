@@ -2,8 +2,10 @@ import React from "react";
 import { View, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "./../../estilos/AgendaStyles";
+import { useTranslation } from "react-i18next";
 
 const GrupoItem = ({ item }) => {
+  const { t } = useTranslation();
   const fechaItem = item.fecha?.toDate
     ? item.fecha.toDate()
     : new Date(item.fecha);
@@ -22,17 +24,19 @@ const GrupoItem = ({ item }) => {
               })}
             </Text>
             <Text style={styles.estiloTipoAccion}>
-              Sesión grupal de terapia ocupacional
+              {t("sesion_grupal_de_terapia_ocupacional")}
             </Text>
           </View>
-          <Text style={styles.textoInfo}>Descripción: {item.descripcion}</Text>
+          <Text style={styles.textoInfo}>
+            {t("descripcion")} {item.descripcion}
+          </Text>
           {item.residentes && (
             <Text style={styles.textoInfo}>
-              Participantes: {item.residentes.length}
+              {t("participantes")}: {item.residentes.length}
             </Text>
           )}
           <Text style={styles.estiloInfoUsuario}>
-            Realizado por: {item.usuarioNombre}
+            {t("realizado_por")}: {item.usuarioNombre}
           </Text>
         </View>
       </View>

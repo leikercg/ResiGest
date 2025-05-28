@@ -197,8 +197,21 @@
   "Confirmar_guardado_residente": "¿Estás seguro de que deseas guardar este residente?",
   "Confirmar": "Confirmar",
   "No_se_encuentra_el_residente": "No se encuentra el residente",
-  "alert_residente_guardado_mensaje" : "Residente guardado correctamente."
+  "alert_residente_guardado_mensaje" : "Residente guardado correctamente.",
 
+  "fecha": "Fecha",
+  "nombre_del_residente": "Nombre del residente",
+  "zona": "Zona",
+  "observacion": "Observación",
+  "creado_por": "Creado por",
+  "cura_de_enfermeria": "Cura de enfermería",
+  "sesion_grupal_de_terapia_ocupacional": "Sesión grupal de terapia ocupacional",
+  "participantes": "Participantes",
+  "sesion_de_fisioterapia": "Sesión de fisioterapia",
+  "realizado_por": "Realizado por",
+  "tarea_asistencial": "Tarea asistencial",
+  "visita_medica": "Visita médica",
+  "motivo": "Motivo"
 
 
 

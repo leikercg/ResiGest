@@ -198,7 +198,21 @@
   "Confirmar_guardado_residente": "Are you sure you want to save this resident?",
   "Confirmar": "Confirm",
   "No_se_encuentra_el_residente": "Resident not found",
-  "alert_residente_guardado_mensaje": "Resident saved successfully."
+  "alert_residente_guardado_mensaje": "Resident saved successfully.",
+
+  "fecha": "Date",
+  "nombre_del_residente": "Resident's name",
+  "zona": "Zone",
+  "observacion": "Observation",
+  "creado_por": "Created by",
+  "cura_de_enfermeria": "Nursing care",
+  "sesion_grupal_de_terapia_ocupacional": "Group occupational therapy session",
+  "participantes": "Participants",
+  "sesion_de_fisioterapia": "Physiotherapy session",
+  "realizado_por": "Performed by",
+  "tarea_asistencial": "Assistance task",
+  "visita_medica": "Medical visit",
+  "motivo": "Reason"
 
 
 
